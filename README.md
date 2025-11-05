@@ -71,8 +71,7 @@ Open the `server` and `client` in separate VSCode workspaces or open the combine
 
 ### Entity-Relationship (ER) Diagram
 
-![ER Diagram](./images/er_diagram.png)
-
+![ER Diagram](./images/ER_Diagram.drawio.png) 
 ## Teaser (MS3)
 
 ![Teaser](./images/teaser.png)
