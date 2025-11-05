@@ -62,12 +62,13 @@ Open the `server` and `client` in separate VSCode workspaces or open the combine
 
 ### Purpose
 
-2-5 sentences describing what the system does
+The Study Life Forum is a platform that allows verified students, alumni, and faculty to discuss university related topics anonymously. Users can create and participate in forums, make posts, and comment, all while maintaining their anonymity but retaining verified status. The system aims to foster open communication, knowledge sharing, and networking within the academic community. It unifies discussions about courses, careers, and general topics.
 
 ### Pages
 
-* Home: 1-3 sentences describing what the page displays and what a user can do
-* Shopping cart: ...
+* Home: Displays a list of accessible forums, both public and private. Users can browse forums, see featured posts, and navigate to specific forums or their profile.
+* Forum: Shows all posts within a selected forum. Users can read posts, create new posts, and navigate to individual post pages to view comments.
+* Profile: Allows users to manage their account settings, update their password, view their own posts and comments.
 
 ### Entity-Relationship (ER) Diagram
 
