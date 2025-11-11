@@ -6,7 +6,8 @@ var cors = require('cors');
 var history = require('connect-history-api-fallback');
 
 // Variables
-var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/animalDevelopmentDB';
+require('dotenv').config();
+var mongoURI = process.env.MONGODB_URI;
 var port = process.env.PORT || 3000;
 
 // Connect to MongoDB
@@ -15,7 +16,7 @@ mongoose.connect(mongoURI).catch(function(err) {
     console.error(err.stack);
     process.exit(1);
 }).then(function() {
-    console.log(`Connected to MongoDB with URI: ${mongoURI}`); // mistake when forward porting
+    console.log(`Connected to MongoDB`); // mistake when forward porting
 });
 
 // Create Express app
