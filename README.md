@@ -70,6 +70,31 @@ The Study Life Forum is a platform that allows verified students, alumni, and fa
 * Forum: Shows all posts within a selected forum. Users can read posts, create new posts, and navigate to individual post pages to view comments.
 * Profile: Allows users to manage their account settings, update their password, view their own posts and comments.
 
+### Advanced Feature Proposal
+
+We are proposing two advanced features, we would implement the one approved by the examiner.
+
+## Summary of Advanced Feature 1:
+We propose advanced search and filtering of posts as one of our advanced features. The goal is to give users a powerful search page where they can quickly find relevant discussions based on text, forum, tags and time period.
+
+## Brief description of the necessary backend and frontend enhancements to achieve this functionality:
+* We need more complex backend query logic that combines multiple filters in a single endpoint (search text, chosen forum, selected tags, date range, sort order).
+* We need to use MongoDB text search to keep these combined queries efficient when the data grows.
+* We have to design and implement a dedicated endpoint.
+* On the frontend we must build a rich search page with multiple controls (text input, dropdowns, checkboxes) and connect them to the API.
+* We also need to handle pagination, sorting options (newest/top/most commented) and update the UI based on the user’s chosen filters.
+
+
+## Summary of Advanced Feature 2:
+We propose integrating automatic language translation into the forum. This allows a user to translate a comment in their preferred language(Swedish or English). This makes international students be able to join discussions more comfortably.
+
+## Brief description of the necessary backend and frontend enhancements to achieve this functionality:
+* We need to integrate an external API such as google translate API
+* We must design a system that avoids leaking sensitive information. Only the content being translated can be sent to the external API.  No user identity, internal IDs, or metadata.
+* We must introduce backend logic that dynamically transforms user-generated content, such as Posts and Comments, into a translated version depending on the user’s preferred language.
+* We integrate a logic where the post or comment body is fetched and sent through the API for translation and presented in the frontend without actually saving it in the database.
+* We must handle errors when the external API is unreachable, slow or returns unexpected results. This requires both frontend and backend-level fallback systems so the user still receives the original text.
+
 ### Entity-Relationship (ER) Diagram
 
 ![ER Diagram](./images/ER_Diagram.drawio.png) 
