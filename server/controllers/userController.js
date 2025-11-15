@@ -136,3 +136,23 @@ exports.createUser = async (req, res, next) => {
     next(err);
   }
 };
+
+// GET: get all the users
+exports.getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().select('-passwordHash');
+    res.json({ data: users });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE: delete all the users
+exports.deleteAllUsers = async (req, res, next) => {
+  try {
+    await User.deleteMany({});
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};
