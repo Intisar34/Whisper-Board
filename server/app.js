@@ -17,6 +17,7 @@ mongoose.connect(mongoURI).catch(function(err) {
     process.exit(1);
 }).then(function() {
     console.log(`Connected to MongoDB`); // mistake when forward porting
+    console.log('   Database name:', mongoose.connection.db.databaseName); // print database name
 });
 
 // Create Express app
