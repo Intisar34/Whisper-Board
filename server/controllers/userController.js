@@ -70,3 +70,69 @@ function validateRoleAndInstitution({ role, institution, otherRoleName }) {
 
   return null; // no error
 }
+
+// POST: create user
+exports.createUser = async (req, res, next) => {
+  try {
+    const { email, password, institution, role, otherRoleName } = req.body;
+
+    // check for empty fields
+    if (!email || !password || !institution || !role) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // check if the email is valid
+    if (!validateEmail(email)) {
+      return res.status(422).json({ error: 'Invalid email format' });
+    }
+
+    // check if the password is valid and least 8 char
+    if (!validatePassword(password)) {
+      return res.status(422).json({
+        error:
+          'Password must be at least 8 characters and contain letters and numbers',
+      });
+    }
+
+    // check if institution and role
+    const roleError = validateRoleAndInstitution({ role, institution, otherRoleName });
+    if (roleError) {
+      return res.status(422).json({ error: roleError });
+    }
+
+    // check for duplicate email
+    const existing = await User.findOne({ email });
+    if (existing) {
+      return res.status(409).json({ error: 'Email already registered' });
+    }
+
+    // hash pasword
+    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    // create unique username
+    const username = await createUniqueUsername();
+
+    // create the user in mongoDB
+    const user = await User.create({
+      username,
+      email,
+      passwordHash,
+      institution: institution.trim(),
+      role,
+      otherRoleName: role === 'other' ? otherRoleName.trim() : undefined,
+    });
+
+    // send response for the sucessfully created user
+    res.status(201).json({
+      data: {
+        username: user.username,
+        email: user.email,
+        institution: user.institution,
+        role: user.role,
+        otherRoleName: user.otherRoleName,
+        isVerified: user.isVerified,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
