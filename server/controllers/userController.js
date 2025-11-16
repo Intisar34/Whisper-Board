@@ -176,7 +176,7 @@ exports.getUserByUsername = async (req, res, next) => {
 
 // PUT: update the whole user
 exports.updateUserPut = async (req, res, next) => {
-  try {
+try {
     const { username } = req.params;
     const { email, password, institution, role, otherRoleName } = req.body;
 
@@ -224,4 +224,62 @@ exports.updateUserPut = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+// PATCH: update specific details of a user
+exports.updateUserPatch = async (req, res, next) => {
+    try{
+        const { username } = req.params;
+        const updates = { ...req.body };
+
+        if (updates.email && !validateEmail(updates.email)) {
+            return res.status(422).json({ error: 'Invalid email format'});
+        }
+
+        if (updates. password) {
+            if (!validatePassword(updates.password)) {
+                return res.status(422).json({
+                    error: 'Password must be at least 8 characters and contain letters and numbers'
+                });
+            }
+            updates.passwordHash = await bcrypt.hash(updates.password, SALT_ROUNDS);
+            delete updates.password;
+        }
+        
+        const currentUser = await User.findOne({ username });
+        if (!currentUser) {
+            return res.status(404).json({ error: 'User not found'});
+        }
+        
+        const newInstitution = updates.institution !== undefined ? updates.institution : currentUser.institution;
+        const newRole = updates.role !== undefined ? updates.role : currentUser.role;
+        const newOtherRoleName = updates.otherRoleName !== undefined ? updates.otherRoleName : currentUser.otherRoleName;
+
+        const roleError = validateRoleAndInstitution({
+            role: newRole,
+            institution: newInstitution,
+            otherRoleName: newOtherRoleName,
+        });
+        
+        if (roleError) {
+            return res.status(422).json({ error: roleError });
+        }
+     
+        if (updates.institution) {
+            updates.institution = updates.institution.trim();
+        }
+        if (updates.role === 'other' && updates.otherRoleName) {
+           updates.otherRoleName = updates.otherRoleName.trim();
+        }
+     
+        const user = await User.findOneAndUpdate({ username }, updates, {
+            new: true,
+            runValidators: true,
+        }).select('-passwordHash');
+     
+        res.json({ data: user });
+
+    } catch (err) {
+        next(err);
+    }
 };
