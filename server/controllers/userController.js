@@ -232,11 +232,16 @@ exports.updateUserPatch = async (req, res, next) => {
         const { username } = req.params;
         const updates = { ...req.body };
 
+        const currentUser = await User.findOne({ username });
+        if (!currentUser) {
+            return res.status(404).json({ error: 'User not found'});
+        }
+
         if (updates.email && !validateEmail(updates.email)) {
             return res.status(422).json({ error: 'Invalid email format'});
         }
 
-        if (updates. password) {
+        if (updates.password) {
             if (!validatePassword(updates.password)) {
                 return res.status(422).json({
                     error: 'Password must be at least 8 characters and contain letters and numbers'
@@ -244,11 +249,6 @@ exports.updateUserPatch = async (req, res, next) => {
             }
             updates.passwordHash = await bcrypt.hash(updates.password, SALT_ROUNDS);
             delete updates.password;
-        }
-        
-        const currentUser = await User.findOne({ username });
-        if (!currentUser) {
-            return res.status(404).json({ error: 'User not found'});
         }
         
         const newInstitution = updates.institution !== undefined ? updates.institution : currentUser.institution;
@@ -281,5 +281,21 @@ exports.updateUserPatch = async (req, res, next) => {
 
     } catch (err) {
         next(err);
+    }
+};
+
+// DELETE: delete a specific user
+exports.deleteUser = async (req, res, next) => {
+    try {
+        const {username} = req.params;
+        const user = await User.findOneAndDelete({ username});
+
+        if(!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(204).send
+    } catch (err) {
+    next(err);
     }
 };
