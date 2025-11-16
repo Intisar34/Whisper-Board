@@ -285,7 +285,7 @@ exports.updateUserPatch = async (req, res, next) => {
 };
 
 // DELETE: delete a specific user
-exports.deleteUser = async (req, res, next) => {
+exports.deleteUserByUsername = async (req, res, next) => {
     try {
         const {username} = req.params;
         const user = await User.findOneAndDelete({ username});
