@@ -4,6 +4,7 @@ var morgan = require('morgan');
 var path = require('path');
 var cors = require('cors');
 var history = require('connect-history-api-fallback');
+var userRoutes = require('./routes/userRoutes');
 
 // Variables
 require('dotenv').config();
@@ -17,7 +18,7 @@ mongoose.connect(mongoURI).catch(function(err) {
     process.exit(1);
 }).then(function() {
     console.log(`Connected to MongoDB`); // mistake when forward porting
-    console.log('   Database name:', mongoose.connection.db.databaseName); // print database name
+    console.log('Database name:', mongoose.connection.db.databaseName); // print database name
 });
 
 // Create Express app
@@ -30,6 +31,7 @@ app.use(morgan('dev'));
 // Enable cross-origin resource sharing for frontend must be registered before api
 app.options('*', cors());
 app.use(cors());
+app.use('/api/v1/users', userRoutes);
 
 // Import routes
 app.get('/api', function(req, res) {
