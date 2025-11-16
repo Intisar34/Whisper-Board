@@ -173,3 +173,55 @@ exports.getUserByUsername = async (req, res, next) => {
     next(err);
   }
 };
+
+// PUT: update the whole user
+exports.updateUserPut = async (req, res, next) => {
+  try {
+    const { username } = req.params;
+    const { email, password, institution, role, otherRoleName } = req.body;
+
+    if (!email || !institution || !role) {
+      return res.status(400).json({ error: 'Missing required fields for PUT' });
+    }
+
+    if (!validateEmail(email)) {
+      return res.status(422).json({ error: 'Invalid email format' });
+    }
+
+    const roleError = validateRoleAndInstitution({ role, institution, otherRoleName });
+    if (roleError) {
+      return res.status(422).json({ error: roleError });
+    }
+
+    const updates = {
+      email,
+      institution: institution.trim(),
+      role,
+      otherRoleName: role === 'other' ? otherRoleName?.trim() : undefined,
+    };
+
+    if (password) {
+      if (!validatePassword(password)) {
+        return res.status(422).json({
+          error:
+            'Password must be at least 8 characters and contain letters and numbers',
+        });
+      }
+      updates.passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    }
+
+    const user = await User.findOneAndUpdate({ username }, updates, {
+      new: true,
+      overwrite: true,
+      runValidators: true,
+    }).select('-passwordHash');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ data: user });
+  } catch (err) {
+    next(err);
+  }
+};
