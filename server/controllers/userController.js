@@ -294,7 +294,7 @@ exports.deleteUserByUsername = async (req, res, next) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        res.status(204).send
+        res.status(204).send();
     } catch (err) {
     next(err);
     }

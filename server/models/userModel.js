@@ -31,7 +31,10 @@ const userSchema = new mongoose.Schema(
         },
         otherRoleName: {
             type: String,
-            required: true,
+            trim: true,
+            required: function () {
+                return this.role === 'other';
+            },
         },
         isVerified: {
             type: Boolean,
