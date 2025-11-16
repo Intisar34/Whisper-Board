@@ -156,3 +156,20 @@ exports.deleteAllUsers = async (req, res, next) => {
     next(err);
   }
 };
+
+// GET: get a specific user by their username
+exports.getUserByUsername = async (req, res, next) => {
+  try {
+    const { username } = req.params;
+
+    const user = await User.findOne({ username }).select('-passwordHash');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ data: user });
+  } catch (err) {
+    next(err);
+  }
+};
