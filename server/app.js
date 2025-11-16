@@ -4,6 +4,7 @@ var morgan = require('morgan');
 var path = require('path');
 var cors = require('cors');
 var history = require('connect-history-api-fallback');
+var postsController = require('./entities/post');
 
 // Variables
 require('dotenv').config();
@@ -33,7 +34,9 @@ app.use(cors());
 // Import routes
 app.get('/api', function(req, res) {
     res.json({'message': 'Welcome to your DIT342 backend ExpressJS project!'});
-});
+}); 
+
+app.use(postsController);
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
 app.use('/api/*', function (req, res) {
@@ -57,11 +60,10 @@ app.use(function(err, req, res, next) {
         'message': err.message,
         'error': {}
     };
-    if (env === 'development') {
-        // Return sensitive stack trace only in dev mode
+    if (env === 'development') { 
         err_res['error'] = err.stack;
     }
-    res.status(err.status || 500);
+    res.status(err.status || 500); 
     res.json(err_res);
 });
 
@@ -73,3 +75,4 @@ app.listen(port, function(err) {
 });
 
 module.exports = app;
+
