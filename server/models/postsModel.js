@@ -1,11 +1,35 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema; 
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema; 
 
-var postsSchema = new Schema({
-    title: {type: String},
-    body: {type: String},
-    usersID: {type: String},
-    forumID: {type: String}
-});
+const postsSchema = new Schema({
+    title: {
+        type: String,
+        lowercase: true,
+        required:true
+    },
+
+    body: {
+        type: String,
+        lowercase:true,
+        required:true
+    },
+
+    postDate:{
+        type: Date,
+        default: Date.now
+    },
+
+    usersID: {
+        type: String,
+        index: true,
+
+    },
+
+    forumID: {
+        type: String,
+        index: true
+    },
+}, 
+{ timestamps: true } );
 
 module.exports = mongoose.model('posts', postsSchema); 
