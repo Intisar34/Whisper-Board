@@ -6,7 +6,7 @@ const SALT_ROUNDS = 10;
 // amount of retry for unique username
 const UNQ_USR_TRY = 5;
 // username character limit
-const USSER_NAME_CHAR_LIMIT = 12;
+const USERNAME_CHAR_LIMIT = 12;
 
 // validate if it follows the email format
 function validateEmail(email) {
@@ -30,7 +30,7 @@ const USERNAME_CHARS =
 // generate random username, with 12 character limit
 function generateUsername() {
     let username = '';
-    for (let i = 0; i < USSER_NAME_CHAR_LIMIT; i++) {
+    for (let i = 0; i < USERNAME_CHAR_LIMIT; i++) {
         const idx = Math.floor(Math.random() * USERNAME_CHARS.length);
         username += USERNAME_CHARS[idx];
     }
