@@ -88,12 +88,22 @@ We propose advanced search and filtering of posts as one of our advanced feature
 ## Summary of Advanced Feature 2:
 We propose integrating automatic language translation into the forum. This allows a user to translate a comment in their preferred language(Swedish or English). This makes international students be able to join discussions more comfortably.
 
-## Brief description of the necessary backend and frontend enhancements to achieve this functionality:
+## Brief description of the necessary backend achieve this functionality:
 * We need to integrate an external API such as google translate API
 * We must design a system that avoids leaking sensitive information. Only the content being translated can be sent to the external API.  No user identity, internal IDs, or metadata.
 * We must introduce backend logic that dynamically transforms user-generated content, such as Posts and Comments, into a translated version depending on the user’s preferred language.
 * We integrate a logic where the post or comment body is fetched and sent through the API for translation and presented in the frontend without actually saving it in the database.
 * We must handle errors when the external API is unreachable, slow or returns unexpected results. This requires both frontend and backend-level fallback systems so the user still receives the original text.
+
+## Brief description of the necessary frontend enhancements to achieve this functionality:
+* Each post has a ‘show translation’, toggle.
+* Each comment has a ‘show translation’, toggle.
+* The toggle will change state to ‘translating…’ when clicked.
+* If the text is translated, a ‘show original’ toggle is shown to get the original text back.
+* If the text fails to translate, a ‘failed translation’ toggle is shown and the original text stays.
+* The frontend caches the translated text in local memory, so already translated posts or comments do not send new API requests.
+* The user can choose their preferred language in profile settings, so the frontend automatically requests translation of the predefined language.
+* The users are already anonymous, so if they put sensitive data in comments there's nothing we could do about it, it's their freedom of choice. For example: if someone puts their personummer in comments, there is nothing from our end to control it, the core of our platform is anonymity from the beginning.
 
 ### Entity-Relationship (ER) Diagram
 
