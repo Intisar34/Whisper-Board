@@ -5,6 +5,7 @@ var path = require('path');
 var cors = require('cors');
 var history = require('connect-history-api-fallback');
 const forumRoutes = require("./routes/forumRoutes");
+const commentRoutes = require('./routes/commentRoutes');
 
 // Variables
 require('dotenv').config();
@@ -31,6 +32,7 @@ app.use(morgan('dev'));
 app.options('*', cors());
 app.use(cors());
 app.use("/api/forums", forumRoutes);
+app.use('/api/comments', commentRoutes);
 
 // Import routes
 app.get('/api', function(req, res) {
