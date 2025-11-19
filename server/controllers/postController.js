@@ -1,6 +1,6 @@
 const Post = require('../models/postModel');
 
-//POST: Create a post.
+// POST: Create a post.
 exports.createPost =  async (req,res, next) => { 
     try{
         const post = new Post(req.body);
@@ -13,7 +13,7 @@ exports.createPost =  async (req,res, next) => {
     }
 }; 
 
-//GET: Get all posts.
+// GET: Get all posts.
 exports.getAllPosts = async (req,res,next) => {
     try{
         const getPosts = await Post.find()      
@@ -35,7 +35,7 @@ exports.deleteAllPosts = async (req,res,next) => {
     }
 };
 
-//GET: Get a specific Post.
+// GET: Get a specific Post.
 exports.getPost = async (req,res,next) => {
     try{
         const postID = req.params.id;// get id from URL
@@ -104,5 +104,65 @@ exports.patchPost = async (req,res,next) => {
     }
 };
 
+// POST: Create a post for a specific user.
+exports.createPostForUser = async (req,res,next) => {
+    try{
+        const username = req.params.username;
+        const post = new Post({
+            title: req.body.title,
+            body: req.body.body,
+            usersID: username,
+            forumID: req.body.forumID
+    });  
+        const savedPost = await post.save()
 
+        res.status(201).json(savedPost)
+    } catch(err){
+        next(err); // in here the field userID is filled
+    }
+};
+
+// POST: Create a post in a specific forum.
+exports.createPostInForum = async (req, res, next) => {
+    try {
+        const forumID = req.params.forumID;
+        const newPost = await Post.create({
+            title: req.body.title,
+            body: req.body.body,
+            usersID: req.body.usersID, // OR you may get this from auth later
+            forumID: forumID            // comes from URL
+        });
+
+        res.status(201).json(newPost);
+
+    } catch (err) {
+        next(err);
+    }
+};
+
+// DELETE: Delete specific post from a specific user.
+exports.deleteUserSpecificPost = async (req, res, next) => {
+    try {
+        const username = req.params.username;
+        const postId = req.params.post_id;
+
+        // Find the post
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Check relationship: only delete if it belongs to the user
+        if (post.usersID !== username) {
+            return res.status(403).json({ message: 'You cannot delete a post that is not yours.' });
+        }
+
+        await Post.findByIdAndDelete(postId);
+
+        res.status(204).send(); // No content, success
+    } catch (err) {
+        next(err);
+    }
+};
 
