@@ -12,6 +12,7 @@ router.post('/api/posts', async function(req,res, next){
         res.status(201).json(savedPost) 
     } catch (err) {
         next(err);
+
     }
 }); 
 
@@ -62,6 +63,46 @@ router.delete('/api/posts/:id', async function(req,res,next){
         res.status(200).json({message: "Successfully deleted", deletedItem})
     } catch(err){
         next(err);
+    }
+});
+
+// Replace a post by ID. 
+router.put('/api/posts/:id', async function(req,res,next){
+    try{
+        const oldPost = req.params.id;
+        const newPost = await Post.findByIdAndUpdate(
+            oldPost,req.body, {
+                new: true, // return the updated document.
+                overwrite: true // replace the whole document with the new body.
+            }
+        );
+
+        if(!newPost){
+            return res.status(404).json({message: "Post not found"})
+        }
+        
+        res.status(200).json({updatedPost: newPost, message: "Post has been succesfully updated"})
+
+    } catch(err){
+        next(err);
+    }
+});
+
+// Update specific fields in post by ID
+router.patch('/api/posts/:id', async function(req,res,next){
+    try{
+        const postID = req.params.id;
+        const newData = await Post.findByIdAndUpdate(
+            postID, {$set: req.body},{new: true}
+        );
+
+        if(!newData){
+            return res.status(404).json({message: "Not found"})
+        };
+
+        res.status(200).json({newField: newData});
+    } catch(err){
+        next(err)
     }
 });
 
