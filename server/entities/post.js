@@ -65,5 +65,5 @@ router.delete('/api/posts/:id', async function(req,res,next){
     }
 });
 
-
+module.exports = router;
 
