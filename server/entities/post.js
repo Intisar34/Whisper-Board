@@ -40,3 +40,30 @@ router.get('/api/posts/:id', async function(req,res,next){
     }
 });
 
+// Delete all posts.
+router.delete('/api/posts', async function(req,res,next){
+    try{
+        const results = await Post.deleteMany({});
+        res.status(200).json({message: " All posts have been deleted", deletedCount: results.deletedCount})
+    } catch(err){
+        next(err);
+    }
+});
+
+ // Delete a specific post by ID
+router.delete('/api/posts/:id', async function(req,res,next){
+    try{
+        const postID = req.params.id;
+        const deletedItem = await Post.findByIdAndDelete(postID)
+
+        if(!deletedItem){
+            res.status(404).json({message: "Not found"})
+        }
+        res.status(200).json({message: "Successfully deleted", deletedItem})
+    } catch(err){
+        next(err);
+    }
+});
+
+
+
