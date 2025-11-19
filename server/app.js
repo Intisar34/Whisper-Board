@@ -4,7 +4,7 @@ var morgan = require('morgan');
 var path = require('path');
 var cors = require('cors');
 var history = require('connect-history-api-fallback');
-var postsController = require('./entities/post');
+var postRouter = require('./routes/postRoutes');
 
 // Variables
 require('dotenv').config();
@@ -36,7 +36,7 @@ app.get('/api', function(req, res) {
     res.json({'message': 'Welcome to your DIT342 backend ExpressJS project!'});
 }); 
 
-app.use(postsController);
+app.use('/api/posts', postRouter);
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
 app.use('/api/*', function (req, res) {
