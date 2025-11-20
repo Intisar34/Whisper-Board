@@ -13,13 +13,22 @@ exports.createPost =  async (req,res, next) => {
     }
 }; 
 
-// GET: Get all posts.
+// GET: Get all posts with optional sorting.
 exports.getAllPosts = async (req,res,next) => {
     try{
-        const getPosts = await Post.find()      
-      
-        res.status(200).json({ getPosts });
-    } catch(err) {
+        const query = req.query.sort || null;
+
+        let getPosts
+
+        if(query){
+            getPosts = await Post.find().sort(query)
+        } else {
+            getPosts = await Post.find();
+        }
+
+        res.status(200).json(getPosts);
+
+    } catch(err){
         next(err);
     }
 };
@@ -118,7 +127,7 @@ exports.createPostForUser = async (req,res,next) => {
 
         res.status(201).json(savedPost)
     } catch(err){
-        next(err); // in here the field userID is filled
+        next(err); 
     }
 };
 
