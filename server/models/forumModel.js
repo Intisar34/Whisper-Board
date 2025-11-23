@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 // Defines the schema for forums
 const forumSchema = new mongoose.Schema ({
 
-    name: {type: String, unique: true},
+    name: {type: String, required: true},
     description: {type: String}
 
 })
