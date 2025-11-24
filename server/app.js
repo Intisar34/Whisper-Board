@@ -4,8 +4,8 @@ var morgan = require('morgan');
 var path = require('path');
 var cors = require('cors');
 var history = require('connect-history-api-fallback');
+var commentRoutes = require('./routes/commentRoutes');
 var postRouter = require('./routes/postRoutes');
-
 var forumRoutes = require('./routes/forumRoutes');
 var userRoutes = require('./routes/userRoutes');
 
@@ -34,7 +34,7 @@ app.use(morgan('dev'));
 // Enable cross-origin resource sharing for frontend must be registered before api
 app.options('*', cors());
 app.use(cors());
-
+app.use('/api/v1/comments', commentRoutes);
 app.use('/api/v1/forums', forumRoutes);
 app.use('/api/v1/users', userRoutes);
 
