@@ -19,9 +19,9 @@ const postsSchema = new Schema({
         default: Date.now
     },
 
-    usersID: {
-        type: String,
-        index: true,
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     },
 
     forumID: {

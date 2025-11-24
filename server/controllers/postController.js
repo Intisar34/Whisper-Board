@@ -59,6 +59,18 @@ exports.getPost = async (req,res,next) => {
     }
 };
 
+// GET: All posts for a specific user
+exports.getUserPosts = async (req, res, next) => {
+    try {
+        const { username } = req.params;
+        const posts = await Post.find({ userID: username });
+
+        res.status(200).json(posts);
+    } catch (err) {
+        next(err);
+    }
+};
+
  // DELETE: Delete a specific post by ID.
 exports.deletePost = async(req,res,next) => {
     try{
@@ -120,7 +132,7 @@ exports.createPostForUser = async (req,res,next) => {
         const post = new Post({
             title: req.body.title,
             body: req.body.body,
-            usersID: username,
+            userID: username,
             forumID: req.body.forumID
     });  
         const savedPost = await post.save()
@@ -138,7 +150,7 @@ exports.createPostInForum = async (req, res, next) => {
         const newPost = await Post.create({
             title: req.body.title,
             body: req.body.body,
-            usersID: req.body.usersID, // OR you may get this from auth later
+            userID: req.body.userID, // OR you may get this from auth later
             forumID: forumID            // comes from URL
         });
 
@@ -163,7 +175,7 @@ exports.deleteUserSpecificPost = async (req, res, next) => {
         }
 
         // Check relationship: only delete if it belongs to the user
-        if (post.usersID !== username) {
+        if (post.userID !== username) {
             return res.status(403).json({ message: 'You cannot delete a post that is not yours.' });
         }
 
@@ -174,4 +186,6 @@ exports.deleteUserSpecificPost = async (req, res, next) => {
         next(err);
     }
 };
+
+
 
