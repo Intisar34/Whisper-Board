@@ -32,7 +32,7 @@ app.use(morgan('dev'));
 app.options('*', cors());
 app.use(cors());
 app.use("/api/forums", forumRoutes);
-app.use('/api/comments', commentRoutes);
+app.use('/api/v1/comments', commentRoutes);
 
 // Import routes
 app.get('/api', function(req, res) {
