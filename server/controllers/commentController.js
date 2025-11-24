@@ -4,15 +4,14 @@ const Comments = require('../models/commentModel');
 // Creates a comment
 exports.createComment = async (req, res, next) => {
     try {
-        const comment = await Comments.create(req.body);
+        const comment = await Comments.save(req.body);
         res.status(201).json({data: comment});
     } catch (err) {
         next(err);
     }
 };
 
-
-// Gets all comments by userId/postId
+// Gets either all comments or filters by userId/postId
 exports.getComments = async (req, res, next) => {
     try {
         const allowed_filters = ["user_id", "post_id"];
@@ -26,6 +25,7 @@ exports.getComments = async (req, res, next) => {
 
         const comments = await Comments.find(filter);
         res.json({data: comments});
+
     } catch(err) {
         next(err);
     }
@@ -82,3 +82,18 @@ exports.deleteCommentByID = async (req, res, next) => {
 };
 
 
+// Create comments inside a post (relationship)
+exports.createPostComments = async (req, res, next) => {
+    try {
+        const {post_id} = req.params;
+        const comment = new Comment({
+            body: req.body.body,
+            post_id: post_id
+        });
+
+        const saveComment = await comment.save();
+        res.status(201).json(saveComment);
+    } catch (err) {
+        next (err);
+    }
+};
