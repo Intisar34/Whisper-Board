@@ -71,6 +71,22 @@ exports.getUserPosts = async (req, res, next) => {
     }
 };
 
+// GET: Single post for a specific user
+exports.getUserPostById = async (req, res, next) => {
+    try {
+        const { username, post_id } = req.params;
+
+        const post = await Post.findOne({ _id: post_id, userID: username });
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found for this user' });
+        }
+
+        res.status(200).json(post);
+    } catch (err) {
+        next(err);
+    }
+};
+
  // DELETE: Delete a specific post by ID.
 exports.deletePost = async(req,res,next) => {
     try{
