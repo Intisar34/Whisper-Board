@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 
@@ -8,19 +7,13 @@ const {
     getComments,
     getCommentByID,
     deleteCommentByID,
-    updateComment,
-    createPostComments,
-    deletePostComments
+    updateComment
 } = require('../controllers/commentController');
 
-router.post("/", createComment)
+router.post("/", createComment);
 router.get("/", getComments);
 router.get("/:id", getCommentByID);
 router.delete("/:id", deleteCommentByID);
 router.put("/:id", updateComment);
 
-// Relationship routes
-router.post("/posts/:post_id/comments", createPostComments);
-router.delete("/posts/:post_id/comments/:comment_id", deletePostComments)
-
-module.exports = router; 
+module.exports = router;

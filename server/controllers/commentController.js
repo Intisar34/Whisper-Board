@@ -14,7 +14,7 @@ exports.createComment = async (req, res, next) => {
 // Gets either all comments or filters by userId/postId
 exports.getComments = async (req, res, next) => {
     try {
-        const allowed_filters = ["user_id", "post_id"];
+        const allowed_filters = ["userID", "post_id"];
         const filter = {}
 
         allowed_filters.forEach(key => {
@@ -81,37 +81,64 @@ exports.deleteCommentByID = async (req, res, next) => {
     }
 };
 
-
 // Create comments inside a post (relationship)
 exports.createPostComments = async (req, res, next) => {
     try {
-        const {post_id} = req.params;
-        const comment = new Comment({
-            body: req.body.body,
-            post_id: post_id
+        const { post_id } = req.params;
+        const { body, userID } = req.body;
+
+        const comment = await Comments.create({
+            body,
+            post_id,
+            userID
         });
 
-        const saveComment = await comment.save();
-        res.status(201).json(saveComment);
+        res.status(201).json(comment);
     } catch (err) {
-        next (err);
+        next(err);
+    }
+};
+
+// Get all comments for a specific post (relationship)
+exports.getPostComments = async (req, res, next) => {
+    try {
+        const { post_id } = req.params;
+
+        const comments = await Comments.find({ post_id });
+        res.status(200).json(comments);
+    } catch (err) {
+        next(err);
+    }
+};
+
+// Get a single comment in a specific post (relationship)
+exports.getPostCommentById = async (req, res, next) => {
+    try {
+        const { post_id, comment_id } = req.params;
+
+        const comment = await Comments.findOne({ _id: comment_id, post_id });
+        if (!comment) {
+            return res.status(404).json({ error: "Comment not found in this post!" });
+        }
+
+        res.status(200).json(comment);
+    } catch (err) {
+        next(err);
     }
 };
 
 // Delete comment inside a post (relationship)
 exports.deletePostComments = async (req, res, next) => {
     try {
-        const {post_id, comment_id} = req.params;
+        const { post_id, comment_id } = req.params;
 
-        const comment = await Comments.findOneAndDelete({comment_id: comment_id, post_id: post_id});
-
+        const comment = await Comments.findOneAndDelete({ _id: comment_id, post_id });
         if (!comment) {
-            return res.status(404).json({error: "Comment not found in this post!"});
+            return res.status(404).json({ error: "Comment not found in this post!" });
         }
-        
-        res.status(201).json(saveComment);
+
+        res.status(204).send();
     } catch (err) {
-        next (err);
+        next(err);
     }
 };
-

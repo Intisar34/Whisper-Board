@@ -19,14 +19,14 @@ const postsSchema = new Schema({
         default: Date.now
     },
 
-    usersID: {
-        type: String,
-        index: true,
+    userID: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
     },
 
     forumID: {
-        type: String,
-        index: true
+        type: Schema.Types.ObjectId,
+        ref: "Forums"
     },
 }, 
 { timestamps: true } );
