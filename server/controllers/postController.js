@@ -203,5 +203,50 @@ exports.deleteUserSpecificPost = async (req, res, next) => {
     }
 };
 
+// GET: All posts in a specific forum
+exports.getForumPosts = async (req, res, next) => {
+    try {
+        const { forumID } = req.params;
+
+        const posts = await Post.find({ forumID: forumID });
+        res.status(200).json(posts);
+    } catch (err) {
+        next(err);
+    }
+};
+
+// GET: Single post in a specific forum
+exports.getForumPostById = async (req, res, next) => {
+    try {
+        const { forumID, post_id } = req.params;
+
+        const post = await Post.findOne({ _id: post_id, forumID: forumID });
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found in this forum' });
+        }
+
+        res.status(200).json(post);
+    } catch (err) {
+        next(err);
+    }
+};
+
+// DELETE: Delete a post from a specific forum
+exports.deleteForumPost = async (req, res, next) => {
+    try {
+        const { forumID, post_id } = req.params;
+
+        const post = await Post.findOne({ _id: post_id, forumID: forumID });
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found in this forum' });
+        }
+
+        await Post.findByIdAndDelete(post_id);
+
+        res.status(204).send();
+    } catch (err) {
+        next(err);
+    }
+};
 
 

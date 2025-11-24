@@ -13,7 +13,10 @@ const {
     createPostInForum,
     deleteUserSpecificPost,
     getUserPosts,
-    getUserPostById
+    getUserPostById,
+    getForumPosts,
+    getForumPostById,
+    deleteForumPost
 
 } = require("../controllers/postController");
 
@@ -30,7 +33,11 @@ router.patch("/posts/:id", patchPost);
 router.get("/users/:username/posts", getUserPosts);
 router.get("/users/:username/posts/:post_id", getUserPostById);
 router.post("/users/:username/posts", createPostForUser);
-router.post("/forums/:forumID/posts", createPostInForum);
 router.delete("/users/:username/posts/:post_id", deleteUserSpecificPost);
+
+router.post("/forums/:forumID/posts", createPostInForum);
+router.get("/forums/:forumID/posts", getForumPosts);
+router.get("/forums/:forumID/posts/:post_id", getForumPostById);
+router.delete("/forums/:forumID/posts/:post_id", deleteForumPost);
 
 module.exports = router;

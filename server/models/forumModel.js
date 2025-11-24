@@ -8,7 +8,7 @@ const forumSchema = new mongoose.Schema ({
     description: {type: String},
 
     // Foreign key for User
-    user_id: {
+    userID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true

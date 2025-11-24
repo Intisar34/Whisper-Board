@@ -20,13 +20,13 @@ const postsSchema = new Schema({
     },
 
     userID: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User"
     },
 
     forumID: {
-        type: String,
-        index: true
+        type: Schema.Types.ObjectId,
+        ref: "Forums"
     },
 }, 
 { timestamps: true } );
