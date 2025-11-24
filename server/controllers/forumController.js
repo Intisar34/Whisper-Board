@@ -1,6 +1,6 @@
 
 const Forum = require('../models/forumModel');
-const Post = require('../models/postModel');
+
 
 // Creates a forum
 exports.createForums = async (req, res, next) =>{
@@ -92,34 +92,4 @@ exports.updateForumField = async (req, res, next) => {
       } catch (err) {
           next (err);
       }
-};
-
-
-// Get all posts inside a forum
-exports.getForumPosts = async (req, res, next) => {
-    try {
-        const {forum_id} = req.params;
-        const posts = await Post.find({forumID: forum_id})
-
-        res.status(200).json({data: posts});
-    } catch (err) {
-        next(err);
-    }
-};
-
-// Create posts inside a forum
-exports.createForumPosts = async (req, res, next) => {
-    try {
-        const {forum_id} = req.params;
-        const post = new Post({
-            title: req.body.title,
-            body: req.body.body,
-            forumID: forum_id
-        });
-
-        const savePost = await post.save();
-        res.status(201).json(savePost);
-    } catch (err) {
-        next (err);
-    }
 };

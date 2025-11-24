@@ -9,9 +9,7 @@ const {
     getForumByID,
     deleteForumByID,
     updateForum,
-    updateForumField,
-    getForumPosts,
-    createForumPosts
+    updateForumField
 } = require("../controllers/forumController");
 
 router.post("/", createForums)
@@ -20,10 +18,5 @@ router.get("/:id", getForumByID);
 router.delete("/:id", deleteForumByID);
 router.put("/:id", updateForum);
 router.patch("/:id", updateForumField);
-
-// Realationship routes
-router.get("/forums/:forum_id/posts", getForumPosts)
-router.post("/forums/:forum_id/posts", createForumPosts)
-
 
 module.exports = router;
