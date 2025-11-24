@@ -1,5 +1,7 @@
 const bcrypt =require('bcrypt');
 const User = require('../models/userModel');
+const Post = require('../models/postModel');
+const Comment = require('../models/commentModel');
 
 // password hashign
 const SALT_ROUNDS = 10;
@@ -293,6 +295,9 @@ exports.deleteUserByUsername = async (req, res, next) => {
         if(!user) {
             return res.status(404).json({ error: 'User not found' });
         }
+
+        await Post.deleteMany({ userID: username });
+        await Comment.deleteMany({ userID: username });
 
         res.status(204).send();
     } catch (err) {
