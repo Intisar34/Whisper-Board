@@ -9,7 +9,8 @@ const {
     getCommentByID,
     deleteCommentByID,
     updateComment,
-    createPostComments
+    createPostComments,
+    deletePostComments
 } = require('../controllers/commentController');
 
 router.post("/", createComment)
@@ -20,5 +21,6 @@ router.put("/:id", updateComment);
 
 // Relationship routes
 router.post("/posts/:post_id/comments", createPostComments);
+router.delete("/posts/:post_id/comments/:comment_id", deletePostComments)
 
 module.exports = router; 

@@ -97,3 +97,21 @@ exports.createPostComments = async (req, res, next) => {
         next (err);
     }
 };
+
+// Delete comment inside a post (relationship)
+exports.deletePostComments = async (req, res, next) => {
+    try {
+        const {post_id, comment_id} = req.params;
+
+        const comment = await Comments.findOneAndDelete({comment_id: comment_id, post_id: post_id});
+
+        if (!comment) {
+            return res.status(404).json({error: "Comment not found in this post!"});
+        }
+        
+        res.status(201).json(saveComment);
+    } catch (err) {
+        next (err);
+    }
+};
+
