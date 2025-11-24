@@ -170,7 +170,39 @@ exports.getUserByUsername = async (req, res, next) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    res.json({ data: user });
+    // Converted to plain object so we can safely add fields
+    const userObj = user.toObject();
+
+    //HATEOAS links
+    const links = [
+      {
+        rel: "self",
+        href: `/api/v1/users/${userObj.username}`,
+        method: "GET",
+      },
+      {
+        rel: "update",
+        href: `/api/v1/users/${userObj.username}`,
+        method: "PUT",
+      },
+      {
+        rel: "partial-update",
+        href: `/api/v1/users/${userObj.username}`,
+        method: "PATCH",
+      },
+      {
+        rel: "delete",
+        href: `/api/v1/users/${userObj.username}`,
+        method: "DELETE",
+      },
+      {
+        rel: "posts",
+        href: `/api/v1/users/${userObj.username}/posts`,
+        method: "GET",
+      },
+    ];
+
+    res.json({ data: user, links });
   } catch (err) {
     next(err);
   }
