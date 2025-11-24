@@ -1,5 +1,6 @@
 
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema; 
 
 // Defines the schema for forums
 const forumSchema = new mongoose.Schema ({
@@ -9,7 +10,7 @@ const forumSchema = new mongoose.Schema ({
 
     // Foreign key for User
     userID: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User",
         required: true
     }

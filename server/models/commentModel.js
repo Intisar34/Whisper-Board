@@ -1,5 +1,6 @@
 
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema; 
 
 // Defines comment schema 
 const commentSchema = new mongoose.Schema({
@@ -8,14 +9,14 @@ const commentSchema = new mongoose.Schema({
 
     // Foreign key for Post
     post_id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Post",
         required: true
     },
 
     // Foreign key for User
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
+    userID: {
+        type: Schema.Types.ObjectId,
         ref: "User",
         required: true
     }

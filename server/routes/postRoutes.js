@@ -16,9 +16,16 @@ const {
     getUserPostById,
     getForumPosts,
     getForumPostById,
-    deleteForumPost
+    deleteForumPost,
 
 } = require("../controllers/postController");
+
+const {
+  createPostComments,
+  getPostComments,
+  getPostCommentById,
+  deletePostComments,
+} = require("../controllers/commentController");
 
 router.post("/posts", createPost);
 router.get("/posts", getAllPosts);
@@ -39,5 +46,10 @@ router.post("/forums/:forumID/posts", createPostInForum);
 router.get("/forums/:forumID/posts", getForumPosts);
 router.get("/forums/:forumID/posts/:post_id", getForumPostById);
 router.delete("/forums/:forumID/posts/:post_id", deleteForumPost);
+
+router.post("/posts/:post_id/comments", createPostComments);
+router.get("/posts/:post_id/comments", getPostComments);
+router.get("/posts/:post_id/comments/:comment_id", getPostCommentById);
+router.delete("/posts/:post_id/comments/:comment_id", deletePostComments);
 
 module.exports = router;
