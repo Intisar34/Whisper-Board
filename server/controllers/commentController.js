@@ -4,8 +4,10 @@ const Comments = require('../models/commentModel');
 // Creates a comment
 exports.createComment = async (req, res, next) => {
     try {
-        const comment = await Comments.save(req.body);
-        res.status(201).json({data: comment});
+        
+        const comment = new Comments (req.body);
+        const newComment = await comment.save(req.body);
+        res.status(201).json({data: newComment});
     } catch (err) {
         next(err);
     }
