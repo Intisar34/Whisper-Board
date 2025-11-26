@@ -1,5 +1,7 @@
 const bcrypt =require('bcrypt');
 const User = require('../models/userModel');
+const Post = require('../models/postModel');
+const Comment = require('../models/commentModel');
 
 // password hashign
 const SALT_ROUNDS = 10;
@@ -124,12 +126,7 @@ exports.createUser = async (req, res, next) => {
     // send response for the sucessfully created user
     res.status(201).json({
       data: {
-        username: user.username,
-        email: user.email,
-        institution: user.institution,
-        role: user.role,
-        otherRoleName: user.otherRoleName,
-        isVerified: user.isVerified,
+        user,
       },
     });
   } catch (err) {
@@ -168,7 +165,17 @@ exports.getUserByUsername = async (req, res, next) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    res.json({ data: user });
+    const baseUrl = `${req.protocol}://${req.get('host')}/api/v1`;
+    const userObj = user.toObject();
+
+    userObj.links = [
+      { rel: 'self',    href: `${baseUrl}/users/${user.username}` },
+      { rel: 'posts',   href: `${baseUrl}/users/${user.username}/posts` },
+      { rel: 'forums',  href: `${baseUrl}/forums?owner=${user.username}` },
+      { rel: 'comments', href: `${baseUrl}/users/${user.username}/comments` },
+    ];
+
+    return res.status(200).json({ data: userObj });
   } catch (err) {
     next(err);
   }
@@ -293,6 +300,9 @@ exports.deleteUserByUsername = async (req, res, next) => {
         if(!user) {
             return res.status(404).json({ error: 'User not found' });
         }
+
+        await Post.deleteMany({ userID: user._id });
+        await Comment.deleteMany({ userID: user._id });
 
         res.status(204).send();
     } catch (err) {

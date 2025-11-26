@@ -1,5 +1,6 @@
 
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema; 
 
 // Defines the schema for forums
 const forumSchema = new mongoose.Schema ({
@@ -8,13 +9,15 @@ const forumSchema = new mongoose.Schema ({
     description: {type: String},
 
     // Foreign key for User
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
+    userID: {
+        type: Schema.Types.ObjectId,
         ref: "User",
-        required: false
-    }
+        required: true
+    },
+},
 
-})
+{ timestamps: true}
+);
 
 // Creates a mongoose model 
 module.exports = mongoose.model("Forums", forumSchema);
