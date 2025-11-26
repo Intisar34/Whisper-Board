@@ -14,11 +14,10 @@ const forumSchema = new mongoose.Schema ({
         ref: "User",
         required: true
     },
-    
-
 },
+
 { timestamps: true}
-)
+);
 
 // Creates a mongoose model 
 module.exports = mongoose.model("Forums", forumSchema);
