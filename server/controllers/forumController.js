@@ -12,7 +12,7 @@ exports.createForums = async (req, res, next) =>{
         const newForum = new Forum(req.body);
         const saveForum = await newForum.save();
         
-        res.status(201).json({data: saveForum});
+        res.status(201).json({forum: saveForum});
 
     } catch (err) {
         next(err);
@@ -25,7 +25,7 @@ exports.getForums = async (req, res, next) => {
     try {
         const forums = await Forum.find();
 
-        res.status(200).json({data:forums});
+        res.status(200).json({forums: forums});
 
     } catch(err) {
         next(err);
@@ -42,7 +42,7 @@ exports.getForumByID = async (req, res, next) => {
             return res.status(404).json({error: "Forum not found!"});
         }
 
-        res.status(200).json({data:forum});
+        res.status(200).json({forum: forum});
     } catch(err) {
         next(err);
     }
@@ -63,7 +63,7 @@ exports.updateForum = async (req, res, next) => {
             return res.status(404).json({error: "Forum not found!"});
         }
         
-        res.status(200).json({data:updatedForum});
+        res.status(200).json({forum: updatedForum});
         } catch (err) {
             next (err);
         }
@@ -101,7 +101,7 @@ exports.updateForumField = async (req, res, next) => {
             return res.status(404).json({error: "Forum not found!"});
 
         }
-        res.status(200).json({data:updatedForumField});
+        res.status(200).json({forum: updatedForumField});
 
       } catch (err) {
           next (err);
