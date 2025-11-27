@@ -144,3 +144,21 @@ exports.deletePostComments = async (req, res, next) => {
         next(err);
     }
 };
+
+// Create comments for specific user (relationship)
+exports.createUserSpecificComment = async (req, res, next) => {
+    try{
+        const{userID} = req.params;
+        const {body, post_id} = req.body;
+
+        const newComment = await Comments.create({
+            body,
+            post_id,
+            userID
+        });
+
+        res.status(201).json({comment: newComment});      
+} catch (err) {
+    next(err);
+}
+};
