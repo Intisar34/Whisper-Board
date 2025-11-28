@@ -1,75 +1,4341 @@
 {
 	"info": {
-		"_postman_id": "f7ee95b5-9cb9-442f-a6a9-42de46138872",
-		"name": "server",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "3e29da25-696e-481a-b976-895a18522c42",
+		"name": "MS1 - Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38747712",
+		"_collection_link": "https://group-10-6237.postman.co/workspace/Group-10-WEB~8722debc-6dbd-4118-94e7-72de47941352/collection/50009324-3e29da25-696e-481a-b976-895a18522c42?action=share&source=collection_link&creator=38747712"
 	},
 	"item": [
 		{
-			"name": "GET /api",
-			"event": [
+			"name": "User",
+			"item": [
 				{
-					"listen": "prerequest",
-					"script": {
-						"id": "b58d92ec-5214-450c-adb0-28e068aa71b9",
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/api",
-					"host": [
-						"{{host}}"
+					"name": "Check Connection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
 					],
-					"path": [
-						"api"
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response has data object\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"data\");",
+									"});",
+									"",
+									"pm.test(\"User fields are present\", function () {",
+									"  const data = pm.response.json().data.user;",
+									"  pm.expect(data).to.have.property(\"username\");",
+									"  pm.expect(data).to.have.property(\"email\");",
+									"  pm.expect(data).to.have.property(\"institution\");",
+									"  pm.expect(data).to.have.property(\"role\");",
+									"});",
+									"",
+									"const createdUser = pm.response.json();",
+									"pm.environment.set(\"username\", createdUser.data.user.username);",
+									"pm.environment.set(\"userID\", createdUser.data.user._id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\n  {\n    \"email\": \"bijoy@chalmers.se\",\n    \"password\": \"sara1234\",\n    \"institution\": \"Chalmers University of Technology\",\n    \"role\": \"other\",\n    \"otherRoleName\": \"Administrator\"\n  }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User (Invalid)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for missing required fields\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON with error field\", function () {",
+									"    pm.response.to.be.json;",
+									"    const body = pm.response.json();",
+									"",
+									"    pm.expect(body).to.have.property(\"error\");",
+									"    pm.expect(body.error).to.be.a(\"string\");",
+									"    pm.expect(body.error).to.eql(\"Missing required fields\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\n  {\n    \"email\": \"\",\n    \"password\": \"sara1234\",\n    \"institution\": \"Chalmers University of Technology\",\n    \"role\": \"other\",\n    \"otherRoleName\": \"Administrator\"\n  }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has user data\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"data\");",
+									"  pm.expect(json.data).to.have.property(\"username\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific User (Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"  pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Response has no user data\", function () {",
+									"    pm.response.to.be.json;",
+									"    const body = pm.response.json();",
+									" ",
+									"    pm.expect(body).to.have.property(\"error\");",
+									"    pm.expect(body.error).to.be.a(\"string\");",
+									"    pm.expect(body.error).to.eql(\"User not found\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List all Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Data is an array of users\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"data\");",
+									"  pm.expect(json.data).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"At least one user exists\", function () {",
+									"  const users = pm.response.json().data;",
+									"  pm.expect(users.length).to.be.at.least(1);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List all Users (Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Data is an array of users\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"data\");",
+									"  pm.expect(json.data).to.be.an(\"array\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 on email patch\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Email field was updated\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"data\");",
+									"  pm.expect(json.data).to.have.property(\"email\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"updatedemail@gmail.com\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update email (Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 for invalid email on update\", function () {",
+									"    pm.response.to.have.status(422);",
+									"});",
+									"",
+									"pm.test(\"Response has error about email format on update\", function () {",
+									"    pm.response.to.be.json;",
+									"    const body = pm.response.json();",
+									"",
+									"    pm.expect(body).to.have.property(\"error\");",
+									"    pm.expect(body.error).to.be.a(\"string\");",
+									"    pm.expect(body.error.toLowerCase()).to.include(\"email\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"updatedemailgmail.com\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update pass",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 on password patch\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"User object is returned\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"data\");",
+									"  pm.expect(json.data).to.have.property(\"username\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"password\": \"updatedPass1234\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update pass (Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 for weak password on update\", function () {",
+									"    pm.response.to.have.status(422);",
+									"});",
+									"",
+									"pm.test(\"Response has error about password strength on update\", function () {",
+									"    pm.response.to.be.json;",
+									"    const body = pm.response.json();",
+									"",
+									"    pm.expect(body).to.have.property(\"error\");",
+									"    pm.expect(body.error).to.be.a(\"string\");",
+									"    pm.expect(body.error.toLowerCase()).to.include(\"password\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"password\": \"1234567\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update institution",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 on institution patch\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Institution field was updated\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"data\");",
+									"  pm.expect(json.data).to.have.property(\"institution\");",
+									"  pm.expect(json.data.institution).to.eql(\"Updated institution\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"institution\": \"Updated institution\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update institution (Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 for missing Institution\", function () {",
+									"  pm.response.to.have.status(422);",
+									"});",
+									"",
+									"pm.test(\"Error message for missing Institution\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"error\");",
+									"  pm.expect(json.error).to.eql(\"Institution is required\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"institution\": \"\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update role",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 on role patch\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Role field was updated\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"data\");",
+									"  pm.expect(json.data).to.have.property(\"role\");",
+									"  pm.expect(json.data.role).to.be.oneOf([\"Alumni\", \"other\", \"Student\", \"Teacher\", \"TA\"]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"role\": \"other\",\n  \"otherRoleName\": \"updatedRole\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update role (Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 when role malformed\", function () {",
+									"  pm.response.to.have.status(422);",
+									"});",
+									"",
+									"pm.test(\"Error mentions otherRoleName requirement on role update\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"error\");",
+									"  pm.expect(json.error.toLowerCase()).to.include(\"otherrolename\");",
+									"  pm.expect(json.error.toLowerCase()).to.include(\"required\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"role\": \"other\",\n  \"otherRoleName\": \"\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update all the fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 on full update\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Updated user is returned\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"data\");",
+									"  pm.expect(json.data).to.have.property(\"email\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"hasan123@gmail.com\",\n    \"password\": \"newPass1234\",\n    \"institution\": \"Chalmers University of Technology\",\n    \"role\": \"Alumni\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update all the fields (Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422 when required fields are missing\", function () {",
+									"  pm.response.to.have.status(422);",
+									"});",
+									"",
+									"pm.test(\"Error message for missing required fields\", function () {",
+									"  const json = pm.response.json();",
+									"  pm.expect(json).to.have.property(\"error\");",
+									"  pm.expect(json.error).to.include(\"Password must be at least 8 characters and contain letters and numbers\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"hasan@gmail.com\",\n    \"password\": \"newP\",\n    \"institution\": \"Chalmers University of Technology\",\n    \"role\": \"Alumni\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"id": "05864cff-5cba-4070-bac3-a59328954ebf",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
+			]
 		},
 		{
-			"listen": "test",
-			"script": {
-				"id": "e9c319be-3306-4fc5-ba34-fcf64391213a",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
+			"name": "Forum",
+			"item": [
+				{
+					"name": "Create forum (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is a valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Forum has required fields\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body.forum).to.have.property(\"name\");\r",
+									"    pm.expect(body.forum).to.have.property(\"userID\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Fields have correct types\", function() {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body.forum.name).to.be.a(\"string\");\r",
+									"\r",
+									"    if (body.forum.description) {\r",
+									"        pm.expect(body.forum.description).to.be.a(\"string\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"const createdForum = pm.response.json();\r",
+									"pm.environment.set(\"forumID\", createdForum.forum._id);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Programming\",\r\n    \"description\": \"I love food!\",\r\n    \"userID\": \"{{userID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create forum (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message for misssing name\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body).to.have.property(\"error\");\r",
+									"    pm.expect(body.error).to.eql(\"Forum name is required!\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all forums",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains data array\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body).to.have.property(\"forums\");\r",
+									"    pm.expect(body.forums).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Forums have required fields\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    body.forums.forEach(forum => {\r",
+									"        pm.expect(forum).to.have.property(\"name\");\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/forums",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get forum by ID (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains data object\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body).to.have.property(\"forum\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Forum has required fields\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body.forum).to.have.property(\"name\");\r",
+									"    if (body.forum.description) {\r",
+									"        pm.expect(body.forum.description).to.be.a(\"string\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get forum by ID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 for non-existing ID\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message returned\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update all fields (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Updated forum has required fields\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(body.forum).to.have.property(\"name\");\r",
+									"    \r",
+									"    if (body.description) {\r",
+									"        pm.expect(body.data.description).to.be.a(\"string\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Web Engineering\",\r\n    \"description\": \"We are working on MS1\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update all fields (invalid - missing forum)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message for missing forum\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Computer\",\r\n    \"description\": \"I have a HP\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update all fields (invalid - missing name))",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message for misssing name\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body).to.have.property(\"error\");\r",
+									"    pm.expect(body.error).to.eql(\"Forum name is required!\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\",\r\n    \"description\": \"I have a HP\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Updated forum field is required\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.forum).to.have.property(\"name\");\r",
+									"    pm.expect(json.forum.name).to.be.a(\"string\");\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Hamburger\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update description",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"    \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Updated forum field\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body.forum).to.have.property(\"description\");\r",
+									"    pm.expect(body.forum.description).to.be.a(\"string\");\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"My favourite hamburger is beef\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update name (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message for missing name\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body).to.have.property(\"error\");\r",
+									"    pm.expect(body.error).to.eql(\"Forum name cannot be empty!\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update specific fields (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message for missing forum\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"London\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
-			"id": "cd185905-a834-4211-8030-583d17702534",
-			"key": "host",
-			"value": "http://localhost:3000",
-			"type": "string"
+			"name": "Post",
+			"item": [
+				{
+					"name": "Create a post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has required fields\", function(){\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"title\");\r",
+									"    pm.expect(json).to.have.property(\"body\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields have the correct type\", function(){\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.title).to.be.a(\"string\");\r",
+									"    pm.expect(json.body).to.be.a(\"string\");\r",
+									"    pm.expect(new Date(json.postDate).toString()).not.equal(\"Invalid Date\");\r",
+									"});\r",
+									"\r",
+									"const createdPost = pm.response.json();\r",
+									"pm.environment.set(\"postID\", createdPost._id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"trying new post\",\r\n    \"body\": \"my refresh token logic isnt working after 15 minutes.\",\r\n    \"userID\": \"{{userID}}\",\r\n    \"forumID\": \"{{forumID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create post (Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for missing required fields\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"    pm.expect(json.error).to.equal(\"Missing required fields\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"post second\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create post for specific user(Valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has required fields\", function(){\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"title\");\r",
+									"    pm.expect(json).to.have.property(\"body\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields have the correct type\", function(){\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.title).to.be.a(\"string\");\r",
+									"    pm.expect(json.body).to.be.a(\"string\");\r",
+									"    pm.expect(new Date(json.postDate).toString()).not.equal(\"Invalid Date\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"cafe study\",\r\n  \"body\": \"whatever this is\",\r\n  \"forumID\": \"{{forumID}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a post for specific user(invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for missing required fields\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"    pm.expect(json.error).to.equal(\"Missing required fields\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"hello from the other side\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create post for specific user(User not found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 404 \", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"    pm.expect(json.error).to.equal(\"User not found\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"go to lisberg!\",\r\n    \"body\":\"who wants to go?\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username(Invalid)}}/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username(Invalid)}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create post specific forum(Valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has required fields\", function(){\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"title\");\r",
+									"    pm.expect(json).to.have.property(\"body\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields have the correct type\", function(){\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.title).to.be.a(\"string\");\r",
+									"    pm.expect(json.body).to.be.a(\"string\");\r",
+									"    pm.expect(new Date(json.postDate).toString()).not.equal(\"Invalid Date\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"no no!\",\r\n  \"body\": \"no no\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID}}/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create post specific forum(Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for missing required fields\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"    pm.expect(json.error).to.equal(\"Missing required fields\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID(Invalid)}}/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID(Invalid)}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List all posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Post have required fields\", function () {\r",
+									"    const posts = pm.response.json();\r",
+									"    pm.expect(posts.specificPost).to.have.property(\"title\");\r",
+									"    pm.expect(posts.specificPost).to.have.property(\"body\");\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sort the posts by fields(Valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has required fields\", function(){\r",
+									"    const posts = pm.response.json();\r",
+									"\r",
+									"    pm.expect(posts).to.be.an(\"array\");\r",
+									"\r",
+									"    posts.forEach(post => {\r",
+									"        pm.expect(post).to.have.property(\"title\");\r",
+									"        pm.expect(post).to.have.property(\"body\");\r",
+									"        pm.expect(post).to.have.property(\"postDate\");\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/posts?sort=-postDate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "-postDate"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "specific post(Valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has required fields\", function(){\r",
+									"    \r",
+									"    const posts = pm.response.json();\r",
+									"\r",
+									"    pm.expect(posts.specificPost).to.have.property(\"title\");\r",
+									"    pm.expect(posts.specificPost).to.have.property(\"body\");\r",
+									"    pm.expect(posts.specificPost).to.have.property(\"postDate\");\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n"
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Specific Post (Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All post from specific user(Valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has required fields\", function(){\r",
+									"    const posts = pm.response.json();\r",
+									"\r",
+									"    pm.expect(posts).to.be.an(\"array\");\r",
+									"\r",
+									"    posts.forEach(post => {\r",
+									"        pm.expect(post).to.have.property(\"title\");\r",
+									"        pm.expect(post).to.have.property(\"body\");\r",
+									"        pm.expect(post).to.have.property(\"postDate\");\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All posts specific User(Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Status is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"    pm.expect(json.error).to.equal(\"User not found\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username(Invalid)}}/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username(Invalid)}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All posts specific Forum",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has required fields\", function(){\r",
+									"    const posts = pm.response.json();\r",
+									"\r",
+									"    pm.expect(posts).to.be.an(\"array\");\r",
+									"\r",
+									"    posts.forEach(post => {\r",
+									"        pm.expect(post).to.have.property(\"title\");\r",
+									"        pm.expect(post).to.have.property(\"body\");\r",
+									"        pm.expect(post).to.have.property(\"postDate\");\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID}}/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Specific forum specific post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has required fields\", function () {\r",
+									"    const post = pm.response.json();\r",
+									"    pm.expect(post).to.have.property(\"title\");\r",
+									"    pm.expect(post).to.have.property(\"body\");\r",
+									"    pm.expect(post).to.have.property(\"postDate\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID}}/posts/{{postID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID}}",
+								"posts",
+								"{{postID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update title(Valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains update object\", function () {\r",
+									"    pm.expect(json).to.have.property(\"update\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"update contains expected updated fields\", function () {\r",
+									"    const updated = json.update;\r",
+									"    pm.expect(updated).to.have.property(\"title\");\r",
+									"    pm.expect(updated).to.have.property(\"body\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"difference between promise all and promise allsettled\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update title(Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"difference between promise all and promise allsettled\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update all the fields(Valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    pm.expect(json).to.have.property(\"updatedPost\");\r",
+									"    pm.expect(json.updatedPost).to.have.property(\"title\");\r",
+									"    pm.expect(json.updatedPost).to.have.property(\"body\");\r",
+									"    pm.expect(json).to.have.property(\"message\");\r",
+									"    pm.expect(json.message).to.equal(\"Post has been successfully updated\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"what is the difference between let and var\",\r\n  \"body\": \"i keep seeing people say var is outdated. why?\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update all the fields(Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has message field\", function () {\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "Create comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comments object\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body).to.have.property(\"comment\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has required fields\", function(){\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.comment).to.have.property(\"body\");\r",
+									"    pm.expect(json.comment).to.have.property(\"userID\");\r",
+									"    pm.expect(json.comment).to.have.property(\"postID\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Fields have correct types\", function() {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.comment.body).to.be.a(\"string\");\r",
+									"    pm.expect(json.comment.userID).to.be.a(\"string\");\r",
+									"    pm.expect(json.comment.postID).to.be.a(\"string\");\r",
+									"\r",
+									"});\r",
+									"\r",
+									"const createdComment = pm.response.json();\r",
+									"pm.environment.set(\"commentID\", createdComment.comment._id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"body\": \"yallaho!\",\r\n  \"postID\": \"{{postID}}\",\r\n  \"userID\": \"{{userID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create comment post by ID (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comment object\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"comment\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comments has required fields\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.comment).to.have.property(\"body\");\r",
+									"    pm.expect(json.comment).to.have.property(\"userID\");\r",
+									"    pm.expect(json.comment).to.have.property(\"postID\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Fields have correct types\", function() {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.comment.body).to.be.a(\"string\");\r",
+									"    pm.expect(json.comment.userID).to.be.a(\"string\");\r",
+									"    pm.expect(json.comment.postID).to.be.a(\"string\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"body\": \"helloooo\",\r\n    \"postID\": \"{{postID}}\",\r\n    \"username\": \"{{username}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID}}/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create comment post by ID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"    pm.expect(json.error).to.equal(\"Post not found!\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"body\": \"helloooo\",\r\n    \"postID\": \"{{postID(Invalid)}}\",\r\n    \"userID\": \"{{username(Invalid)}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1//posts/:postID/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"",
+								"posts",
+								":postID",
+								"comments"
+							],
+							"variable": [
+								{
+									"key": "postID",
+									"value": "6928efe953e96112767eddee"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user comment by ID (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comment object\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"comment\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comments has required fields\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.comment).to.have.property(\"body\");\r",
+									"    pm.expect(json.comment).to.have.property(\"userID\");\r",
+									"    pm.expect(json.comment).to.have.property(\"postID\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Fields have correct types\", function() {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.comment.body).to.be.a(\"string\");\r",
+									"    pm.expect(json.comment.userID).to.be.a(\"string\");\r",
+									"    pm.expect(json.comment.postID).to.be.a(\"string\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"body\": \"Love thisss!!\",\r\n  \"postID\": \"{{postID}}\",\r\n  \"username\": \"{{username}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user comment by ID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"    pm.expect(json.error).to.equal(\"User not found!\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"body\": \"Love thisss!!\",\r\n  \"postID\": \"{{postID(Invalid)}}\",\r\n  \"username\": \"{{username(Invalid)}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username(Invalid)}}/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username(Invalid)}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all comments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comments object\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body).to.have.property(\"comments\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comments array\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body.comments).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comments have required fields\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    body.comments.forEach(comment => {\r",
+									"        pm.expect(comment).to.have.property(\"body\");\r",
+									"        pm.expect(comment).to.have.property(\"userID\");\r",
+									"        pm.expect(comment).to.have.property(\"postID\");\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get comment by ID (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"if(pm.response.code === 200){\r",
+									"    pm.test(\"Response contains data object\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"comment\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comments has required fields\", function () {\r",
+									"    pm.expect(json.comment).to.have.property(\"body\");\r",
+									"    pm.expect(json.comment).to.have.property(\"userID\");\r",
+									"    pm.expect(json.comment).to.have.property(\"postID\");\r",
+									"    \r",
+									"});\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"Status is 404\", function () {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response contains 'error' field\", function () {\r",
+									"        pm.expect(json).to.have.property(\"error\");\r",
+									"        pm.expect(json.error).to.equal(\"Comment not found!\");\r",
+									"    });\r",
+									"};\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/comments/{{commentID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"{{commentID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get comment by ID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/comments/{{commentID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"{{commentID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter comments by userID (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comments object\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"comments\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comments array\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.comments).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comments have required fields\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    json.comments.forEach(comment => {\r",
+									"    pm.expect(comment).to.have.property(\"body\");\r",
+									"    pm.expect(comment).to.have.property(\"userID\");\r",
+									"\r",
+									"    });\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/comments?username={{userID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "{{userID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter comment by userID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/comments?userID={{userID(invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "{{userID(invalid)}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter comments by postID (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comments object\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"comments\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comments array\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.comments).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comments have required fields\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    json.comments.forEach(comment => {\r",
+									"    pm.expect(comment).to.have.property(\"body\");\r",
+									"    pm.expect(comment).to.have.property(\"postID\");\r",
+									"    pm.expect(comment.postID).to.eql(pm.request.url.query.get(\"postID\"));\r",
+									"    });\r",
+									"\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/comments?postID={{postID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "postID",
+									"value": "{{postID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter comment by postID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/comments?postID={{postID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "postID",
+									"value": "{{postID(Invalid)}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get post comments (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comment object\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"comments\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comments array\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body.comments).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comments has required fields\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    json.comments.forEach(comment => {\r",
+									"        pm.expect(comment).to.have.property(\"body\");\r",
+									"        pm.expect(comment).to.have.property(\"userID\");\r",
+									"        pm.expect(comment).to.have.property(\"postID\");\r",
+									"    });\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID}}/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get post comment (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {",
+									"    pm.response.to.have.status(500);",
+									"});",
+									"",
+									"pm.test(\"Response contains 'error' field\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"error\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID(Invalid)}}/comments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID(Invalid)}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get post comment by ID (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains comment object\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"comment\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comments has required fields\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.comment).to.have.property(\"body\");\r",
+									"    pm.expect(json.comment).to.have.property(\"userID\");\r",
+									"    pm.expect(json.comment).to.have.property(\"postID\");\r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID}}/comments/{{commentID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}",
+								"comments",
+								"{{commentID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get post comment by ID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID(Invalid)}}/comments/{{commentID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID(Invalid)}}",
+								"comments",
+								"{{commentID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get post comment by ID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID}}/comments/{{commentID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}",
+								"comments",
+								"{{commentID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update comment (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Updated forum has required fields\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body.comment).to.have.property(\"body\");\r",
+									"    pm.expect(body.comment).to.have.property(\"userID\");\r",
+									"    pm.expect(body.comment).to.have.property(\"postID\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Fields have correct types\", function() {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.comment.body).to.be.a(\"string\");\r",
+									"    pm.expect(json.comment.userID).to.be.a(\"string\");\r",
+									"    pm.expect(json.comment.postID).to.be.a(\"string\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"body\": \"that is coldddd\",\r\n  \"postID\": \"67a0e8d4f3c94214d4b7c888\",\r\n  \"userID\": \"679fe3a1aa14bb3bc19d9ccc\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/comments/{{commentID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"{{commentID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updated comment (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/comments/{{commentID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"{{commentID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete Comments",
+			"item": [
+				{
+					"name": "Delete comment by ID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/comments/{{commentID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"{{commentID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete comment post by ID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains error field\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1//posts/{{postID}}/comments/{{commentID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"",
+								"posts",
+								"{{postID}}",
+								"comments",
+								"{{commentID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete comment post by ID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains 'error' field\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1//posts/{{postID(Invalid)}}/comments/{{commentID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"",
+								"posts",
+								"{{postID(Invalid)}}",
+								"comments",
+								"{{commentID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete comment by ID (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body is empty\", function () {\r",
+									"        pm.expect(pm.response.text()).to.eql(\"\"); \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/comments/{{commentID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"{{commentID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete Posts",
+			"item": [
+				{
+					"name": "Specific post(Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response status code is 500\", function(){\r",
+									"pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains error message\", function(){\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/posts/{{postID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete specific post specific user(Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"response is valid JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const json = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response code has status code 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body contains the error message\", function () {\r",
+									"    pm.expect(json).to.have.property(\"error\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}/posts/{{postID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}",
+								"posts",
+								"{{postID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete specific post specific user(Valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code has status code 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"if (pm.response.code === 403) {\r",
+									"    pm.test(\"response is valid JSON\", function () {\r",
+									"        pm.response.to.be.json;\r",
+									"    });\r",
+									"\r",
+									"    const json = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Response code has status code 403\", function () {\r",
+									"        pm.response.to.have.status(403);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response body contains the error message\", function () {\r",
+									"        pm.expect(json).to.have.property(\"message\");\r",
+									"        pm.expect(json.message).to.eql(\"You cannot delete a post that is not yours.\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"response is valid JSON\", function () {\r",
+									"        pm.response.to.be.json;\r",
+									"    });\r",
+									"\r",
+									"    const json = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Response code has status code 404\", function () {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Response body contains the error message\", function () {\r",
+									"        pm.expect(json).to.have.property(\"message\");\r",
+									"        pm.expect(json.message).to.eql(\"Post not found\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}/posts/{{postID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}",
+								"posts",
+								"{{postID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete all posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is valid JSON\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response fields have the correct type\", function(){\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"message\");\r",
+									"    pm.expect(json.message).to.be.a(\"string\");\r",
+									"    \r",
+									"    pm.expect(json).to.have.property(\"deletedCount\");\r",
+									"    pm.expect(json.deletedCount).to.be.a(\"number\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"mongodb connection error\",\r\n  \"body\": \"my atlas cluster keeps timing out. any ideas?\",\r\n  \"usersID\": \"mohamed\",\r\n  \"forumID\": \"backend\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete Forums",
+			"item": [
+				{
+					"name": "Delete forum by ID (invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500 for non-existing ID\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message returned\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body).to.have.property(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete forum by ID (valid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/forums/{{forumID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"forums",
+								"{{forumID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete User",
+			"item": [
+				{
+					"name": "Specific User (Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"  pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Response has no user data\", function () {",
+									"    pm.response.to.be.json;",
+									"    const body = pm.response.json();",
+									" ",
+									"    pm.expect(body).to.have.property(\"error\");",
+									"    pm.expect(body.error).to.be.a(\"string\");",
+									"    pm.expect(body.error).to.eql(\"User not found\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username(Invalid)}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username(Invalid)}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Specific User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204 when deleting user\", function () {",
+									"  pm.response.to.have.status(204);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{username}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All users (Invalid)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204 (no content)\", function () {",
+									"  pm.response.to.have.status(204);",
+									"});",
+									"",
+									"pm.environment.unset(\"username\");",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204 (no content)\", function () {",
+									"  pm.response.to.have.status(204);",
+									"});",
+									"",
+									"pm.environment.unset(\"username\");",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
