@@ -38,11 +38,11 @@ router.patch("/posts/:id", patchPost);
 
 
 // Extra relationship routes
-router.get("/users/:userID/posts", getUserPosts);
-router.get("/users/:userID/posts/:post_id", getUserPostById);
-router.post("/users/:userID/posts", createPostForUser);
-router.delete("/users/:userID/posts/:post_id", deleteUserSpecificPost);
-router.post("/users/:userID/comments", createUserSpecificComment)
+router.get("/users/:username/posts", getUserPosts);
+router.get("/users/:username/posts/:post_id", getUserPostById);
+router.post("/users/:username/posts", createPostForUser);
+router.delete("/users/:username/posts/:post_id", deleteUserSpecificPost);
+router.post("/users/:username/comments", createUserSpecificComment)
 
 router.post("/forums/:forumID/posts", createPostInForum);
 router.get("/forums/:forumID/posts", getForumPosts);
