@@ -1,4 +1,5 @@
 const Post = require('../models/postModel');
+const User = require('../models/userModel');
 
 // POST: Create a post.
 exports.createPost =  async (req,res, next) => { 
@@ -6,10 +7,15 @@ exports.createPost =  async (req,res, next) => {
         const post = new Post(req.body);
         const savedPost = await post.save();
 
-        res.status(201).json(savedPost) 
+        res.status(201).json(savedPost);
     } catch (err) {
+        if(err.name === "ValidationError"){
+            return res.status(400).json({
+                error: "Missing required fields",
+                details: err.message
+            })
+        }
         next(err);
-
     }
 }; 
 
@@ -18,16 +24,15 @@ exports.getAllPosts = async (req,res,next) => {
     try{
         const query = req.query.sort || null;
 
-        let getPosts
+        let getPosts;
 
         if(query){
-            getPosts = await Post.find().sort(query)
+            getPosts = await Post.find().sort(query);
         } else {
             getPosts = await Post.find();
         }
 
         res.status(200).json(getPosts);
-
     } catch(err){
         next(err);
     }
@@ -38,7 +43,7 @@ exports.deleteAllPosts = async (req,res,next) => {
     try{
         const results = await Post.deleteMany({});
         
-        res.status(200).json({message: " All posts have been deleted", deletedCount: results.deletedCount})
+        res.status(200).json({message: "All posts have been deleted", deletedCount: results.deletedCount})
     } catch(err){
         next(err);
     }
@@ -48,12 +53,13 @@ exports.deleteAllPosts = async (req,res,next) => {
 exports.getPost = async (req,res,next) => {
     try{
         const postID = req.params.id;// get id from URL
-        const uniquePost = await Post.findById(postID); //find the post by ID   
+        const specificPost = await Post.findById(postID); // find the post by ID   
       
-        if(!uniquePost){
-        return res.status(404).json({message: "'Post not found"})
+        if(!specificPost){
+        return res.status(404).json({error: "Post not found"})
         }
-        res.status(200).json({ uniquePost });
+
+        res.status(200).json({ specificPost });
     } catch(err) {
         next(err);
     }
@@ -63,7 +69,13 @@ exports.getPost = async (req,res,next) => {
 exports.getUserPosts = async (req, res, next) => {
     try {
         const { username } = req.params;
-        const posts = await Post.find({ userID: username });
+        const user = await User.findOne({username});
+
+        if(!user){
+           return res.status(404).json({error: "User not found"});
+        }
+
+        const posts = await Post.find({ userID: user._id});
 
         res.status(200).json(posts);
     } catch (err) {
@@ -74,11 +86,17 @@ exports.getUserPosts = async (req, res, next) => {
 // GET: Single post for a specific user
 exports.getUserPostById = async (req, res, next) => {
     try {
-        const { username, post_id } = req.params;
+        const { username, postID } = req.params;
+        const user = await User.findOne({username});
 
-        const post = await Post.findOne({ _id: post_id, userID: username });
+        if(!user){
+           return res.status(404).json({error: "User not found"});
+        }
+
+        const post = await Post.findOne({ _id: postID, userID: user._id });
+        
         if (!post) {
-            return res.status(404).json({ error: 'Post not found for this user' });
+            return res.status(404).json({ error: "Post not found for this user" });
         }
 
         res.status(200).json(post);
@@ -94,8 +112,9 @@ exports.deletePost = async(req,res,next) => {
         const deletedItem = await Post.findByIdAndDelete(postID)
 
         if(!deletedItem){
-            res.status(404).json({message: "Not found"})
+            return res.status(404).json({error: "Post not found"})
         }
+
         res.status(200).json({message: "Successfully deleted", deletedItem})
     } catch(err){
         next(err);
@@ -114,10 +133,10 @@ exports.updatePost = async(req,res,next) => {
         );
 
         if(!newPost){
-            return res.status(404).json({message: "Post not found"})
+            return res.status(404).json({error: "Post not found"})
         }
         
-        res.status(200).json({updatedPost: newPost, message: "Post has been succesfully updated"})
+        res.status(200).json({updatedPost: newPost, message: "Post has been successfully updated"})
     } catch(err){
         next(err);
     }
@@ -132,10 +151,10 @@ exports.patchPost = async (req,res,next) => {
         );
 
         if(!newData){
-            return res.status(404).json({message: "Not found"})
+            return res.status(404).json({error: "Post not found"})
         };
 
-        res.status(200).json({newField: newData});
+        res.status(200).json({update: newData, message: "Post has been successfully updated"});
     } catch(err){
         next(err)
     }
@@ -145,16 +164,28 @@ exports.patchPost = async (req,res,next) => {
 exports.createPostForUser = async (req,res,next) => {
     try{
         const username = req.params.username;
-        const post = new Post({
+        const user = await User.findOne({ username });
+
+        if(!user){
+           return res.status(404).json({error: "User not found"});
+        }
+
+        const post = await Post.create({
             title: req.body.title,
             body: req.body.body,
-            userID: username,
-            forumID: req.body.forumID
+            userID: user._id,
+            forumID: req.body.forumID // extract from JWT maybe later on
     });  
-        const savedPost = await post.save()
-
-        res.status(201).json(savedPost)
+    
+        res.status(201).json(post)
     } catch(err){
+        
+        if(err.name === "ValidationError"){
+            return res.status(400).json({
+                error: "Missing required fields",
+                details: err.message
+            })
+        }
         next(err); 
     }
 };
@@ -166,13 +197,20 @@ exports.createPostInForum = async (req, res, next) => {
         const newPost = await Post.create({
             title: req.body.title,
             body: req.body.body,
-            userID: req.body.userID, // OR you may get this from auth later
-            forumID: forumID            // comes from URL
+            userID: req.body.userID, // will have to extract it from JWT later maybe
+            forumID: forumID          
         });
 
         res.status(201).json(newPost);
 
     } catch (err) {
+        
+        if(err.name === "ValidationError"){
+            return res.status(400).json({
+                error: "Missing required fields",
+                details: err.message
+            })
+        }
         next(err);
     }
 };
@@ -181,18 +219,24 @@ exports.createPostInForum = async (req, res, next) => {
 exports.deleteUserSpecificPost = async (req, res, next) => {
     try {
         const username = req.params.username;
-        const postId = req.params.post_id;
+        const postId = req.params.postID;
+        
+        const user = await User.findOne({username});
+        
+        if(!user){
+           return res.status(404).json({error: "User not found"});
+        }
 
         // Find the post
         const post = await Post.findById(postId);
 
         if (!post) {
-            return res.status(404).json({ message: 'Post not found' });
+            return res.status(404).json({ error: 'Post not found' });
         }
 
         // Check relationship: only delete if it belongs to the user
-        if (post.userID !== username) {
-            return res.status(403).json({ message: 'You cannot delete a post that is not yours.' });
+        if (!post.userID.equals(user._id)) {
+            return res.status(403).json({ error: 'You cannot delete a post that is not yours.' });
         }
 
         await Post.findByIdAndDelete(postId);
@@ -218,9 +262,9 @@ exports.getForumPosts = async (req, res, next) => {
 // GET: Single post in a specific forum
 exports.getForumPostById = async (req, res, next) => {
     try {
-        const { forumID, post_id } = req.params;
+        const { forumID, postID } = req.params;
 
-        const post = await Post.findOne({ _id: post_id, forumID: forumID });
+        const post = await Post.findOne({ _id: postID, forumID: forumID });
         if (!post) {
             return res.status(404).json({ error: 'Post not found in this forum' });
         }
@@ -234,14 +278,14 @@ exports.getForumPostById = async (req, res, next) => {
 // DELETE: Delete a post from a specific forum
 exports.deleteForumPost = async (req, res, next) => {
     try {
-        const { forumID, post_id } = req.params;
+        const { forumID, postID } = req.params;
 
-        const post = await Post.findOne({ _id: post_id, forumID: forumID });
+        const post = await Post.findOne({ _id: postID, forumID: forumID });
         if (!post) {
             return res.status(404).json({ error: 'Post not found in this forum' });
         }
 
-        await Post.findByIdAndDelete(post_id);
+        await Post.findByIdAndDelete(postID);
 
         res.status(204).send();
     } catch (err) {
