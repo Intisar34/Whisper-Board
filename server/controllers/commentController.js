@@ -1,5 +1,9 @@
 
 const Comments = require('../models/commentModel');
+const Posts = require('../models/postModel');
+const Users = require('../models/userModel');
+
+
 
 // Creates a comment
 exports.createComment = async (req, res, next) => {
@@ -13,20 +17,36 @@ exports.createComment = async (req, res, next) => {
     }
 };
 
-// Gets either all comments or filters by userId/postId
+// Gets either all comments or filters by userID/postId
 exports.getComments = async (req, res, next) => {
     try {
-        const allowed_filters = ["userID", "post_id"];
+        const allowed_filters = ["userID", "postID"];
         const filter = {}
 
         allowed_filters.forEach(key => {
             if (req.query[key]) {
                 filter[key] = req.query[key]
             }
-        })
+
+        });
+
+        if (filter.userID) {
+        const checkUser = await Users.findById(filter.userID);
+        if (!checkUser) {
+            return res.status(404).json({error: "User not found!"});
+        }
+        }
+
+        if (filter.postID) {
+            const checkPost = await Posts.findById(filter.postID);
+            if (!checkPost) {
+                return res.status(404).json({error: "Post not found!"});
+            }
+        }
 
         const comments = await Comments.find(filter);
-        res.json({comments: comments});
+        res.status(200).json({comments: comments});
+
 
     } catch(err) {
         next(err);
@@ -42,7 +62,7 @@ exports.getCommentByID = async (req, res, next) => {
         if(!comment){
             return res.status(404).json({error: "Comment not found!"});
         }
-        res.json({comment: comment});
+        res.status(200).json({comment: comment});
     } catch(err) {
         next(err);
     }
@@ -86,13 +106,24 @@ exports.deleteCommentByID = async (req, res, next) => {
 // Create comments inside a post (relationship)
 exports.createPostComments = async (req, res, next) => {
     try {
-        const { post_id } = req.params;
-        const { body, userID } = req.body;
+        const { postID } = req.params;
+        const { body, username } = req.body;
+
+        const checkPost = await Posts.findById(postID);
+        if (!checkPost) {
+            return res.status(404).json({error: "Post not found!"});
+        }
+
+
+        const checkUser = await Users.findOne({username});
+        if (!checkUser) {
+            return res.status(404).json({error: "User not found!"});
+        }
 
         const newComment = await Comments.create({
             body,
-            post_id,
-            userID
+            postID,
+            userID: checkUser._id
         });
 
         res.status(201).json({comment: newComment});
@@ -104,9 +135,14 @@ exports.createPostComments = async (req, res, next) => {
 // Get all comments for a specific post (relationship)
 exports.getPostComments = async (req, res, next) => {
     try {
-        const { post_id } = req.params;
+        const { postID } = req.params;
 
-        const comments = await Comments.find({ post_id });
+        const checkPost = await Posts.findById(postID);
+        if (!checkPost) {
+            return res.status(404).json({error: "Post not found!"});
+        }
+
+        const comments = await Comments.find({postID});
         res.status(200).json({comments: comments});
     } catch (err) {
         next(err);
@@ -116,14 +152,19 @@ exports.getPostComments = async (req, res, next) => {
 // Get a single comment in a specific post (relationship)
 exports.getPostCommentById = async (req, res, next) => {
     try {
-        const { post_id, comment_id } = req.params;
+        const { postID, commentID } = req.params;
 
-        const comment = await Comments.findOne({ _id: comment_id, post_id });
-        if (!comment) {
-            return res.status(404).json({ error: "Comment not found in this post!" });
+        const checkPost = await Posts.findById(postID);
+        if (!checkPost) {
+            return res.status(404).json({error: "Post not found!"});
         }
 
-        res.status(200).json({data: comment});
+        const comment = await Comments.findOne({ _id: commentID, postID });
+        if (!comment) {
+            return res.status(404).json({error: "Comment not found in this post!"});
+        }
+
+        res.status(200).json({comment: comment});
     } catch (err) {
         next(err);
     }
@@ -132,11 +173,16 @@ exports.getPostCommentById = async (req, res, next) => {
 // Delete comment inside a post (relationship)
 exports.deletePostComments = async (req, res, next) => {
     try {
-        const { post_id, comment_id } = req.params;
+        const { postID, commentID } = req.params;
 
-        const comment = await Comments.findOneAndDelete({ _id: comment_id, post_id });
-        if (!comment) {
-            return res.status(404).json({ error: "Comment not found in this post!" });
+        const checkPost = await Posts.findById(postID);
+        if (!checkPost) {
+            return res.status(404).json({error: "Post not found!"});
+        }
+
+        const deleteComment = await Comments.findOneAndDelete({ _id: commentID, postID});
+        if (!deleteComment) {
+            return res.status(404).json({error: "Comment not found in this post!"});
         }
 
         res.status(204).send();
@@ -148,13 +194,18 @@ exports.deletePostComments = async (req, res, next) => {
 // Create comments for specific user (relationship)
 exports.createUserSpecificComment = async (req, res, next) => {
     try{
-        const{userID} = req.params;
-        const {body, post_id} = req.body;
+        const{username} = req.params;
+        const {body, postID} = req.body;
+
+        const checkUser = await Users.findOne({username});
+        if (!checkUser) {
+            return res.status(404).json({error: "User not found!"});
+        }
 
         const newComment = await Comments.create({
             body,
-            post_id,
-            userID
+            postID,
+            userID: checkUser._id 
         });
 
         res.status(201).json({comment: newComment});      

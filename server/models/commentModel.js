@@ -8,7 +8,7 @@ const commentSchema = new mongoose.Schema({
     body: {type: String, required: true},
 
     // Foreign key for Post
-    post_id: {
+    postID: {
         type: Schema.Types.ObjectId,
         ref: "Post",
         required: true
