@@ -262,9 +262,9 @@ exports.getForumPosts = async (req, res, next) => {
 // GET: Single post in a specific forum
 exports.getForumPostById = async (req, res, next) => {
     try {
-        const { forumID, post_id } = req.params;
+        const { forumID, postID } = req.params;
 
-        const post = await Post.findOne({ _id: post_id, forumID: forumID });
+        const post = await Post.findOne({ _id: postID, forumID: forumID });
         if (!post) {
             return res.status(404).json({ error: 'Post not found in this forum' });
         }
@@ -278,14 +278,14 @@ exports.getForumPostById = async (req, res, next) => {
 // DELETE: Delete a post from a specific forum
 exports.deleteForumPost = async (req, res, next) => {
     try {
-        const { forumID, post_id } = req.params;
+        const { forumID, postID } = req.params;
 
-        const post = await Post.findOne({ _id: post_id, forumID: forumID });
+        const post = await Post.findOne({ _id: postID, forumID: forumID });
         if (!post) {
             return res.status(404).json({ error: 'Post not found in this forum' });
         }
 
-        await Post.findByIdAndDelete(post_id);
+        await Post.findByIdAndDelete(postID);
 
         res.status(204).send();
     } catch (err) {
