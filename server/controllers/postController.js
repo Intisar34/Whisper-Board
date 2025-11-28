@@ -219,7 +219,7 @@ exports.createPostInForum = async (req, res, next) => {
 exports.deleteUserSpecificPost = async (req, res, next) => {
     try {
         const username = req.params.username;
-        const postId = req.params.post_id;
+        const postId = req.params.postID;
         
         const user = await User.findOne({username});
         
