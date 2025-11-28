@@ -39,19 +39,19 @@ router.patch("/posts/:id", patchPost);
 
 // Extra relationship routes
 router.get("/users/:username/posts", getUserPosts);
-router.get("/users/:username/posts/:post_id", getUserPostById);
+router.get("/users/:username/posts/:postID", getUserPostById);
 router.post("/users/:username/posts", createPostForUser);
-router.delete("/users/:username/posts/:post_id", deleteUserSpecificPost);
+router.delete("/users/:username/posts/:postID", deleteUserSpecificPost);
 router.post("/users/:username/comments", createUserSpecificComment)
 
 router.post("/forums/:forumID/posts", createPostInForum);
 router.get("/forums/:forumID/posts", getForumPosts);
-router.get("/forums/:forumID/posts/:post_id", getForumPostById);
-router.delete("/forums/:forumID/posts/:post_id", deleteForumPost);
+router.get("/forums/:forumID/posts/:postID", getForumPostById);
+router.delete("/forums/:forumID/posts/:postID", deleteForumPost);
 
-router.post("/posts/:post_id/comments", createPostComments);
-router.get("/posts/:post_id/comments", getPostComments);
-router.get("/posts/:post_id/comments/:comment_id", getPostCommentById);
-router.delete("/posts/:post_id/comments/:comment_id", deletePostComments);
+router.post("/posts/:postID/comments", createPostComments);
+router.get("/posts/:postID/comments", getPostComments);
+router.get("/posts/:postID/comments/:commentID", getPostCommentById);
+router.delete("/posts/:postID/comments/:commentID", deletePostComments);
 
 module.exports = router;
