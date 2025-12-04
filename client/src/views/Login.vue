@@ -17,8 +17,8 @@
                         <input type = "password" v-model="password"/>
                 </div>
 
-                <button type = "submit"> Log in </button>
-                <button type = "submit"> Forgot password? </button>
+                <button class=button1 type = "submit"> Log in </button>
+                <button class=button2 type = "submit"> Forgot password? </button>
              </div>
         </div>
     </div>
@@ -29,3 +29,5 @@ export default {
   name: 'Login'
 }
 </script>
+
+<style src='../styles/Login.css'></style>
