@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap');
+
+.loginpage {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(#FEFEFE 2%, #A2AFE4 75%);
+}
+
+.loginbox {
+  padding: 40px 60px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  width: 400px;
+}
+
+h2 {
+  color: #0e1d40;
+  font-size: 26px;
+  margin-bottom: 25px;
+  font-weight: 800;
+}
+
+.logo {
+  font-size: 70px;
+  font-weight: 800;
+  color: #0e1d40;
+  margin-bottom: 20px;
+  font-family: 'Jolly Lodger';
+  position: absolute; 
+  top: 20px;         
+  left: 20px;  
+}
+
+.username {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 14px;
+}
+
+.password {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 14px;
+}
+
+input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #c9c9c9;
+  border-radius: 5px;
+}
+
+.button1 {
+  width: 100%;
+  background: #0e1d40;
+  color: white;
+  padding: 8px 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.button2 {
+  width: 100%;
+  background: #0e1d40;
+  color: white;
+  padding: 8px 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.button1:hover {
+  background: #122858;
+}
+
+.button2:hover {
+  background: #122858;
+}
+
