@@ -55,160 +55,165 @@
         </div>
     </header>
 
-      <!-- Side Bar Section for Post and Forum Button-->
-    <b-col cols="12" md="3" lg="2" class="mb-4">
-        <nav class="sidebar pt-2">
-          <!-- Post button -->
-          <button
-            type="button"
-            class="w-100 text-start d-flex align-items-center mb-2 sidebarItem"
-            :class="{ active: activeSidebar === 'post' }"
-            @click="activeSidebar = 'post'"
+    <b-container fluid class="px-4 mt-4">
+      <b-row>
+        <!-- Side Bar Section for Post and Forum Button-->
+        <b-col cols="12" md="3" lg="2" class="mb-4">
+            <nav class="sidebar pt-2">
+              <!-- Post button -->
+              <button
+                type="button"
+                class="w-100 text-start d-flex align-items-center mb-2 sidebarItem"
+                :class="{ active: activeSidebar === 'post' }"
+                @click="activeSidebar = 'post'"
+              >
+                <div class="sidebarIconBox me-3">
+                  <img
+                    src="/postIcon.png"
+                    alt="Post"
+                    class="sidebarIcon"
+                  />
+                </div>
+                <span class="fw-bold">Post</span>
+              </button>
+
+              <!-- Forum button -->
+              <button
+                type="button"
+                class="w-100 text-start d-flex align-items-center sidebarItem"
+                :class="{ active: activeSidebar === 'forum' }"
+                @click="activeSidebar = 'forum'"
+              >
+                <div class="sidebarIconBox me-3">
+                  <img
+                    src="/forumIcon.png"
+                    alt="Forum"
+                    class="sidebarIcon"
+                  />
+                </div>
+                <span class="fw-bold">Forum</span>
+              </button>
+          </nav>
+        </b-col>
+
+        <!-- Main Content Section -->
+        <b-col cols="12" md="9" lg="10">
+          <!--Post creation section-->
+          <section class="createPost mb-3 d-flex align-items-center">
+            <img
+              src="/plusIcon.png"
+              alt="Create post"
+              class="plusIcon me-3"
+            />
+            <input
+              type="text"
+              class="createInput flex-grow-1"
+              placeholder="Start a post ..."
+            />
+          </section>
+
+          <!--Sorting section-->
+          <div class="d-flex align-items-center mb-3 px-1">
+            <span class="small me-1 text-muted">Sort by :</span>
+            <div class="customSelectWrapper">
+              <select
+                v-model="sortBy"
+                @change="onSortChange"
+                class="customSelect fw-bold small"
+              >
+                <option value="popular">Popular</option>
+                <option value="newest">Latest</option>
+                <option value="oldest">Oldest</option>
+              </select>
+            </div>
+            <div class="small text-muted ms-auto" v-if="!loading">
+              {{ filteredPosts.length }} posts
+            </div>
+          </div>
+
+
+          <article
+            v-for="post in filteredPosts"
+            :key="post._id"
+            class="postCard mb-3 p-3 d-flex align-items-start"
           >
-            <div class="sidebarIconBox me-3">
+            <!-- user icon in post section -->
+            <div class="postUserIcon me-3 flex-shrink-0">
               <img
-                src="/postIcon.png"
-                alt="Post"
-                class="sidebarIcon"
+                src="/userIcon.png"
+                alt="User avatar"
+                class="userIcon"
               />
             </div>
-            <span class="fw-bold">Post</span>
-          </button>
-
-          <!-- Forum button -->
-          <button
-            type="button"
-            class="w-100 text-start d-flex align-items-center sidebarItem"
-            :class="{ active: activeSidebar === 'forum' }"
-            @click="activeSidebar = 'forum'"
-          >
-            <div class="sidebarIconBox me-3">
-              <img
-                src="/forumIcon.png"
-                alt="Forum"
-                class="sidebarIcon"
-              />
+          
+            <div class="flex-grow-1 text-start">
+              <div class="d-flex align-items-baseline lh-1 mb-1">
+                <span class="fw-bold small text-dark me-1">
+                  {{ forumName(post) }}
+                </span>
+                <span class="text-muted small">&ndash; {{ formatDate(post) }}</span>
+              </div>
+            
+              <div class="text-muted tinyText mb-2">
+                {{ usernameLabel(post) }}
+              </div>
+            
+              <h2 class="postTitle">
+                {{ capitalise(post.title) }}
+              </h2>
+            
+              <p class="postBody">
+                {{ post.body }}
+              </p>
+            
+              <footer class="d-flex align-items-center gap-2 mt-3">
+                <!-- Like Buttion -->
+                <button
+                  class="pillButton d-flex align-items-center"
+                  type="button"
+                  disabled
+                >
+                  <img
+                    src="/likeIcon.png"
+                    alt="Likes"
+                    class="pillIcon me-1"
+                  />
+                  {{ post.likes ?? 0 }}
+                </button>
+              
+                <!-- Dislike Button -->
+                <button
+                  class="pillButton d-flex align-items-center"
+                  type="button"
+                  disabled
+                >
+                  <img
+                    src="/dislikeIcon.png"
+                    alt="Dislikes"
+                    class="pillIcon me-1"
+                  />
+                  {{ post.dislikes ?? 0 }}
+                </button>
+              
+                <!-- Comment Button -->
+                <button
+                  class="pillButton d-flex align-items-center"
+                  type="button"
+                  disabled
+                >
+                  <img
+                    src="/commentIcon.png"
+                    alt="Comments"
+                    class="pillIcon me-1"
+                  />
+                  {{ post.commentsCount ?? 0 }}
+                </button>
+              </footer>
             </div>
-            <span class="fw-bold">Forum</span>
-          </button>
-      </nav>
-    </b-col>
-
-    <!--Post creation section-->
-    <section class="createPost mb-3 d-flex align-items-center">
-      <img
-        src="/plusIcon.png"
-        alt="Create post"
-        class="plusIcon me-3"
-      />
-      <input
-        type="text"
-        class="createInput flex-grow-1"
-        placeholder="Start a post ..."
-      />
-    </section>
-
-    <!--Sorting section-->
-    <div class="d-flex align-items-center mb-3 px-1">
-      <span class="small me-1 text-muted">Sort by :</span>
-      <div class="customSelectWrapper">
-        <select
-          v-model="sortBy"
-          @change="onSortChange"
-          class="customSelect fw-bold small"
-        >
-          <option value="popular">Popular</option>
-          <option value="newest">Latest</option>
-          <option value="oldest">Oldest</option>
-        </select>
-      </div>
-      <div class="small text-muted ms-auto" v-if="!loading">
-        {{ filteredPosts.length }} posts
-      </div>
-    </div>
-
-
-    <article
-      v-for="post in filteredPosts"
-      :key="post._id"
-      class="postCard mb-3 p-3 d-flex align-items-start"
-    >
-      <!-- user icon in post section -->
-      <div class="postUserIcon me-3 flex-shrink-0">
-        <img
-          src="/userIcon.png"
-          alt="User avatar"
-          class="userIcon"
-        />
-      </div>
-    
-      <div class="flex-grow-1 text-start">
-        <div class="d-flex align-items-baseline lh-1 mb-1">
-          <span class="fw-bold small text-dark me-1">
-            {{ forumName(post) }}
-          </span>
-          <span class="text-muted small">&ndash; {{ formatDate(post) }}</span>
-        </div>
-      
-        <div class="text-muted tinyText mb-2">
-          {{ usernameLabel(post) }}
-        </div>
-      
-        <h2 class="postTitle">
-          {{ capitalise(post.title) }}
-        </h2>
-      
-        <p class="postBody">
-          {{ post.body }}
-        </p>
-      
-        <footer class="d-flex align-items-center gap-2 mt-3">
-          <!-- Like Buttion -->
-          <button
-            class="pillButton d-flex align-items-center"
-            type="button"
-            disabled
-          >
-            <img
-              src="/likeIcon.png"
-              alt="Likes"
-              class="pillIcon me-1"
-            />
-            {{ post.likes ?? 0 }}
-          </button>
-        
-          <!-- Dislike Button -->
-          <button
-            class="pillButton d-flex align-items-center"
-            type="button"
-            disabled
-          >
-            <img
-              src="/dislikeIcon.png"
-              alt="Dislikes"
-              class="pillIcon me-1"
-            />
-            {{ post.dislikes ?? 0 }}
-          </button>
-        
-          <!-- Comment Button -->
-          <button
-            class="pillButton d-flex align-items-center"
-            type="button"
-            disabled
-          >
-            <img
-              src="/commentIcon.png"
-              alt="Comments"
-              class="pillIcon me-1"
-            />
-            {{ post.commentsCount ?? 0 }}
-          </button>
-        </footer>
-      </div>
-    </article>
-
-
+          </article>
+        </b-col>
+      </b-row>
+    </b-container>
 
   </div>
 </template>
