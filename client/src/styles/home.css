@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Oleo+Script&family=Inter:wght@400;500;600;700&display=swap');
 
+/* Home page screen*/
+.whisperboardPage {
+  min-height: 100vh;
+  background-color: #E6E6E6;
+  color: #111827;
+  font-family: 'Inter', sans-serif;
+}
+
 /* Top bar  section*/
 .topBar {
   background-color: #ffffff;
@@ -85,6 +93,55 @@
   width: 20px;
   height: 20px;
 }
+
+/* <post create section */
+.createPost {
+  background-color: #EDEDED;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.createInput {
+  background: transparent;
+  border: none;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.plusIcon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+
+.createInput:focus {
+  outline: none;
+}
+
+/* Sort style section*/
+.customSelectWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.customSelect {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding-right: 1.2rem;
+  cursor: pointer;
+  background-image: url("/sortIcon.png");
+  background-repeat: no-repeat;
+  background-position: right 2px top 50%;
+  background-size: 0.6rem auto;
+}
+
+.customSelect:focus {
+  outline: none;
+}
+
 
 
 
