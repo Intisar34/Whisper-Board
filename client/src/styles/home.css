@@ -53,3 +53,38 @@
   width: 20px;
   height: 20px;
 }
+
+
+/* Sidebar  Section*/
+.sidebar {
+  padding-right: 10px;
+}
+
+.sidebarItem {
+  border: none;
+  background-color: transparent;
+  padding: 0.5rem 0.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #000;
+  transition: background 0.2s;
+}
+
+.sidebarItem.active {
+  background-color: #C4C4C4;
+
+}
+
+.sidebarIconBox {
+  width: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebarIcon {
+  width: 20px;
+  height: 20px;
+}
+
+
+

@@ -5,7 +5,7 @@ import signUP from './views/SignUP.vue'
 import Login from './views/Login.vue'
 
 const routes = [
-  { path: '/', name: 'home', component: Home },
+  { path: '/home/posts', name: 'home', component: Home },
   { path: '/signup', name: 'signUP', component: signUP },
   { path: '/login', name: 'login', component: Login }
 
