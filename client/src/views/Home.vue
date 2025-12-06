@@ -128,32 +128,253 @@
     </div>
 
 
+    <article
+      v-for="post in filteredPosts"
+      :key="post._id"
+      class="postCard mb-3 p-3 d-flex align-items-start"
+    >
+      <!-- user icon in post section -->
+      <div class="postUserIcon me-3 flex-shrink-0">
+        <img
+          src="/userIcon.png"
+          alt="User avatar"
+          class="userIcon"
+        />
+      </div>
+    
+      <div class="flex-grow-1 text-start">
+        <div class="d-flex align-items-baseline lh-1 mb-1">
+          <span class="fw-bold small text-dark me-1">
+            {{ forumName(post) }}
+          </span>
+          <span class="text-muted small">&ndash; {{ formatDate(post) }}</span>
+        </div>
+      
+        <div class="text-muted tinyText mb-2">
+          {{ usernameLabel(post) }}
+        </div>
+      
+        <h2 class="postTitle">
+          {{ capitalise(post.title) }}
+        </h2>
+      
+        <p class="postBody">
+          {{ post.body }}
+        </p>
+      
+        <footer class="d-flex align-items-center gap-2 mt-3">
+          <!-- Like Buttion -->
+          <button
+            class="pillButton d-flex align-items-center"
+            type="button"
+            disabled
+          >
+            <img
+              src="/likeIcon.png"
+              alt="Likes"
+              class="pillIcon me-1"
+            />
+            {{ post.likes ?? 0 }}
+          </button>
+        
+          <!-- Dislike Button -->
+          <button
+            class="pillButton d-flex align-items-center"
+            type="button"
+            disabled
+          >
+            <img
+              src="/dislikeIcon.png"
+              alt="Dislikes"
+              class="pillIcon me-1"
+            />
+            {{ post.dislikes ?? 0 }}
+          </button>
+        
+          <!-- Comment Button -->
+          <button
+            class="pillButton d-flex align-items-center"
+            type="button"
+            disabled
+          >
+            <img
+              src="/commentIcon.png"
+              alt="Comments"
+              class="pillIcon me-1"
+            />
+            {{ post.commentsCount ?? 0 }}
+          </button>
+        </footer>
+      </div>
+    </article>
+
+
+
   </div>
 </template>
 
 
 <script>
+import { Api } from '@/Api'
+
 export default {
   name: 'Home',
   data () {
     return {
-      search: '',
-      activeSidebar: 'post',
+      
+      posts: [],
+      forumsById: {}, 
+      usersById: {}, 
+
+      loading: false,
+      error: null,
       sortBy: 'popular',
-      loading: false
+      search: '',
+      activeSidebar: 'post'
     }
   },
   computed: {
     filteredPosts () {
-      return []
+      const term = this.search.trim().toLowerCase()
+      if (!term) return this.posts
+
+      return this.posts.filter(post =>
+        (post.title && post.title.toLowerCase().includes(term)) ||
+        (post.body && post.body.toLowerCase().includes(term))
+      )
     }
   },
+  created () {
+    this.init()
+  },
   methods: {
-    onSortChange () {
-      // for fetched posts
+    async init () {
+      this.loading = true
+      try {
+        // Fetch forums, users and posts in parallel
+        await Promise.all([
+          this.fetchForums(),
+          this.fetchUsers(),
+          this.fetchPosts()
+        ])
+      } catch (err) {
+        console.error(err)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async onSortChange () {
+      this.loading = true
+      try {
+        await this.fetchPosts()
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async fetchPosts () {
+      try {
+        this.error = null
+        const params = {}
+
+        // sort query param
+        if (this.sortBy === 'popular' || this.sortBy === 'newest') {
+          params.sort = '-postDate'
+        } else if (this.sortBy === 'oldest') {
+          params.sort = 'postDate'
+        }
+
+        const response = await Api.get('/posts', { params })
+        this.posts = Array.isArray(response.data) ? response.data : []
+      } catch (err) {
+        console.error(err)
+        this.error =
+          err.response?.data?.error ||
+          'Could not load posts from the server.'
+      }
+    },
+
+    async fetchForums () {
+      try {
+        const response = await Api.get('/forums')
+        const forums = response.data?.forums || []
+        const map = {}
+
+        forums.forEach(forum => {
+          map[forum._id] = forum
+        })
+
+        this.forumsById = map
+      } catch (err) {
+        console.error(err)
+      }
+    },
+
+    async fetchUsers () {
+      try {
+        const response = await Api.get('/users')
+        const users = response.data?.data || []
+        const map = {}
+
+        users.forEach(user => {
+          map[user._id] = user
+        })
+
+        this.usersById = map
+      } catch (err) {
+        console.error(err)
+      }
+    },
+
+    forumName (post) {
+      const forum = this.forumsById[post.forumID]
+      return forum?.name || 'Forum'
+    },
+
+    usernameLabel (post) {
+      const user = this.usersById[post.userID]
+      return user?.username || 'Anonymous user'
+    },
+
+    formatDate (post) {
+      const raw = post.postDate || post.createdAt
+      if (!raw) return ''
+
+      const date = new Date(raw)
+      const today = new Date()
+
+      const t = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      )
+      const d = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+      )
+
+      const diffMs = t - d
+      const oneDay = 24 * 60 * 60 * 1000
+      const diffDays = Math.round(diffMs / oneDay)
+
+      if (diffDays === 0) return 'Today'
+      if (diffDays === 1) return 'Yesterday'
+      if (diffDays > 1 && diffDays < 7) return `${diffDays} days ago`
+
+      return date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      })
+    },
+
+    capitalise (value) {
+      if (!value) return ''
+      return value.charAt(0).toUpperCase() + value.slice(1)
     }
   }
-  
 }
 </script>
 
