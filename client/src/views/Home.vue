@@ -1,42 +1,62 @@
 <template>
-  <div>
-    <b-container fluid>
-      <h1 class="display-5 fw-bold">DIT342 Frontend</h1>
-      <p class="fs-4">Welcome to your DIT342 Frontend Vue.js App</p>
-      <b-button class="btn_message" variant="primary" v-on:click="getMessage()" >Get Message from Server</b-button>
-      <p class="col-xl-9">Message from the server:<br/>
-      {{ message }}</p>
-    </b-container>
-  </div>
+  <header class="topBar d-flex align-items-center px-4 py-2">
+    <!-- Logo section -->
+    <div class="me-3">
+      <img
+        src="/WhisperBoardLogo.png"
+        alt="WhisperBoard"
+        class="img-fluid"
+      />
+    </div>
+
+    <!-- Search section -->
+    <div class="flex-grow-1 mx-md-5 mx-2">
+      <div class="search d-flex align-items-center px-3">
+        <img
+          src="/searchIcon.png"
+          alt="Search"
+          class="searchIcon"
+        />
+        <input
+          type="text"
+          class="form-control border-0 bg-transparent shadow-none ms-2"
+          placeholder="Search post/forum ..."
+          v-model="search"
+        />
+      </div>
+    </div>
+
+    <!-- Notification section -->
+    <button
+      class="bellIcon me-4"
+      type="button"
+      aria-label="Notifications"
+    >
+      <img
+        src="/Bellicon.png"
+        alt="Notifications"
+        class="bellIcon"
+      />
+    </button>
+
+    <!-- User section -->
+    <div class="userIconBox d-flex align-items-center cursor-pointer">
+      <div class="userIconOutline">
+        <img
+          src="/userIcon.png"
+          alt="User avatar"
+          class="userIcon"
+        />
+      </div>
+      <span class="ms-2 fw-bold text-dark small">HUsd68VG</span>
+    </div>
+  </header>
 </template>
 
 <script>
-// @ is an alias to /src
-import { Api } from '@/Api'
-
 export default {
-  name: 'home',
-  data() {
-    return {
-      message: 'none'
-    }
-  },
-  methods: {
-    getMessage() {
-      Api.get('/')
-        .then(response => {
-          this.message = response.data.message
-        })
-        .catch(error => {
-          this.message = error
-        })
-    }
-  }
+  name: 'Home',
 }
 </script>
 
-<style>
-.btn_message {
-  margin-bottom: 1em;
-}
-</style>
+<style src="../styles/home.css"></style>

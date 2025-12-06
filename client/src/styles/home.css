@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Oleo+Script&family=Inter:wght@400;500;600;700&display=swap');
+
+/* Top bar  section*/
+.topBar {
+  background-color: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+  height: 64px;
+}
+
+/* Search section*/
+.search {
+  background-color: #E4E6EB;
+  border-radius: 50px;
+  height: 40px;
+  max-width: 400px;
+}
+
+.searchIcon {
+  width: 18px;
+  height: 18px;
+}
+
+/*Notification section */
+.bellIcon {
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  width: 22px;
+  height: 22px;
+}
+
+/* user section */
+.userIconBox {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  padding: 4px 12px 4px 4px;
+  border-radius: 8px;
+}
+
+.userIconOutline {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 2px solid #52525b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userIcon {
+  width: 20px;
+  height: 20px;
+}
