@@ -12,7 +12,7 @@
     <div class="signUpBox">
       <h1 class="title">Sign up</h1>
 
-      <form>
+      <form v-on:submit.prevent="createUser">
         <div class="institution">
           <label for="institution">University</label>
           <input id="institution" type="text" v-model="institution" placeholder="University of Gothenburg or Chalmers...">
@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import { Api } from '@/Api'
 
 export default {
   name: 'SignUP',
@@ -74,6 +75,37 @@ export default {
       confirmPassword: '',
       role: '',
       otherRoleName: ''
+    }
+  },
+  methods: {
+    createUser() {
+      if (this.password !== this.confirmPassword) {
+        alert('passwords do not match, try again')
+        return
+      }
+
+      Api.post('/users', {
+        institution: this.institution,
+        email: this.email,
+        password: this.password,
+        role: this.role === 'other' ? 'other' : this.role,
+        otherRoleName: this.role === 'other' ? this.otherRoleName : null
+      })
+        .then(response => {
+          console.log('User Created:', response.data.data.user)
+          alert('Account successfully created! Welcome, Your username is: ' + response.data.data.user.username)
+          console.log('connected to the backend')
+        })
+        .catch(error => {
+          if (error.response) {
+            alert('Error: ' + error.response.data.error)
+          } else if (error.request) {
+            alert('No response from server. Please try again later.')
+          } else {
+            alert('Error: ' + error.message)
+          }
+          console.log('connected to the backend')
+        })
     }
   }
 }
