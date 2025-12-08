@@ -54,7 +54,7 @@
 
         <button class="createButton" type="submit">Create Account</button>
           <p>--- Already have an account? ---</p>
-        <button class="loginButton" type="button">Log In</button>
+        <button class="loginButton" type="button" @click="goToLogin">Log In</button>
       </form>
 
     </div>
@@ -106,6 +106,10 @@ export default {
           }
           console.log('connected to the backend')
         })
+    },
+
+    goToLogin() {
+      this.$router.push('/login')
     }
   }
 }
