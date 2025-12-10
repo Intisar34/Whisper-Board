@@ -59,3 +59,54 @@
   margin-top: 4px
 }
 
+.editButton {
+  border-radius: 12px;
+  color:#fafbfe;
+  text-align: center;
+  background: #7d8499;
+  position: absolute;
+  right: 35px;
+  bottom: 20px;
+  width: auto;
+  padding: 10px 20px;
+}
+
+.title {
+  font-weight: bolder;
+  color:#0e1d40;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif
+} 
+
+label { 
+  font-weight: bold; 
+  color: #230858;
+  text-align: left;
+}  
+
+.tallModal {
+  min-height: 700px;
+  padding: 20px;
+}
+
+.formBox {
+  padding: 25px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+}
+
+.buttonContainer{
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.deleteButton {
+  background-color: #d94e4e !important;
+  border-color: #5a0d0d !important;
+  color: white !important;
+  border-radius: 12px;
+  padding: 10px 25px;
+}
+
