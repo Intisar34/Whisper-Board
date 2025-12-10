@@ -118,3 +118,42 @@ label {
   margin-top: 10px;
 }
 
+.timelineContainer {
+  padding-top: 40px;
+  width: 70%;
+  padding-left: 70px;
+}
+
+.timelineLine {
+  border-left: 3px solid #6E89D6;
+  margin-left: 25px;
+  padding-left: 25px;
+  position: relative;
+}
+
+.timelineItem {
+  position:relative;
+  margin-bottom: 40px;
+}
+
+.timelineDot {
+  width: 14px;
+  height: 14px;
+  background-color: #6E89D6;
+  border-radius: 50%;
+  position: absolute;
+  left: -8px;
+}
+
+.timelineContent {
+  margin-left: 15px;
+  width: 100%;
+}
+
+.postCard {
+  border-radius: 20px;
+  padding: 20px;
+  background: #ffffffb6;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+}
+

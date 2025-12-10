@@ -48,6 +48,27 @@
         </BNav>
       </div>
     </div>
+    <div class="timelineContainer">
+     <BContainer>
+       <BRow>
+        <BCol cols="12" class="py-4">
+          <div class="timelineLine">
+            <div class="timelineItem" v-for="(item, i) in timeline" :key="i">
+              <div class="timelineDot"></div>
+
+              <div class="timelineContent">
+                <BCard class="postCard">
+                  <h5>{{ item.title}}</h5>
+                  <p>{{ item.text }}</p>
+                  <small class="text-secondary">{{ item.date }}</small>
+                </BCard>
+              </div>
+            </div>
+          </div>
+        </BCol>
+      </BRow>
+     </BContainer>
+    </div>
   </div>
 </template>
 
@@ -58,6 +79,23 @@ export default {
   data() {
     return {
       toggleModel: false,
+      timeline: [
+        {
+          title: 'blah blah bla',
+          text: 'yes yes yes',
+          date: 'Dec 2025'
+        },
+        {
+          title: 'No NO no',
+          text: 'Hello New York',
+          date: 'Nov 2025'
+        },
+        {
+          title: 'first post',
+          text: 'university experience.',
+          date: 'Oct 2025'
+        }
+      ],
       form: {
         username: 'username',
         password: 'passowrd',
