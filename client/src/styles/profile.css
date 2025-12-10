@@ -110,3 +110,11 @@ label {
   padding: 10px 25px;
 }
 
+.profileFooter {
+  width: 100%;
+  background: white;
+  padding: 15px 0;
+  border-radius: 0 0 20px 20px; 
+  margin-top: 10px;
+}
+

@@ -39,6 +39,14 @@
              </div>
             </BModal>
       </div>
+      <div class="profileFooter">
+        <BNav tabs fill>
+            <BNavItem active href="#nav-fill">Home</BNavItem>
+            <BNavItem href="#nav-fill">Posts</BNavItem>
+            <BNavItem href="#nav-fill">Comments</BNavItem>
+            <BNavItem href="#nav-fill">Forums</BNavItem>
+        </BNav>
+      </div>
     </div>
   </div>
 </template>
