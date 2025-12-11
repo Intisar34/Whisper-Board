@@ -294,3 +294,42 @@ exports.deleteForumPost = async (req, res, next) => {
 };
 
 
+// PATCH: Like a post
+exports.likePost = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const post = await Post.findByIdAndUpdate(
+            id,
+            { $inc: { likes: 1 } },
+            { new: true }
+        );
+
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
+        res.status(200).json(post);
+    } catch (err) {
+        next(err);
+    }
+};
+
+// PATCH: Dislike a post
+exports.dislikePost = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const post = await Post.findByIdAndUpdate(
+            id,
+            { $inc: { dislikes: 1 } },
+            { new: true }
+        );
+
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
+        res.status(200).json(post);
+    } catch (err) {
+        next(err);
+    }
+};

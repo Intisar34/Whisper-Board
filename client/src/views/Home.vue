@@ -171,7 +171,7 @@
                 <button
                   class="pillButton d-flex align-items-center"
                   type="button"
-                  disabled
+                  @click="likePost(post._id)"
                 >
                   <img
                     src="/likeIcon.png"
@@ -185,7 +185,7 @@
                 <button
                   class="pillButton d-flex align-items-center"
                   type="button"
-                  disabled
+                  @click="dislikePost(post._id)"
                 >
                   <img
                     src="/dislikeIcon.png"
@@ -383,6 +383,34 @@ export default {
 
     goToForum () {
       this.$router.push('/home/forums')
+    },
+
+    async likePost(postId) {
+      try {
+        const response = await Api.patch(`/posts/${postId}/like`);
+        const updatedPost = response.data;
+        const index = this.posts.findIndex(p => p._id === postId);
+        if (index !== -1) {
+          this.posts.splice(index, 1, updatedPost);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Failed to like post');
+      }
+    },
+
+    async dislikePost(postId) {
+      try {
+        const response = await Api.patch(`/posts/${postId}/dislike`);
+        const updatedPost = response.data;
+        const index = this.posts.findIndex(p => p._id === postId);
+        if (index !== -1) {
+          this.posts.splice(index, 1, updatedPost);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Failed to dislike post');
+      }
     }
   }
 }
