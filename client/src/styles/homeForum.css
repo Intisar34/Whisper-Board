@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Oleo+Script&family=Inter:wght@400;500;600;700&display=swap');
+
+/* Home page screen*/
+.whisperboardPage {
+    min-height: 100vh;
+    background-color: #e6e6e6;
+    color: #111827;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Top bar  section*/
+.topBar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    height: 64px;
+}
+
+/* Search section*/
+.search {
+    background-color: #E4E6EB;
+    border-radius: 50px;
+    height: 40px;
+    max-width: 400px;
+}
+
+.searchIcon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.6;
+}
+
+/*Notification section */
+.bellIcon {
+    border: none;
+    background: transparent;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.bellIcon:hover {
+    opacity: 1;
+}
+
+/* user section */
+.userIconBox {
+    background: transparent;
+    border: 1px solid #e5e7eb;
+    padding: 4px 12px 4px 4px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.userIconBox:hover {
+    background-color: #f9fafb;
+}
+
+.userIconOutline {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 2px solid #52525b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.userIcon {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* Sidebar  Section*/
+.sidebar {
+    padding-right: 10px;
+}
+
+.sidebarItem {
+    border: none;
+    background-color: transparent;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #1f2937;
+    transition: all 0.2s ease;
+}
+
+.sidebarItem:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.sidebarItem.active {
+    background-color: #d1d5db;
+    font-weight: 600;
+}
+
+.sidebarIconBox {
+    width: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.sidebarIcon {
+    width: 20px;
+    height: 20px;
+}
