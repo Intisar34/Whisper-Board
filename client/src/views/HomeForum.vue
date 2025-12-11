@@ -98,7 +98,7 @@
 
         <!-- Main Content Section -->
         <b-col cols="12" md="9" lg="10">
-          <h2 class="mb-4 fw-bold">Forums</h2>
+
           
           <div v-if="loading" class="text-center">
             Loading...
@@ -155,7 +155,6 @@ export default {
       search: '',
       activeSidebar: 'forum',
       forums: [],
-      usersById: {},
       loading: false,
       error: null
     }
