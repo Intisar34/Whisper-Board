@@ -82,7 +82,7 @@
                 type="button"
                 class="w-100 text-start d-flex align-items-center sidebarItem"
                 :class="{ active: activeSidebar === 'forum' }"
-                @click="activeSidebar = 'forum'"
+                @click="goToForum"
               >
                 <div class="sidebarIconBox me-3">
                   <img
@@ -379,6 +379,10 @@ export default {
     capitalise (value) {
       if (!value) return ''
       return value.charAt(0).toUpperCase() + value.slice(1)
+    },
+
+    goToForum () {
+      this.$router.push('/home/forums')
     }
   }
 }
