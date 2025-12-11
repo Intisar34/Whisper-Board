@@ -144,14 +144,24 @@ export default {
     }
   },
   created () {
-    this.fetchForums()
+    this.init()
   },
   methods: {
+    async init () {
+      this.loading = true
+      try {
+        await this.fetchForums()
+      } catch (err) {
+        console.error(err)
+      } finally {
+        this.loading = false
+      }
+    },
+
     goToPost() {
         this.$router.push('/home/posts')
     },
     async fetchForums() {
-        this.loading = true
         this.error = null
         try {
             const response = await Api.get('/forums')
@@ -159,8 +169,7 @@ export default {
         } catch (err) {
             console.error(err)
             this.error = 'Failed to load forums.'
-        } finally {
-            this.loading = false
+            throw err 
         }
     },
     capitalise (value) {
