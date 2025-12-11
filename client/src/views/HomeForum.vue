@@ -109,17 +109,33 @@
           </div>
 
           <div v-else>
-             <div 
-               v-for="forum in forums" 
-               :key="forum._id"
-               class="postCard mb-3 p-3"
-             >
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                   <h3 class="postTitle">{{ capitalise(forum.name) }}</h3>
-                   <span class="text-muted tinyText">{{ formatDate(forum.createdAt) }}</span>
-                </div>
-                <p class="postBody">{{ forum.description }}</p>
-             </div>
+          <article
+            v-for="forum in forums" 
+            :key="forum._id"
+            class="forumCard mb-3 p-3 d-flex align-items-start"
+          >
+            <!-- forum icon -->
+            <div class="forumIconBox me-3 flex-shrink-0">
+              <img
+                src="/forumIcon.png"
+                alt="Forum icon"
+                class="userIcon"
+              />
+            </div>
+
+            <div class="flex-grow-1 text-start">
+              <div class="d-flex align-items-baseline lh-1 mb-2">
+                <h2 class="forumTitle m-0 me-1">
+                  {{ capitalise(forum.name) }}
+                </h2>
+                <span class="text-muted small">&ndash; {{ formatDate(forum.createdAt) }}</span>
+              </div>
+            
+              <p class="forumBody">
+                {{ forum.description }}
+              </p>
+            </div>
+          </article>
           </div>
         </b-col>
       </b-row>
@@ -139,6 +155,7 @@ export default {
       search: '',
       activeSidebar: 'forum',
       forums: [],
+      usersById: {},
       loading: false,
       error: null
     }
@@ -169,7 +186,6 @@ export default {
         } catch (err) {
             console.error(err)
             this.error = 'Failed to load forums.'
-            throw err 
         }
     },
     capitalise (value) {
