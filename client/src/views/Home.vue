@@ -43,7 +43,7 @@
         </button>
 
         <!-- User section -->
-        <div class="userIconBox d-flex align-items-center cursor-pointer">
+        <div class="userIconBox d-flex align-items-center cursor-pointer" @click="$router.push('/profile')">
           <div class="userIconOutline">
             <img
               src="/userIcon.png"
@@ -417,3 +417,4 @@ export default {
 </script>
 
 <style src="../styles/home.css"></style>
+
