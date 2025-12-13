@@ -5,7 +5,8 @@ export function storeUser(username) {
 
 // Gets user from the localStorage
 export function getUser() {
-  localStorage.getItem('user')
+  const user = localStorage.getItem('user')
+  return user ? JSON.parse(user) : null
 };
 
 // Deletes user from the localStorage
