@@ -126,25 +126,3 @@ exports.getUserForums = async (req, res, next) => {
         next(err);
     }
 }
-
-//Post: Create forums for specific user (Relationship)
-// exports.createUserForums = async(req, res, next) => {
-//     const { username } = req.params;
-//     const user = await User.findOne({username});
-
-//     if(!user) {
-//         return res.status(404).json({error: "User not found!"})
-//     }
-
-//     if(!req.body.name) {
-//         return res.status(400).json({error: "Forum name is required!"});
-//     }
-
-//     const newForum = Forum.create({
-//         name: req.body.name,
-//         description: req.body.description,
-//         userID: user._id,
-//     })
-
-//     return res.status(201).json({newForum})
-// }
