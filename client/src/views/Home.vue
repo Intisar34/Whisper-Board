@@ -131,6 +131,7 @@
             </div>
           </div>
 
+
           <article
             v-for="post in filteredPosts"
             :key="post._id"
@@ -144,7 +145,7 @@
                 class="userIcon"
               />
             </div>
-
+          
             <div class="flex-grow-1 text-start">
               <div class="d-flex align-items-baseline lh-1 mb-1">
                 <span class="fw-bold small text-dark me-1">
@@ -152,25 +153,25 @@
                 </span>
                 <span class="text-muted small">&ndash; {{ formatDate(post) }}</span>
               </div>
-
+            
               <div class="text-muted tinyText mb-2">
                 {{ usernameLabel(post) }}
               </div>
-
+            
               <h2 class="postTitle">
                 {{ capitalise(post.title) }}
               </h2>
-
+            
               <p class="postBody">
                 {{ post.body }}
               </p>
-
+            
               <footer class="d-flex align-items-center gap-2 mt-3">
                 <!-- Like Buttion -->
                 <button
                   class="pillButton d-flex align-items-center"
                   type="button"
-                  disabled
+                  @click="likePost(post._id)"
                 >
                   <img
                     src="/likeIcon.png"
@@ -179,12 +180,12 @@
                   />
                   {{ post.likes ?? 0 }}
                 </button>
-
+              
                 <!-- Dislike Button -->
                 <button
                   class="pillButton d-flex align-items-center"
                   type="button"
-                  disabled
+                  @click="dislikePost(post._id)"
                 >
                   <img
                     src="/dislikeIcon.png"
@@ -193,7 +194,7 @@
                   />
                   {{ post.dislikes ?? 0 }}
                 </button>
-
+              
                 <!-- Comment Button -->
                 <button
                   class="pillButton d-flex align-items-center"
@@ -217,18 +218,19 @@
   </div>
 </template>
 
-<script>
 
+<script>
+  
 import { Api } from '@/Api'
 
 export default {
   name: 'Home',
-  data() {
+  data () {
     return {
-
+      
       posts: [],
-      forumsById: {},
-      usersById: {},
+      forumsById: {}, 
+      usersById: {}, 
 
       loading: false,
       error: null,
@@ -238,7 +240,7 @@ export default {
     }
   },
   computed: {
-    filteredPosts() {
+    filteredPosts () {
       const term = this.search.trim().toLowerCase()
       if (!term) return this.posts
 
@@ -248,11 +250,11 @@ export default {
       )
     }
   },
-  created() {
+  created () {
     this.init()
   },
   methods: {
-    async init() {
+    async init () {
       this.loading = true
       try {
         // Fetch forums, users and posts in parallel
@@ -268,7 +270,7 @@ export default {
       }
     },
 
-    async onSortChange() {
+    async onSortChange () {
       this.loading = true
       try {
         await this.fetchPosts()
@@ -277,7 +279,7 @@ export default {
       }
     },
 
-    async fetchPosts() {
+    async fetchPosts () {
       try {
         this.error = null
         const params = {}
@@ -299,7 +301,7 @@ export default {
       }
     },
 
-    async fetchForums() {
+    async fetchForums () {
       try {
         const response = await Api.get('/forums')
         const forums = response.data?.forums || []
@@ -315,7 +317,7 @@ export default {
       }
     },
 
-    async fetchUsers() {
+    async fetchUsers () {
       try {
         const response = await Api.get('/users')
         const users = response.data?.data || []
@@ -331,17 +333,17 @@ export default {
       }
     },
 
-    forumName(post) {
+    forumName (post) {
       const forum = this.forumsById[post.forumID]
       return forum?.name || 'Forum'
     },
 
-    usernameLabel(post) {
+    usernameLabel (post) {
       const user = this.usersById[post.userID]
       return user?.username || 'Anonymous user'
     },
 
-    formatDate(post) {
+    formatDate (post) {
       const raw = post.postDate || post.createdAt
       if (!raw) return ''
 
@@ -374,16 +376,45 @@ export default {
       })
     },
 
-    capitalise(value) {
+    capitalise (value) {
       if (!value) return ''
       return value.charAt(0).toUpperCase() + value.slice(1)
     },
 
-    goToForum() {
+    goToForum () {
       this.$router.push('/home/forums')
+    },
+
+    async likePost(postId) {
+      try {
+        const response = await Api.patch(`/posts/${postId}/like`);
+        const updatedPost = response.data;
+        const index = this.posts.findIndex(p => p._id === postId);
+        if (index !== -1) {
+          this.posts.splice(index, 1, updatedPost);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Failed to like post');
+      }
+    },
+
+    async dislikePost(postId) {
+      try {
+        const response = await Api.patch(`/posts/${postId}/dislike`);
+        const updatedPost = response.data;
+        const index = this.posts.findIndex(p => p._id === postId);
+        if (index !== -1) {
+          this.posts.splice(index, 1, updatedPost);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Failed to dislike post');
+      }
     }
   }
 }
 </script>
 
 <style src="../styles/home.css"></style>
+
