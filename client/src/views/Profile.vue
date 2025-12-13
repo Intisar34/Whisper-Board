@@ -42,13 +42,13 @@
       <div class="profileFooter">
         <BNav tabs fill>
             <BNavItem to="/home/posts">Home</BNavItem>
-            <BNavItem @click="loadPosts">Posts</BNavItem>
-            <BNavItem href="#nav-fill">Comments</BNavItem>
-            <BNavItem href="#nav-fill">Forums</BNavItem>
+            <BNavItem @click="setTab('posts')">Posts</BNavItem>
+            <BNavItem @click="setTab('comments')">Comments</BNavItem>
+            <BNavItem @click="setTab('forums')">Forums</BNavItem>
         </BNav>
       </div>
     </div>
-    <div v-if="activeTab === 'posts'" class="timelineContainer">
+    <div class="timelineContainer">
      <BContainer>
        <BRow>
         <BCol cols="12" class="py-4">
@@ -100,13 +100,9 @@ export default {
     }
   },
 
-  mounted() {
-    if (this.user) {
-      this.fetchPostUser()
-    }
-  },
-
   methods: {
+
+    // Fetch all posts the user has
     async fetchPostUser() {
       try {
         const response = await Api.get(`/users/${this.user.username}/posts`)
@@ -125,13 +121,59 @@ export default {
         console.error('Failed fetching user posts:', err)
       }
     },
+
+    // Fetch all comments the user has
+    async fetchCommentsUser() {
+      try {
+        const response = await Api.get(`/users/${this.user.username}/comments`)
+        this.comments = response.data
+
+        if (!this.comments || this.comments.length === 0) {
+          console.log('Currently user has no comments')
+        }
+
+        this.timeline = this.comments.map(comment => ({
+          body: comment.body
+        }
+        ))
+      } catch (err) {
+        console.error('Failed fetching user comments:', err)
+      }
+    },
+
+    // Fetch all forums the user has
+    async fetchForumsUser() {
+      try {
+        const response = await Api.get(`/users/${this.user.username}/forums`)
+        this.forums = response.data
+
+        if (!this.forums || this.forums.length === 0) {
+          console.log('Currently user has no forums')
+        }
+
+        this.timeline = this.forums.map(forum => ({
+          name: forum.name,
+          description: forum.description
+        }))
+      } catch (err) {
+        console.error('Failed fetching users forums: ', err)
+      }
+    },
+
     saveProfile() {
       console.log('Saved Changes:', this.form)
       this.toggleModel = false
     },
-    loadPosts() {
-      this.activeTab = 'posts'
-      this.fetchPostUser()
+
+    setTab(tab) {
+      this.activeTab = tab
+      if (tab === 'posts') {
+        this.fetchPostUser()
+      } else if (tab === 'comments') {
+        this.fetchCommentsUser()
+      } else if (tab === 'forums') {
+        this.fetchForumsUser()
+      }
     }
   }
 }
