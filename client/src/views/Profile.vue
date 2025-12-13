@@ -41,10 +41,10 @@
       </div>
       <div class="profileFooter">
         <BNav tabs fill>
-            <BNavItem @click="activeTab = 'home'">Home</BNavItem>
+            <BNavItem to="/home/posts">Home</BNavItem>
             <BNavItem @click="loadPosts">Posts</BNavItem>
             <BNavItem href="#nav-fill">Comments</BNavItem>
-            <BNavItem href="#nav-fill">forums</BNavItem>
+            <BNavItem href="#nav-fill">Forums</BNavItem>
         </BNav>
       </div>
     </div>
@@ -87,12 +87,12 @@ export default {
       comments: [],
       timeline: [],
 
-      activeTab: 'home',
+      activeTab: 'posts',
 
       form: {
         username: 'username',
-        password: 'passowrd',
-        email: 'emai',
+        password: 'passoword',
+        email: 'email',
         role: 'student'
       },
 
