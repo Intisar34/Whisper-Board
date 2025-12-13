@@ -41,14 +41,14 @@
       </div>
       <div class="profileFooter">
         <BNav tabs fill>
-            <BNavItem active href="#nav-fill">Home</BNavItem>
-            <BNavItem href="#nav-fill">Posts</BNavItem>
+            <BNavItem @click="activeTab = 'home'">Home</BNavItem>
+            <BNavItem @click="loadPosts">Posts</BNavItem>
             <BNavItem href="#nav-fill">Comments</BNavItem>
-            <BNavItem href="#nav-fill">Forums</BNavItem>
+            <BNavItem href="#nav-fill">forums</BNavItem>
         </BNav>
       </div>
     </div>
-    <div class="timelineContainer">
+    <div v-if="activeTab === 'posts'" class="timelineContainer">
      <BContainer>
        <BRow>
         <BCol cols="12" class="py-4">
@@ -59,7 +59,7 @@
               <div class="timelineContent">
                 <BCard class="postCard">
                   <h5>{{ item.title}}</h5>
-                  <p>{{ item.text }}</p>
+                  <p>{{ item.body }}</p>
                   <small class="text-secondary">{{ item.date }}</small>
                 </BCard>
               </div>
@@ -73,42 +73,65 @@
 </template>
 
 <script >
+import { Api } from '@/Api'
+import { getUser } from '@/cache.js'
+
 export default {
   name: 'Profile',
 
   data() {
     return {
       toggleModel: false,
-      timeline: [
-        {
-          title: 'blah blah bla',
-          text: 'yes yes yes',
-          date: 'Dec 2025'
-        },
-        {
-          title: 'No NO no',
-          text: 'Hello New York',
-          date: 'Nov 2025'
-        },
-        {
-          title: 'first post',
-          text: 'university experience.',
-          date: 'Oct 2025'
-        }
-      ],
+      posts: [],
+      forums: [],
+      comments: [],
+      timeline: [],
+
+      activeTab: 'home',
+
       form: {
         username: 'username',
         password: 'passowrd',
         email: 'emai',
         role: 'student'
-      }
+      },
+
+      user: getUser()
+    }
+  },
+
+  mounted() {
+    if (this.user) {
+      this.fetchPostUser()
     }
   },
 
   methods: {
+    async fetchPostUser() {
+      try {
+        const response = await Api.get(`/users/${this.user.username}/posts`)
+        this.posts = response.data
+
+        if (!this.posts || this.posts.length === 0) {
+          console.log('Currently user has no posts created')
+        }
+
+        this.timeline = this.posts.map(post => ({
+          title: post.title,
+          body: post.body,
+          date: post.createdAt
+        }))
+      } catch (err) {
+        console.error('Failed fetching user posts:', err)
+      }
+    },
     saveProfile() {
       console.log('Saved Changes:', this.form)
       this.toggleModel = false
+    },
+    loadPosts() {
+      this.activeTab = 'posts'
+      this.fetchPostUser()
     }
   }
 }
