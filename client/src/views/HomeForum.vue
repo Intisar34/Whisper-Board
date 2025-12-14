@@ -51,7 +51,7 @@
               class="userIcon"
             />
           </div>
-          <span class="ms-2 fw-bold text-dark small">HUsd68VG</span>
+          <span class="ms-2 fw-bold text-dark small">{{ currentUser ? currentUser.username : 'Not logged in' }}</span>
         </div>
     </header>
 
@@ -147,6 +147,7 @@
 
 <script>
 import { Api } from '@/Api'
+import { store } from '../store'
 
 export default {
   name: 'HomeForum',
@@ -157,6 +158,11 @@ export default {
       forums: [],
       loading: false,
       error: null
+    }
+  },
+  computed: {
+    currentUser() {
+      return store.user
     }
   },
   created () {
