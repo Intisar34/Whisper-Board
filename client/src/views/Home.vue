@@ -249,6 +249,9 @@ export default {
         (post.title && post.title.toLowerCase().includes(term)) ||
         (post.body && post.body.toLowerCase().includes(term))
       )
+    },
+    currentUser() {
+      return store.user
     }
   },
   created () {
