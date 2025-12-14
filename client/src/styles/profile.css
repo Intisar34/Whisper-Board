@@ -41,22 +41,45 @@
   flex-direction: column;
   min-width: 0;
   max-width: 100%;
+  padding-bottom: 70px;
 }
 
 .profileName {
   font-size: 1.5rem;
   font-weight: 600;
-  padding: 0;
-  padding-top:30px;
   margin: 0;
+  color: #040d27;
 }
 
 .profileRole {
-  font-size: 1.3rem;
-  font-weight:500;
-  color: #fafbfe;
+  font-size: 1.2rem;
+  font-weight:600;
+  color: #040d27;
   margin: 0;           
   margin-top: 4px
+}
+.profileInstitution {
+  font-size: 1.1rem;
+  font-weight:600;
+  color: #0a1536;
+  margin: 0;           
+  margin-top: 8px
+}
+
+.emailData {
+ position: absolute;
+ top: 35px;
+ right:60px;
+ text-align: right;
+}
+
+.profileEmail {
+  font-size: 1.1rem;
+  font-weight:700;
+  color: #040d27;
+  margin: 0;           
+  margin-bottom: 20px;
+  margin-left: 30px;
 }
 
 .editButton {
@@ -87,19 +110,22 @@ label {
 .tallModal {
   min-height: 700px;
   padding: 20px;
+  background: linear-gradient(180deg, #fefefe 2%, #99acf3 75%);
 }
 
 .formBox {
   padding: 25px;
   border-radius: 15px;
-  background: rgba(255,255,255,0.8);
+  background: rgba(255, 255, 255, 0.2);
   box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+  border-color: #040d27;
 }
 
 .buttonContainer{
   margin-top: 40px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .deleteButton {
