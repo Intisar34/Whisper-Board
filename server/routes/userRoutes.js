@@ -15,7 +15,6 @@ router
   .get(userController.getUserByUsername)
   .put(userController.updateUserPut)
   .patch(userController.updateUserPatch)
-  .delete(userController.deleteUserByUsername)
-  .post(userController.loginUser);
+  .delete(userController.deleteUserByUsername);
 
 module.exports = router;

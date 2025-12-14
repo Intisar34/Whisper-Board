@@ -8,62 +8,26 @@
                 <h2> Log in </h2>
 
                 <div class=username>
-                    <p> Email </p>
-                        <input type = "text" v-model="email" placeholder="Enter your email"/>
+                    <p> Username </p>
+                        <input type = "string" v-model="username"/>
                 </div>
 
                 <div class=password>
                     <p> Password </p>
-                        <input type = "password" v-model="password" placeholder="Enter your password"/>
+                        <input type = "password" v-model="password"/>
                 </div>
 
-                <button class=button1 @click = "loginUser"> Log in </button>
-                <button class=button2 @click = "goToSignup"> Forgot password? </button>
+                <button class=button1 type = "submit"> Log in </button>
+                <button class=button2 type = "submit"> Forgot password? </button>
              </div>
         </div>
     </div>
 </template>
 
 <script>
-
-import { Api } from '@/Api'
-import { store } from '../store'
-
 export default {
-  name: 'Login',
-  data() {
-    return {
-      email: '',
-      password: ''
-    }
-  },
-
-  methods: {
-    async loginUser() {
-      if (!this.email || !this.password) {
-        alert('Both email and password is required!')
-        return
-      };
-
-      try {
-        const response = await Api.post('users/login', {
-          email: this.email,
-          password: this.password
-        })
-
-        // Stores in the global store
-        store.setUser(response.data.data)
-
-        this.$router.push('/home/posts')
-      } catch (err) {
-        if (err.response) {
-          alert(`Login failed: ${err.response.data.error}`)
-        }
-      }
-    }
-  }
+  name: 'Login'
 }
-
 </script>
 
 <style src='../styles/Login.css'></style>

@@ -1,34 +1,13 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/home/posts">Home</router-link>
-      <router-link to="/signup">Signup</router-link>
-      <router-link v-if="store.user" to="/login" @click="logout">Logout</router-link>
+      <router-link to="/">Home</router-link>
+      <router-link to="signup">Signup</router-link>
     </div>
     <!-- Render the content of the current page view -->
     <router-view/>
   </div>
 </template>
-
-<script>
-import { store } from './store'
-
-export default {
-  data() {
-    return {
-      store
-    }
-  },
-  mounted() {
-    store.initialize()
-  },
-  methods: {
-    logout() {
-      store.clearUser()
-    }
-  }
-}
-</script>
 
 <style>
 #app {
@@ -38,5 +17,4 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
 </style>
