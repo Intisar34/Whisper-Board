@@ -17,6 +17,8 @@ const {
     getForumPosts,
     getForumPostById,
     deleteForumPost,
+    likePost,
+    dislikePost
 
 } = require("../controllers/postController");
 
@@ -35,6 +37,8 @@ router.get("/posts/:id", getPost);
 router.delete("/posts/:id",deletePost);
 router.put("/posts/:id", updatePost);
 router.patch("/posts/:id", patchPost);
+router.patch("/posts/:id/like", likePost);
+router.patch("/posts/:id/dislike", dislikePost);
 
 
 // Extra relationship routes

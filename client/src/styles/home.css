@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Oleo+Script&family=Inter:wght@400;500;600;700&display=swap');
+
+/* Home page screen*/
+.whisperboardPage {
+  min-height: 100vh;
+  background-color: #e6e6e6;
+  color: #111827;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Top bar  section*/
+.topBar {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  height: 64px;
+}
+
+/* Search section*/
+.search {
+  background-color: #E4E6EB;
+  border-radius: 50px;
+  height: 40px;
+  max-width: 400px;
+}
+
+.searchIcon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.6;
+}
+
+/*Notification section */
+.bellIcon {
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.bellIcon:hover {
+  opacity: 1;
+}
+
+/* user section */
+.userIconBox {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  padding: 4px 12px 4px 4px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.userIconBox:hover {
+  background-color: #f9fafb;
+}
+
+.userIconOutline {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 2px solid #52525b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userIcon {
+  width: 20px;
+  height: 20px;
+}
+
+
+/* Sidebar  Section*/
+.sidebar {
+  padding-right: 10px;
+}
+
+.sidebarItem {
+  border: none;
+  background-color: transparent;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #1f2937;
+  transition: all 0.2s ease;
+}
+
+.sidebarItem:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.sidebarItem.active {
+  background-color: #d1d5db;
+  font-weight: 600;
+}
+
+.sidebarIconBox {
+  width: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebarIcon {
+  width: 20px;
+  height: 20px;
+}
+
+/* <post create section */
+.createPost {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.createInput {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  color: #374151;
+}
+
+.plusIcon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+
+.createInput:focus {
+  outline: none;
+}
+
+/* Sort style section*/
+.customSelectWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.customSelect {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding-right: 1.2rem;
+  cursor: pointer;
+  color: #111827;
+  background-image: url("/sortIcon.png");
+  background-repeat: no-repeat;
+  background-position: right 2px top 50%;
+  background-size: 0.6rem auto;
+}
+
+.customSelect:focus {
+  outline: none;
+}
+
+
+/* Cards */
+.postCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.postCard:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.postUserIcon {
+  width: 44px;
+  height: 44px;
+  border: 2px solid #52525b;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.postTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.postBody {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+/* Action pills */
+.pillButton {
+  border: none;
+  border-radius: 20px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  transition: background-color 0.2s;
+}
+
+.pillButton:hover {
+  background-color: #e5e7eb;
+}
+
+.pillIcon {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  opacity: 0.7;
+}
+
+.tinyText {
+  font-size: 0.75rem;
+}

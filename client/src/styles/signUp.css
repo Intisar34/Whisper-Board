@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap');
+
+.backgroundColor { 
+  background: linear-gradient(180deg, #FEFEFE 2%, #A2AFE4 75%); 
+  width: 100%; 
+  height: 100vh; 
+  display: flex; 
+  align-items: flex-start; 
+  justify-content: center; 
+  padding-top: 180px; 
+  gap: 200px;
+ } 
+
+.title { 
+  font-size: 32px; 
+  font-weight: bold; 
+  color: #02153E; 
+  text-align: center;
+  margin-bottom: 20px; 
+}
+
+.signUpBox { 
+  width: 650px; 
+  height: 400px; 
+  padding: 30px 40px; 
+  background: linear-gradient(180deg,#FEFEFE 2%,#A2AFE4 75%); 
+  border-radius: 15px; 
+  border-color: #A2AFE4 75%; 
+  display: flex; 
+  flex-direction: column; 
+  position: relative; 
+  right: 50px; 
+} 
+
+.paragraph { 
+  font-size: 20px; 
+  color: #02153E; 
+  line-height: 1.5; 
+  font-weight: bolder; 
+}
+
+.paragraphBox { 
+  width: 400px; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  position: relative; 
+  left: 80px; 
+  top: 140px; 
+} 
+
+.logo { 
+  font-size: 70px; 
+  font-weight: 800; 
+  color: #0e1d40; 
+  font-family: 'Jolly Lodger', cursive; 
+  position: absolute; 
+  top: 250px; 
+  left: 250px; 
+}
+
+label { 
+  font-weight: bold; 
+  margin-bottom: 5px; 
+} 
+
+.institution{ display: flex; 
+  flex-direction: column; 
+  text-align: left; 
+  margin-bottom: 14px; 
+} 
+
+.passwordRow { 
+  display: flex; 
+  gap: 20px; 
+  width: 100%;
+} 
+
+.password{ display: flex; 
+  flex: 1;
+  flex-direction: column; 
+  text-align: left; 
+  margin-bottom: 14px; 
+} 
+
+.confirmPassword{ 
+  flex: 1; 
+  display:flex; 
+  flex-direction: column; 
+  text-align: left; 
+  margin-bottom: 14px; 
+} 
+
+input { padding: 8px; 
+  font-size: 14px; 
+  border: 1px solid #c9c9c9; 
+  border-radius: 5px; 
+} 
+.email{ 
+  display: flex; 
+  flex-direction: column; 
+  text-align: left; 
+  margin-bottom: 14px; 
+} 
+
+.createButton { 
+  width: 45%; 
+  background: #0e1d40; 
+  color: white; 
+  padding: 8px 0; 
+  border: none; 
+  border-radius: 6px; 
+  font-size: 14px; 
+  margin: 10px auto 0; 
+  cursor: pointer; 
+  transition: 0.2s; 
+} 
+   
+.createButton:hover { 
+  background-color: #15264A; 
+  transform: scale(1.05); 
+} 
+
+.loginButton{ 
+  width: 30%; background: #0e1d40; 
+  color: white; 
+  padding: 8px 0; 
+  border: none; 
+  border-radius: 6px; 
+  font-size: 14px; 
+  margin: 10px auto 0; 
+  cursor: pointer; 
+  transition: 0.2s; 
+} 
+
+.loginButton:hover { 
+  background-color: #15264A; 
+  transform: scale(1.05); 
+} 
+
+.roleSelect { 
+  display:flex; 
+  flex-direction:column; 
+  text-align: left; 
+  gap: 5px; 
+  margin-bottom: 14px;
+}
+
+.roleRow { 
+  display: flex; 
+  flex-direction: row; 
+  align-items: flex-start; 
+  gap: 12px; 
+  width: 100%; 
+} 
+
+.roleDropdown { 
+  flex-direction: column;
+  width: 45%; 
+  padding: 10px; 
+  border-radius: 6px; 
+  border: 1px solid #ccc; 
+  background-color: white; 
+  font-size: 14px; 
+  cursor: pointer; 
+} 
+
+.otherRole { 
+  display: flex;
+  flex: 1; 
+  flex-direction: column; 
+  text-align: left;
+} 
+
+
+
+
