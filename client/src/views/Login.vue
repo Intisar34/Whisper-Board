@@ -27,6 +27,7 @@
 <script>
 
 import { Api } from '@/Api'
+import { store } from '../store'
 
 export default {
   name: 'Login',
@@ -50,8 +51,8 @@ export default {
           password: this.password
         })
 
-        // Stores in the local storage
-        localStorage.setItem('user', JSON.stringify(response.data.data))
+        // Stores in the global store
+        store.setUser(response.data.data)
 
         this.$router.push('/home/posts')
       } catch (err) {
