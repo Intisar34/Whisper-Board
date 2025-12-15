@@ -17,6 +17,9 @@
 
         <BButton @click="toggleModel = true;" class="editButton"> Edit Profile </BButton>
             <BModal v-model="toggleModel" size="xl"  content-class="tallModal" title-class="title" title="User Details">
+               <BAlert v-model="showError" variant="danger" dismissible @dismissed="showError = false">
+                  {{ errorMessage }}
+               </BAlert>
                 <BForm @submit.prevent="saveProfile" class="formBox">
 
                   <BFormGroup id="input-group-1" label="Username" label-for="input-1">
@@ -91,7 +94,9 @@ export default {
 
   data() {
     return {
+      showError: false,
       toggleModel: false,
+      errorMessage: '',
       posts: [],
       forums: [],
       comments: [],
@@ -104,10 +109,10 @@ export default {
         password: ''
       },
       roleOptions: [
-        { text: 'Student' },
-        { text: 'Teacher' },
-        { text: 'Alumni' },
-        { text: 'TA' }
+        { text: 'Student', value: 'Student' },
+        { text: 'Teacher', value: 'Teacher' },
+        { text: 'Alumni', value: 'Alumni' },
+        { text: 'TA', value: 'TA' }
       ],
 
       originalForm: {},
@@ -141,7 +146,8 @@ export default {
         this.originalForm = {
           email: user.email,
           institution: user.institution,
-          role: user.role
+          role: user.role,
+          password: user.password
         }
       } catch (err) {
         console.error('Failed fetching user details: ', err)
@@ -155,10 +161,11 @@ export default {
           email: this.form.email
         })
         console.log(request.data.data)
-        this.fetchUserDetail()
-        this.toggleModel = false
       } catch (err) {
-        console.error('Failed updating user email: ', err)
+        this.errorMessage = err.response?.data?.error || 'Something went wrong'
+        this.showError = true
+
+        throw err
       }
     },
 
@@ -169,10 +176,11 @@ export default {
           role: this.form.role
         })
         console.log(request.data.data)
-        this.fetchUserDetail()
-        this.toggleModel = false
       } catch (err) {
-        console.error('Failed updating user role: ', err)
+        this.errorMessage = err.response?.data?.error || 'Something went wrong'
+        this.showError = true
+
+        throw err
       }
     },
 
@@ -183,10 +191,11 @@ export default {
           institution: this.form.institution
         })
         console.log(request.data.data)
-        this.fetchUserDetail()
-        this.toggleModel = false
       } catch (err) {
-        console.error('Failed updating user institution: ', err)
+        this.errorMessage = err.response?.data?.error || 'Something went wrong'
+        this.showError = true
+
+        throw err
       }
     },
 
@@ -194,13 +203,14 @@ export default {
     async updateUserPassword() {
       try {
         const request = await Api.patch(`/users/${this.user.username}`, {
-          passowrd: this.form.password
+          password: this.form.password
         })
         console.log(request.data.data)
-        this.fetchUserDetail()
-        this.toggleModel = false
       } catch (err) {
-        console.error('Failed updating user password: ', err)
+        this.errorMessage = err.response?.data?.error || 'Something went wrong'
+        this.showError = true
+
+        throw err
       }
     },
 
@@ -265,32 +275,24 @@ export default {
     // Save any changes made
     async saveProfile() {
       try {
-        const updates = []
-
+        this.showError = false
         if (this.form.institution !== this.originalForm.institution) {
-          updates.push(this.updateUserInstitution())
+          await this.updateUserInstitution()
         }
 
         if (this.form.email !== this.originalForm.email) {
-          updates.push(this.updateUserEmail())
+          await this.updateUserEmail()
         }
 
         if (this.form.role !== this.originalForm.role) {
-          updates.push(this.updateUserRole())
+          await this.updateUserRole()
         }
 
         if (this.form.password !== this.originalForm.password) {
-          updates.push(this.updateUserPassword())
+          await this.updateUserPassword()
         }
 
-        if (updates.length === 0) {
-          console.log('No changes made')
-          return
-        }
-
-        await Promise.all(updates)
-
-        this.fetchUserDetail()
+        await this.fetchUserDetail()
         this.toggleModel = false
       } catch (err) {
         console.error('Failed Saving the Profile:', err)
