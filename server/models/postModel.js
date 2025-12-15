@@ -19,15 +19,15 @@ const postsSchema = new Schema({
         default: Date.now
     },
 
-    likes: {
-        type: Number,
-        default: 0
-    },
+    likes: [{
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    }],
 
-    dislikes: {
-        type: Number,
-        default: 0
-    },
+    dislikes: [{
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    }],
 
     userID: {
         type: Schema.Types.ObjectId,

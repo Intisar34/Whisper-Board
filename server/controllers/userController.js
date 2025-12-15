@@ -156,6 +156,7 @@ exports.loginUser = async (req, res, next) => {
 
     res.status(200).json({
       data: {
+        _id: user._id,
         username: user.username,
         role: user.role,
         institution: user.institution,
