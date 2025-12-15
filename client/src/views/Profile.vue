@@ -90,7 +90,7 @@
 
 <script >
 import { Api } from '@/Api'
-import { getUser } from '@/cache.js'
+import { store } from '@/store.js'
 
 export default {
   name: 'Profile',
@@ -122,8 +122,7 @@ export default {
       originalForm: {},
 
       activeTab: 'posts',
-
-      user: getUser()
+      store
     }
   },
 
@@ -136,7 +135,7 @@ export default {
     // Fetch user details
     async fetchUserDetail() {
       try {
-        const response = await Api.get(`/users/${this.user.username}`)
+        const response = await Api.get(`/users/${this.store.user.username}`)
         const user = response.data.data
         console.log(user)
 
@@ -161,7 +160,7 @@ export default {
     // Update user email
     async updateUserEmail() {
       try {
-        const request = await Api.patch(`/users/${this.user.username}`, {
+        const request = await Api.patch(`/users/${this.store.user.username}`, {
           email: this.form.email
         })
         console.log(request.data.data)
@@ -176,7 +175,7 @@ export default {
     // Update user role
     async updateUserRole() {
       try {
-        const request = await Api.patch(`/users/${this.user.username}`, {
+        const request = await Api.patch(`/users/${this.store.user.username}`, {
           role: this.form.role
         })
         console.log(request.data.data)
@@ -191,7 +190,7 @@ export default {
     // Update user institution
     async updateUserInstitution() {
       try {
-        const request = await Api.patch(`/users/${this.user.username}`, {
+        const request = await Api.patch(`/users/${this.store.user.username}`, {
           institution: this.form.institution
         })
         console.log(request.data.data)
@@ -206,7 +205,7 @@ export default {
     // Update user password
     async updateUserPassword() {
       try {
-        const request = await Api.patch(`/users/${this.user.username}`, {
+        const request = await Api.patch(`/users/${this.store.user.username}`, {
           password: this.form.password
         })
         console.log(request.data.data)
@@ -221,7 +220,7 @@ export default {
     // Fetch all posts the user has
     async fetchPostUser() {
       try {
-        const response = await Api.get(`/users/${this.user.username}/posts`)
+        const response = await Api.get(`/users/${this.store.user.username}/posts`)
         this.posts = response.data
 
         if (!this.posts || this.posts.length === 0) {
@@ -241,7 +240,7 @@ export default {
     // Fetch all comments the user has
     async fetchCommentsUser() {
       try {
-        const response = await Api.get(`/users/${this.user.username}/comments`)
+        const response = await Api.get(`/users/${this.store.user.username}/comments`)
         this.comments = response.data
 
         if (!this.comments || this.comments.length === 0) {
@@ -260,7 +259,7 @@ export default {
     // Fetch all forums the user has
     async fetchForumsUser() {
       try {
-        const response = await Api.get(`/users/${this.user.username}/forums`)
+        const response = await Api.get(`/users/${this.store.user.username}/forums`)
         this.forums = response.data
 
         if (!this.forums || this.forums.length === 0) {
@@ -316,7 +315,7 @@ export default {
 
     async deleteUser() {
       try {
-        const response = await Api.delete(`users/${this.user.username}`)
+        const response = await Api.delete(`users/${this.store.user.username}`)
 
         if (response.status === 200 || response.status === 204) {
           this.showSuccess = true
