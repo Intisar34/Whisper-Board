@@ -7,6 +7,7 @@ import Login from './views/Login.vue'
 import Profile from './views/Profile.vue'
 
 const routes = [
+  { path: '/', redirect: '/signup' },
   { path: '/home/posts', name: 'home', component: Home },
   { path: '/home/forums', name: 'homeForum', component: HomeForum },
   { path: '/signup', name: 'signUP', component: signUP },

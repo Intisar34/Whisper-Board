@@ -1,11 +1,5 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/home/posts">Home</router-link>
-      <router-link to="/signup">Signup</router-link>
-      <router-link v-if="store.user" to="/login" @click="logout">Logout</router-link>
-    </div>
-    <!-- Render the content of the current page view -->
     <router-view/>
   </div>
 </template>
