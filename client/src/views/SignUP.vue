@@ -52,7 +52,7 @@
         </div>
         </div>
 
-        <button class="createButton" type="submit">Create Account</button>
+        <button class="createButton" type="submit" @click="goToLogin">Create Account</button>
           <p>--- Already have an account? ---</p>
         <button class="loginButton" type="button" @click="goToLogin">Log In</button>
       </form>
