@@ -1,5 +1,5 @@
-
 const Forum = require('../models/forumModel');
+const User = require('../models/userModel');
 
 // Creates a forum
 exports.createForums = async (req, res, next) =>{
@@ -107,3 +107,22 @@ exports.updateForumField = async (req, res, next) => {
           next (err);
       }
 };
+
+//GET: get all forums for a specific user 
+exports.getUserForums = async (req, res, next) => {
+    try {
+        const { username } = req.params;
+        const user = await User.findOne({username})
+
+        if(!user) {
+            return res.status(404).json({ error: "User not found"})
+        }
+
+        const forums = await Forum.find({ userID: user._id });
+        
+        return res.status(200).json(forums)
+
+    } catch(err) {
+        next(err);
+    }
+}
