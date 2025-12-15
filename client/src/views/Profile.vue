@@ -17,7 +17,7 @@
 
         <BButton @click="toggleModel = true;" class="editButton"> Edit Profile </BButton>
             <BModal v-model="toggleModel" size="xl"  content-class="tallModal" title-class="title" title="User Details">
-               <BAlert v-model="showError" variant="danger" dismissible @dismissed="showError = false">
+               <BAlert v-model="showSuccess" variant="danger" dismissible @dismissed="showError = false">
                   {{ errorMessage }}
                </BAlert>
                 <BForm @submit.prevent="saveProfile" class="formBox">
@@ -48,7 +48,10 @@
                 </BForm>
 
              <div class="buttonContainer">
-                <BButton class="deleteButton">Delete</BButton>
+              <BAlert v-model="showSuccess" variant="success">
+                User has been Successfully deleted
+              </BAlert>
+                <BButton class="deleteButton" @click="deleteUser">Delete</BButton>
              </div>
             </BModal>
       </div>
@@ -101,6 +104,7 @@ export default {
       forums: [],
       comments: [],
       timeline: [],
+      showSuccess: false,
       form: {
         username: '',
         institution: '',
@@ -308,9 +312,27 @@ export default {
       } else if (tab === 'forums') {
         this.fetchForumsUser()
       }
+    },
+
+    async deleteUser() {
+      try {
+        const response = await Api.delete(`users/${this.user.username}`)
+
+        if (response.status === 200 || response.status === 204) {
+          this.showSuccess = true
+          setTimeout(() => {
+            this.$router.push('/login')
+          }, 1500)
+        }
+      } catch (err) {
+        console.error('Failed deleting user: ', err)
+        this.errorMessage = 'Failed to delete user'
+        this.showError = true
+      }
     }
   }
 }
+
 </script>
 
 <style src="../styles/profile.css"></style>
