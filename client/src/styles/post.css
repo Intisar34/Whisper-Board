@@ -37,6 +37,7 @@
     padding: 24px;
     box-sizing: border-box;
     border: 1px solid #5165b6;
+    position:relative
     
 }
 
@@ -164,3 +165,23 @@
     cursor: pointer
 }
 
+.closeButton {
+    border-radius: 50%;
+    background-color: #cbe6ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position:absolute;
+    width: 35px;
+    height: 35px;
+    color: white;
+    border: none;
+    right: 20px;
+    top: 20px;
+}
+
+.closeButton svg {
+  width: 60%;
+  height: 60%;
+}
