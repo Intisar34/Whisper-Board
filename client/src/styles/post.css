@@ -1,187 +1,281 @@
 .postPage {
-    border-radius: 8px;
-    background: linear-gradient(180deg, #FEFEFE 1.92%, #A2AFE4 75%);
-    width: 100%;
-    min-height: 100vh;
-    display:flex;
-    flex-direction:column;
-    padding: 20px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #FEFEFE 1.92%, #A2AFE4 75%);
+  width: 100%;
+  min-height: 100vh;
+  display:flex;
+  flex-direction:column;
+  padding: 20px;
 }
 
 .logoContainer {
-    display: flex;
-    margin-bottom: 40px;
-    flex-direction: column;
-    justify-content: center;
-    margin-bottom: 40px;
-    align-items: center;
+  display: flex;
+  margin-bottom: 40px;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 40px;
+  align-items: center;
 }
 
 .logo {
-    color: #02153E;
-    text-align: center;
-    font-family: "Jolly Lodger";
-    font-size: 48px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+  color: #02153E;
+  text-align: center;
+  font-family: "Jolly Lodger";
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .postContainer {
-    background: linear-gradient(180deg, #FEFEFE 1.78%, #CBD2EE 55.13%);
-    border-radius: 16px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1); 
-    width: 100%;
-    max-width: 750px;
-    margin: 20px auto;
-    padding: 24px;
-    box-sizing: border-box;
-    border: 1px solid #5165b6;
-    position:relative
-    
+  background: linear-gradient(180deg, #FEFEFE 1.78%, #CBD2EE 55.13%);
+  border-radius: 16px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1); 
+  width: 100%;
+  max-width: 750px;
+  margin: 20px auto;
+  padding: 24px;
+  box-sizing: border-box;
+  border: 1px solid #5165b6;
+  position:relative
 }
 
 .postTitle {
-    color: #02153E;
-    font-family: Inter;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: normal;
-    text-align: left;
-    padding-bottom: 30px;
-    margin-bottom: 16px;
+  color: #02153E;
+  font-family: Inter;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: normal;
+  text-align: left;
+  padding-bottom: 30px;
+  margin-bottom: 16px;
 }
 
 .postContent {
-    color: #2C3E50; 
-    font-family: Inter;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.5;
-    background: transparent; 
-    border: none;
-    padding: 0;
-    margin-bottom: 24px;
-    resize: none;
-    text-align: left;
-    word-break: break-word;
-    overflow-wrap: break-word;
+  color: #2C3E50; 
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  background: transparent; 
+  border: none;
+  padding: 0;
+  margin-bottom: 24px;
+  resize: none;
+  text-align: left;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .userContainer {
-    display:flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
+  display:flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 .username {
-    color: #000;
-    font-family: Inter;
-    font-size: 24px;
-    font-weight: 600;
+  color: #000;
+  font-family: Inter;
+  font-size: 24px;
+  font-weight: 600;
+  padding-top: 5px;
 }
 
 .postDate {
-    color: #02153E;
-    text-align: center;
-    font-family: Inter;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    letter-spacing: 1.08px;
+  color: #02153E;
+  text-align: center;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 1.08px;
+  padding-bottom: 7px;
 }
 
 .translationContainer {
-    display:flex;
-    flex-direction: row-reverse;
-    background: transparent;
+  display:flex;
+  flex-direction: row-reverse;
+  background: transparent;
 }
 
 .translationButton {
-    color: 000000;
-    background: transparent;
-    font-family: Inter;
-    border:none;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    letter-spacing: 2.4px;
+  color: 000000;
+  background: transparent;
+  font-family: Inter;
+  border:none;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 2.4px;
 }
 
 .commentInput {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 
 .activityBox {
-    display: flex;
-    gap: 12px;
-    margin-top: 16px;
-    margin-bottom: 15px;
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  margin-bottom: 15px;
 }
 
 .commentText {
-    color: #2C3E50;
-    background-color: #eaedf8d8 !important;
-    font-family: Inter;
-    font-size: 14px;
-    border: none;
-    resize: none;
-    border-radius: 70px !important;
-    padding: 12px 20px !important;
-    width: 100%;
+  color: #2C3E50;
+  background-color: #eaedf8d8 !important;
+  font-family: Inter;
+  font-size: 14px;
+  border: none;
+  resize: none;
+  border-radius: 70px !important;
+  padding: 12px 20px !important;
+  width: 100%;
 }
 
 .sendButton {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #3897f0; 
-    border: none;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: white;
-    opacity: 0.5; 
-    transition: background-color 0.2s ease, opacity 0.2s ease;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #3897f0; 
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  opacity: 0.5; 
+  transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
 .sendButton.active {
-    opacity: 1;
+  opacity: 1;
 }
 
 .sendButton:hover {
-    background-color: #2a75c4;
+  background-color: #2a75c4;
 }
 
 .sendButton:disabled {
-    cursor: pointer
+  cursor: pointer
 }
 
 .closeButton {
-    border-radius: 50%;
-    background-color: #cbe6ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    position:absolute;
-    width: 35px;
-    height: 35px;
-    color: white;
-    border: none;
-    right: 20px;
-    top: 20px;
+  border-radius: 50%;
+  background-color: #cbe6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position:absolute;
+  width: 35px;
+  height: 35px;
+  color: white;
+  border: none;
+  right: 20px;
+  top: 20px;
 }
 
 .closeButton svg {
-    width: 60%;
-    height: 60%;
+  width: 60%;
+  height: 60%;
+}
+
+.commentContainer {
+  max-width: 750px;
+  width: 100%;
+  margin: 8px auto 0; 
+  padding: 8px 12px;
+  border-radius: 30px;
+  background: #ECEDF3;
+  border: 1px solid #02153E;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 12px 16px;
+}
+
+.commentContent {
+  color: rgba(0, 0, 0, 0.68);
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  max-width: 85%;
+  text-align: left; 
+  margin: 0;
+}   
+
+.replyButton {
+  border-radius: 15px;
+  background-color: #d2d2d2;
+  font-family: Inter;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  align-self: auto;
+  color: #000;  
+  border: none;
+}
+
+.replyButton:hover {
+  background-color: #e5e7eb;
+}
+
+
+.commentActions {
+  display: flex;
+  flex-direction: row;   
+  align-items: center;   
+  gap: 10px;             
+  margin-top: 8px;
+}
+
+.pillButton {
+  display: flex;
+  align-items: center;   
+  justify-content: center;
+  border: none;
+  border-radius: 20px;
+  font-weight: 600;
+  background-color: #d2d2d2;
+  transition: background-color 0.2s;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+
+.pillButton:hover {
+  background-color: #e5e7eb;
+}
+
+.pillIcon {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  opacity: 0.7;
+}
+
+.tinyText {
+  font-size: 0.75rem;
+}
+
+.commentContainer .userContainer {
+  margin-bottom: 8px;
+}
+
+.commentContainer .username {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.commentContainer .postDate {
+  font-size: 10px;
 }
