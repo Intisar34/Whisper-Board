@@ -5,6 +5,7 @@ import HomeForum from './views/HomeForum.vue'
 import signUP from './views/SignUP.vue'
 import Login from './views/Login.vue'
 import Profile from './views/Profile.vue'
+import Post from './components/Post.vue'
 
 const routes = [
   { path: '/', redirect: '/signup' },
@@ -12,7 +13,8 @@ const routes = [
   { path: '/home/forums', name: 'homeForum', component: HomeForum },
   { path: '/signup', name: 'signUP', component: signUP },
   { path: '/login', name: 'login', component: Login },
-  { path: '/profile', name: 'profile', component: Profile }
+  { path: '/profile', name: 'profile', component: Profile },
+  { path: '/post', name: 'post', component: Post }
 
 ]
 
