@@ -11,7 +11,7 @@
                 <time class="postDate">12h-ago</time>
             </div>
 
-            <button class="closeButton">
+            <button class="closeButton" @click="$router.push('/home/posts')">
                 <img src="/closeButton.svg">
             </button>
 
@@ -31,10 +31,21 @@
                 I’m dropping out and becoming a carrot farmer.
             </article>
 
-            <div class="activityBox">
-                <img src="/likeIcon.png"/>
-                <img src="/dislikeIcon.png"/>
-                <img src="/commentIcon.png"/>
+           <div class="commentActions">
+                <button class="pillButton" type="button">
+                    <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
+                    <span class="tinyText">5</span>
+                </button>
+
+                <button class="pillButton" type="button">
+                    <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
+                    <span class="tinyText">2</span>
+                </button>
+
+                <button class="pillButton" type="button">
+                    <img src="/commentIcon.png" alt="Dislikes" class="pillIcon me-1"/>
+                    <span class="tinyText">4</span>
+                </button>
             </div>
 
             <div class="commentInput">
@@ -57,13 +68,15 @@
             <div class="commentActions">
                 <button class="pillButton" type="button">
                     <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
+                    <span class="tinyText">2</span>
                 </button>
 
                 <button class="pillButton" type="button">
                     <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
+                    <span class="tinyText">2</span>
                 </button>
 
-                <button class="replyButton" type="button">
+                <button class="pillButton" type="button">
                     reply
                 </button>
             </div>
