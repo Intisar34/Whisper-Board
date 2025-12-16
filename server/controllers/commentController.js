@@ -1,9 +1,6 @@
-
 const Comments = require('../models/commentModel');
 const Posts = require('../models/postModel');
 const Users = require('../models/userModel');
-
-
 
 // Creates a comment
 exports.createComment = async (req, res, next) => {
@@ -194,7 +191,7 @@ exports.deletePostComments = async (req, res, next) => {
 // Create comments for specific user (relationship)
 exports.createUserSpecificComment = async (req, res, next) => {
     try{
-        const{username} = req.params;
+        const username = req.params.username;
         const {body, postID} = req.body;
 
         const checkUser = await Users.findOne({username});
@@ -213,3 +210,23 @@ exports.createUserSpecificComment = async (req, res, next) => {
     next(err);
 }
 };
+
+//GET: Get all comments from a specific user (relationship)
+exports.getUserComments = async (req, res, next) => {
+    try {
+        const { username } = req.params;
+        const user = await Users.findOne({username});
+
+        if(!user) {
+            return res.status(404).json({error: "User not found"})
+        }
+
+        const comments = await Comments.find({userID: user._id})
+
+        return res.status(200).json(comments)
+
+    } catch (err) {
+        next(err);
+    }
+}
+

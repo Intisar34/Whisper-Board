@@ -51,7 +51,7 @@
               class="userIcon"
             />
           </div>
-          <span class="ms-2 fw-bold text-dark small">HUsd68VG</span>
+          <span class="ms-2 fw-bold text-dark small">{{ currentUser ? currentUser.username : 'Not logged in' }}</span>
         </div>
     </header>
 
@@ -176,11 +176,9 @@ export default {
       activeSidebar: 'forum',
       forums: [],
       loading: false,
-      error: null,
-      showCreateForum: false
+      error: null
     }
   },
-
   computed: {
     currentUser() {
       return store.user

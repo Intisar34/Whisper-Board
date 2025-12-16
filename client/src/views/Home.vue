@@ -43,7 +43,7 @@
         </button>
 
         <!-- User section -->
-        <div class="userIconBox d-flex align-items-center cursor-pointer">
+        <div class="userIconBox d-flex align-items-center cursor-pointer" @click="$router.push('/profile')">
           <div class="userIconOutline">
             <img
               src="/userIcon.png"
@@ -51,7 +51,7 @@
               class="userIcon"
             />
           </div>
-          <span class="ms-2 fw-bold text-dark small">HUsd68VG</span>
+          <span class="ms-2 fw-bold text-dark small">{{ currentUser ? currentUser.username : 'Not logged in' }}</span>
         </div>
     </header>
 
@@ -178,7 +178,7 @@
                     alt="Likes"
                     class="pillIcon me-1"
                   />
-                  {{ post.likes ?? 0 }}
+                  {{ post.likes ? post.likes.length : 0 }}
                 </button>
               
                 <!-- Dislike Button -->
@@ -192,7 +192,7 @@
                     alt="Dislikes"
                     class="pillIcon me-1"
                   />
-                  {{ post.dislikes ?? 0 }}
+                  {{ post.dislikes ? post.dislikes.length : 0 }}
                 </button>
               
                 <!-- Comment Button -->
@@ -222,6 +222,7 @@
 <script>
   
 import { Api } from '@/Api'
+import { store } from '../store'
 
 export default {
   name: 'Home',
@@ -248,6 +249,9 @@ export default {
         (post.title && post.title.toLowerCase().includes(term)) ||
         (post.body && post.body.toLowerCase().includes(term))
       )
+    },
+    currentUser() {
+      return store.user
     }
   },
   created () {
@@ -386,8 +390,14 @@ export default {
     },
 
     async likePost(postId) {
+      if (!store.user) {
+        alert('You must be logged in to like a post.')
+        return
+      }
       try {
-        const response = await Api.patch(`/posts/${postId}/like`);
+        const response = await Api.patch(`/posts/${postId}/like`, {
+            userID: store.user._id
+        });
         const updatedPost = response.data;
         const index = this.posts.findIndex(p => p._id === postId);
         if (index !== -1) {
@@ -400,8 +410,14 @@ export default {
     },
 
     async dislikePost(postId) {
+      if (!store.user) {
+        alert('You must be logged in to dislike a post.')
+        return
+      }
       try {
-        const response = await Api.patch(`/posts/${postId}/dislike`);
+        const response = await Api.patch(`/posts/${postId}/dislike`, {
+            userID: store.user._id
+        });
         const updatedPost = response.data;
         const index = this.posts.findIndex(p => p._id === postId);
         if (index !== -1) {
@@ -417,3 +433,4 @@ export default {
 </script>
 
 <style src="../styles/home.css"></style>
+

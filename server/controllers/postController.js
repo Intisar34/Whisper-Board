@@ -298,16 +298,27 @@ exports.deleteForumPost = async (req, res, next) => {
 exports.likePost = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const post = await Post.findByIdAndUpdate(
-            id,
-            { $inc: { likes: 1 } },
-            { new: true }
-        );
+        const { userID } = req.body;
+
+        if (!userID) {
+            return res.status(400).json({ error: 'UserID is required' });
+        }
+
+        const post = await Post.findById(id);
 
         if (!post) {
             return res.status(404).json({ error: 'Post not found' });
         }
 
+        // if already liked, unlike, if not, like and pull dislike.
+        if (post.likes.includes(userID)) {
+            post.likes.pull(userID);
+        } else {
+            post.likes.push(userID);
+            post.dislikes.pull(userID);
+        }
+
+        await post.save();
         res.status(200).json(post);
     } catch (err) {
         next(err);
@@ -318,16 +329,27 @@ exports.likePost = async (req, res, next) => {
 exports.dislikePost = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const post = await Post.findByIdAndUpdate(
-            id,
-            { $inc: { dislikes: 1 } },
-            { new: true }
-        );
+        const { userID } = req.body;
+
+        if (!userID) {
+            return res.status(400).json({ error: 'UserID is required' });
+        }
+
+        const post = await Post.findById(id);
 
         if (!post) {
             return res.status(404).json({ error: 'Post not found' });
         }
 
+        // if already disliked, undislike, if not, dislike and pull like.
+        if (post.dislikes.includes(userID)) {
+            post.dislikes.pull(userID);
+        } else {
+            post.dislikes.push(userID);
+            post.likes.pull(userID);
+        }
+
+        await post.save();
         res.status(200).json(post);
     } catch (err) {
         next(err);

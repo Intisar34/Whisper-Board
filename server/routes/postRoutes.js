@@ -2,24 +2,23 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    createPost,
-    getAllPosts,
-    deleteAllPosts,
-    getPost,
-    updatePost,
-    patchPost,
-    deletePost,
-    createPostForUser,
-    createPostInForum,
-    deleteUserSpecificPost,
-    getUserPosts,
-    getUserPostById,
-    getForumPosts,
-    getForumPostById,
-    deleteForumPost,
-    likePost,
-    dislikePost
-
+  createPost,
+  getAllPosts,
+  deleteAllPosts,
+  getPost,
+  updatePost,
+  patchPost,
+  deletePost,
+  createPostForUser,
+  createPostInForum,
+  deleteUserSpecificPost,
+  getUserPosts,
+  getUserPostById,
+  getForumPosts,
+  getForumPostById,
+  deleteForumPost,
+  likePost,
+  dislikePost
 } = require("../controllers/postController");
 
 const {
@@ -27,8 +26,13 @@ const {
   getPostComments,
   getPostCommentById,
   deletePostComments,
-  createUserSpecificComment
+  createUserSpecificComment,
+  getUserComments
 } = require("../controllers/commentController");
+
+const {
+  getUserForums
+} = require("../controllers/forumController");
 
 router.post("/posts", createPost);
 router.get("/posts", getAllPosts);
@@ -46,7 +50,9 @@ router.get("/users/:username/posts", getUserPosts);
 router.get("/users/:username/posts/:postID", getUserPostById);
 router.post("/users/:username/posts", createPostForUser);
 router.delete("/users/:username/posts/:postID", deleteUserSpecificPost);
-router.post("/users/:username/comments", createUserSpecificComment)
+router.post("/users/:username/comments", createUserSpecificComment);
+router.get("/users/:username/comments", getUserComments);
+router.get("/users/:username/forums", getUserForums);
 
 router.post("/forums/:forumID/posts", createPostInForum);
 router.get("/forums/:forumID/posts", getForumPosts);
