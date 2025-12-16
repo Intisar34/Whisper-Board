@@ -135,22 +135,22 @@
 }
 
 .sendButton {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #3897f0; 
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: white;
-  opacity: 0.5; 
-  transition: background-color 0.2s ease, opacity 0.2s ease;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #3897f0; 
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    opacity: 0.5; 
+    transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
 .sendButton.active {
@@ -182,6 +182,6 @@
 }
 
 .closeButton svg {
-  width: 60%;
-  height: 60%;
+    width: 60%;
+    height: 60%;
 }
