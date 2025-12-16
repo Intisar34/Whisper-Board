@@ -2,12 +2,13 @@
   <div class="homepage">
     <div class="newforumBox">
 
-      <div class="title">
+      <div class="mainContent  flex-grow-1">
+
+        <div class="title">
         <h2>Create Forum</h2>
         <button class="closeButton" @click="$emit('close')">×</button>
       </div>
 
-      <div class="mainContent">
         <div class="forumGroup">
           <label>Forum Name</label>
           <input v-model="name" type="text" class="input" placeholder="My Forum" />
@@ -21,12 +22,27 @@
             placeholder="What is this forum about?"
           ></textarea>
         </div>
-        <p v-if="error" class="errorText">{{ error }}</p>
-      </div>
 
-      <div class="button">
-        <button class="createBtn" @click="createForum"> Create Forum </button>
+        <div class="mb-3">
+        <label for="forumCategory" class="form-label">Category</label>
+        <select v-model="category" id="forumCategory" class="form-select">
+          <option value="">Select a category</option>
+          <option value="courses">Courses</option>
+          <option value="teachers">Teachers</option>
+          <option value="internship">Internships</option>
+          <option value="hackathon">Hackathon</option>
+          <option value="events">Events</option>
+          <option value="socializing">Socializing</option>
+        </select>
+
+        <p v-if="error" class="errorText">{{ error }}</p>
+
+        <div class="button ms-auto">
+          <button class="createBtn" @click="createForum"> Create Forum </button>
+        </div>
+
       </div>
+    </div>
 
     </div>
   </div>
@@ -59,6 +75,11 @@ export default {
 
       if (!this.name.trim()) {
         this.error = 'Forum name is required.'
+        return
+      }
+
+      if (!this.category) {
+        this.error = 'Please select a category.'
         return
       }
 
