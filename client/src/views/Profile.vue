@@ -110,7 +110,8 @@ export default {
         institution: '',
         email: '',
         role: '',
-        password: ''
+        password: '',
+        links: []
       },
       roleOptions: [
         { text: 'Student', value: 'Student' },
@@ -144,6 +145,7 @@ export default {
         this.form.email = user.email
         this.form.role = user.role
         this.form.password = user.password
+        this.form.links = user.links || []
 
         // Save a copy of the form
         this.originalForm = {
@@ -220,7 +222,12 @@ export default {
     // Fetch all posts the user has
     async fetchPostUser() {
       try {
-        const response = await Api.get(`/users/${this.store.user.username}/posts`)
+        const link = this.getLink('posts')
+        if (!link) {
+          console.error("HATEOAS link for posts not found")
+          return
+        }
+        const response = await Api.get(link)
         this.posts = response.data
 
         if (!this.posts || this.posts.length === 0) {
@@ -240,7 +247,12 @@ export default {
     // Fetch all comments the user has
     async fetchCommentsUser() {
       try {
-        const response = await Api.get(`/users/${this.store.user.username}/comments`)
+        const link = this.getLink('comments')
+        if (!link) {
+          console.error("HATEOAS link for comments not found")
+          return
+        }
+        const response = await Api.get(link)
         this.comments = response.data
 
         if (!this.comments || this.comments.length === 0) {
@@ -259,7 +271,12 @@ export default {
     // Fetch all forums the user has
     async fetchForumsUser() {
       try {
-        const response = await Api.get(`/users/${this.store.user.username}/forums`)
+        const link = this.getLink('forums')
+        if (!link) {
+          console.error("HATEOAS link for forums not found")
+          return
+        }
+        const response = await Api.get(link)
         this.forums = response.data
 
         if (!this.forums || this.forums.length === 0) {
@@ -328,6 +345,11 @@ export default {
         this.errorMessage = 'Failed to delete user'
         this.showError = true
       }
+    },
+
+    getLink(rel) {
+      const link = this.form.links.find(links => links.rel === rel)
+      return link ? link.href : null
     }
   }
 }

@@ -206,7 +206,7 @@ exports.getUserByUsername = async (req, res, next) => {
     userObj.links = [
       { rel: 'self',    href: `${baseUrl}/users/${user.username}` },
       { rel: 'posts',   href: `${baseUrl}/users/${user.username}/posts` },
-      { rel: 'forums',  href: `${baseUrl}/forums?owner=${user.username}` },
+      { rel: 'forums',  href: `${baseUrl}/users/${user.username}/forums` },
       { rel: 'comments', href: `${baseUrl}/users/${user.username}/comments` },
     ];
 

@@ -52,7 +52,7 @@
         </div>
         </div>
 
-        <button class="createButton" type="submit" @click="goToLogin">Create Account</button>
+        <button class="createButton" type="submit">Create Account</button>
           <p>--- Already have an account? ---</p>
         <button class="loginButton" type="button" @click="goToLogin">Log In</button>
       </form>
@@ -94,6 +94,7 @@ export default {
         .then(response => {
           console.log('User Created:', response.data.data.user)
           alert('Account successfully created! Welcome, Your username is: ' + response.data.data.user.username)
+          this.goToLogin()
           console.log('connected to the backend')
         })
         .catch(error => {
