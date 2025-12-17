@@ -23,7 +23,7 @@
           ></textarea>
         </div>
 
-        <div class="mb-3">
+        <div class="forumGroup mb-3">
         <label for="forumCategory" class="form-label">Category</label>
         <select v-model="category" id="forumCategory" class="form-select">
           <option value="">Select a category</option>
@@ -34,14 +34,12 @@
           <option value="events">Events</option>
           <option value="socializing">Socializing</option>
         </select>
-
+        </div>
         <p v-if="error" class="errorText">{{ error }}</p>
 
-        <div class="button ms-auto">
-          <button class="createBtn" @click="createForum"> Create Forum </button>
+        <div class="button">
+          <button class="createButton" @click="createForum"> Create Forum </button>
         </div>
-
-      </div>
     </div>
 
     </div>
@@ -112,4 +110,4 @@ export default {
 }
 </script>
 
-<style src="../styles/create-forum.css"></style>
+<style src="../styles/createForum.css"></style>
