@@ -301,6 +301,11 @@ export default {
           params.sort = 'postDate'
         }
 
+        // Filter by users joined forums
+        if (this.currentUser) {
+            params.userId = this.currentUser._id
+        }
+
         const response = await Api.get('/posts', { params })
         this.posts = Array.isArray(response.data) ? response.data : []
       } catch (err) {
