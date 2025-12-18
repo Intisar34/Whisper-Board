@@ -43,7 +43,7 @@
         </button>
 
         <!-- User section -->
-        <div class="userIconBox d-flex align-items-center cursor-pointer">
+        <div class="userIconBox d-flex align-items-center cursor-pointer" @click="$router.push('/profile')">
           <div class="userIconOutline">
             <img
               src="/userIcon.png"
@@ -131,9 +131,29 @@
                 <span class="text-muted small">&ndash; {{ formatDate(forum.createdAt) }}</span>
               </div>
             
-              <p class="forumBody">
+              <p class="forumBody mb-0">
                 {{ forum.description }}
               </p>
+            </div>
+
+            <!-- Join and Leave Button for forum-->
+            <div class="ms-3 align-self-center">
+
+              <button 
+                v-if="!isJoined(forum)"
+                class="btn btn-sm btn-primary"
+                @click.stop="joinForum(forum._id)"
+              >
+                Join
+              </button>
+              <button 
+                v-else
+                class="btn btn-sm btn-outline-danger"
+                @click.stop="leaveForum(forum._id)"
+              >
+                Leave
+              </button>
+
             </div>
           </article>
           </div>
@@ -205,6 +225,55 @@ export default {
         month: 'short',
         day: 'numeric'
       })
+    },
+
+    isJoined(forum) {
+      if (!this.currentUser || !forum.members) return false
+      return forum.members.includes(this.currentUser._id)
+    },
+
+    async joinForum(forumId) {
+      if (!this.currentUser) {
+        alert('Please log in to join forums.')
+        return
+      }
+      try {
+        const response = await Api.patch(`/forums/${forumId}/join`, {
+          userID: this.currentUser._id
+        })
+        
+        // Update local store
+        const updatedForum = response.data.forum
+        const index = this.forums.findIndex(f => f._id === forumId)
+        if (index !== -1) {
+          this.forums.splice(index, 1, updatedForum)
+        }
+      } catch (err) {
+        console.error(err)
+        alert('Failed to join forum')
+      }
+    },
+
+    async leaveForum(forumId) {
+      if (!this.currentUser) {
+        alert('Please log in to leave forums.')
+        return
+      }
+      try {
+        const response = await Api.patch(`/forums/${forumId}/leave`, {
+          userID: this.currentUser._id
+        })
+
+        // Update local store
+        const updatedForum = response.data.forum
+        const index = this.forums.findIndex(f => f._id === forumId)
+        if (index !== -1) {
+          this.forums.splice(index, 1, updatedForum)
+        }
+      } catch (err) {
+        console.error(err)
+        alert('Failed to leave forum')
+      }
     }
   }
 }

@@ -14,6 +14,12 @@ const forumSchema = new mongoose.Schema ({
         ref: "User",
         required: true
     },
+
+    // Array of users who joined the forum
+    members: [{
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    }]
 },
 
 { timestamps: true}
