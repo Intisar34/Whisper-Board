@@ -56,7 +56,7 @@ export default {
     return {
       name: '',
       description: '',
-      category: '',
+      category: null,
       error: null
     }
   },
