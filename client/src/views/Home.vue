@@ -43,16 +43,22 @@
         </button>
 
         <!-- User section -->
-        <div class="userIconBox d-flex align-items-center cursor-pointer" @click="$router.push('/profile')">
-          <div class="userIconOutline">
-            <img
-              src="/userIcon.png"
-              alt="User avatar"
-              class="userIcon"
-            />
-          </div>
-          <span class="ms-2 fw-bold text-dark small">{{ currentUser ? currentUser.username : 'Not logged in' }}</span>
-        </div>
+        <BDropdown variant="link" toggle-class="text-decoration-none p-0" no-caret>
+          <template #button-content>
+            <div class="userIconBox d-flex align-items-center cursor-pointer">
+              <div class="userIconOutline">
+                <img
+                  src="/userIcon.png"
+                  alt="User avatar"
+                  class="userIcon"
+                />
+              </div>
+              <span class="ms-2 fw-bold text-dark small">{{ currentUser ? currentUser.username : 'Not logged in' }}</span>
+            </div>
+          </template>
+          <BDropdownItem @click="goToProfile">Profile</BDropdownItem>
+          <BDropdownItem @click="logout"><span class="text-danger">Sign out</span></BDropdownItem>
+        </BDropdown>
     </header>
 
     <b-container fluid class="px-4 mt-4">
@@ -427,6 +433,15 @@ export default {
         console.error(err);
         alert('Failed to dislike post');
       }
+    },
+
+    goToProfile() {
+      this.$router.push('/profile')
+    },
+
+    logout() {
+      store.clearUser()
+      this.$router.push('/login')
     }
   }
 }
