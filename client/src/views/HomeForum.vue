@@ -101,11 +101,26 @@
               </button>
           </nav>
         </b-col>
+        
 
         <!-- Main Content Section -->
         <b-col cols="12" md="9" lg="10">
 
-          
+          <!--Forum creation section-->
+          <button
+            class="createForum mb-3 d-flex align-items-center ms-auto"
+            @click="showCreateForum = true"
+          >
+            <img
+              src="/plusIcon.png"
+              alt="Create forum"
+              class="plusIcon me-3"
+            />
+            <span>Start forum</span>
+          </button>
+
+          <CreateForum v-if="showCreateForum" @close="showCreateForum = false"/>
+
           <div v-if="loading" class="text-center">
             Loading...
           </div>
@@ -116,7 +131,7 @@
 
           <div v-else>
           <article
-            v-for="forum in forums" 
+            v-for="forum in forums"
             :key="forum._id"
             class="forumCard mb-3 p-3 d-flex align-items-start"
           >
@@ -173,10 +188,14 @@
 
 <script>
 import { Api } from '@/Api'
+import CreateForum from './Createforum.vue'
 import { store } from '../store'
 
 export default {
   name: 'HomeForum',
+  components: {
+    CreateForum
+  },
   data () {
     return {
       search: '',

@@ -7,6 +7,16 @@ const forumSchema = new mongoose.Schema ({
 
     name: {type: String, required: true},
     description: {type: String},
+    category: {type: String, required: true,
+        enum: [
+      'courses',
+      'teachers',
+      'internship',
+      'hackathon',
+      'events',
+      'socializing'
+    ]
+    },
 
     // Foreign key for User
     userID: {

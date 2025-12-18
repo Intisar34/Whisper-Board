@@ -9,6 +9,10 @@ exports.createForums = async (req, res, next) =>{
             return res.status(400).json({error: "Forum name is required!"});
         }
 
+        if (!req.body.category) {
+            return res.status(400).json({error: "Category is required!"});
+        }
+
         const newForum = new Forum(req.body);
         const saveForum = await newForum.save();
         
