@@ -27,7 +27,15 @@ exports.createForums = async (req, res, next) =>{
 // Gets all forums
 exports.getForums = async (req, res, next) => {
     try {
-        const forums = await Forum.find();
+        
+        const {category} = req.query;
+        const filter = {};
+
+        if(category && category !== 'all') {
+            filter.category = category;
+        }
+
+        const forums = await Forum.find(filter);
 
         res.status(200).json({forums: forums});
 
