@@ -43,7 +43,7 @@
         </button>
 
         <!-- User section -->
-        <div class="userIconBox d-flex align-items-center cursor-pointer">
+        <div class="userIconBox d-flex align-items-center cursor-pointer" @click="$router.push('/profile')">
           <div class="userIconOutline">
             <img
               src="/userIcon.png"
@@ -250,14 +250,13 @@ export default {
         }
       } catch (err) {
         console.error(err)
-        const msg = err.response?.data?.error || err.message || 'Failed to join forum'
-        alert(msg)
+        alert('Failed to join forum')
       }
     },
 
     async leaveForum(forumId) {
       if (!this.currentUser) {
-        alert('Please log in to join forums.')
+        alert('Please log in to leave forums.')
         return
       }
       try {
