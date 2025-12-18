@@ -26,7 +26,7 @@
         <div class="forumGroup mb-3">
         <label for="forumCategory" class="form-label">Category</label>
         <select v-model="category" id="forumCategory" class="form-select">
-          <option value="">Select a category</option>
+          <option value="" disabled>Select a category</option>
           <option value="courses">Courses</option>
           <option value="teachers">Teachers</option>
           <option value="internship">Internships</option>
