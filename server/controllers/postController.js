@@ -1,5 +1,6 @@
 const Post = require('../models/postModel');
 const User = require('../models/userModel');
+const Forum = require('../models/forumModel');
 
 // POST: Create a post.
 exports.createPost =  async (req,res, next) => { 
@@ -19,18 +20,28 @@ exports.createPost =  async (req,res, next) => {
     }
 }; 
 
-// GET: Get all posts with optional sorting.
+// GET: Get all posts with optional sorting and user feed filtering.
 exports.getAllPosts = async (req,res,next) => {
     try{
-        const query = req.query.sort || null;
+        const sortQuery = req.query.sort || null;
+        const userId = req.query.userId || null;
 
-        let getPosts;
+        let filter = {};
 
-        if(query){
-            getPosts = await Post.find().sort(query);
-        } else {
-            getPosts = await Post.find();
+        // If userId is given filter posts by forums the user has joined
+        if (userId) {
+            const joinedForums = await Forum.find({ members: userId }).select('_id');
+            const joinedForumIds = joinedForums.map(f => f._id);
+            filter.forumID = { $in: joinedForumIds };
         }
+
+        let query = Post.find(filter);
+
+        if(sortQuery){
+            query = query.sort(sortQuery);
+        }
+
+        const getPosts = await query.exec();
 
         res.status(200).json(getPosts);
     } catch(err){
