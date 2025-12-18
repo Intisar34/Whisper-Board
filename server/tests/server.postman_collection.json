@@ -895,11 +895,13 @@
 									"    const body = pm.response.json();\r",
 									"    pm.expect(body.forum).to.have.property(\"name\");\r",
 									"    pm.expect(body.forum).to.have.property(\"userID\");\r",
+									"    pm.expect(body.forum).to.have.property(\"category\");\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Fields have correct types\", function() {\r",
 									"    const body = pm.response.json();\r",
 									"    pm.expect(body.forum.name).to.be.a(\"string\");\r",
+									"    pm.expect(body.forum.category).to.be.a(\"string\");\r",
 									"\r",
 									"    if (body.forum.description) {\r",
 									"        pm.expect(body.forum.description).to.be.a(\"string\");\r",
@@ -932,7 +934,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Programming\",\r\n    \"description\": \"I love food!\",\r\n    \"userID\": \"{{userID}}\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Programming\",\r\n    \"description\": \"I love food!\",\r\n    \"userID\": \"{{userID}}\",\r\n     \"category\": \"socializing\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
