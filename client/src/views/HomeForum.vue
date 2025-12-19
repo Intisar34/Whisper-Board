@@ -121,6 +121,29 @@
 
           <CreateForum v-if="showCreateForum" @close="showCreateForum = false"/>
 
+          <!--Filtering section-->
+          <div class="d-flex align-items-center mb-3 px-1">
+            <span class="small me-1 text-muted">Filter by:</span>
+            <div class="customSelectWrapper">
+              <select
+                v-model="filterBy"
+                @change="onFilterChange"
+                class="customSelect fw-bold small"
+              >
+                <option value="all">All</option>
+                <option value="courses">Courses</option>
+                <option value="school">School</option>
+                <option value="teachers">Teachers</option>
+                <option value="hackathons">Hackathons</option>
+                <option value="events">Events</option>
+                <option value="socializing">Socializing</option>
+              </select>
+            </div>
+             <div class="small text-muted ms-auto" v-if="!loading">
+              {{ filteredForums.length }} forums
+            </div>
+          </div>
+
           <div v-if="loading" class="text-center">
             Loading...
           </div>
@@ -131,7 +154,7 @@
 
           <div v-else>
           <article
-            v-for="forum in forums"
+            v-for="forum in filteredForums"
             :key="forum._id"
             class="forumCard mb-3 p-3 d-flex align-items-start"
           >
@@ -202,10 +225,22 @@ export default {
       activeSidebar: 'forum',
       forums: [],
       loading: false,
-      error: null
+      error: null,
+      showCreateForum: false,
+      filterBy: 'all'
     }
   },
   computed: {
+    filteredForums() {
+      const term = this.search.trim().toLowerCase()
+      if (!term) return this.forums
+
+      return this.forums.filter(forum =>
+        (forum.name && forum.name.toLowerCase().includes(term)) ||
+        (forum.description && forum.description.toLowerCase().includes(term))
+      )
+    },
+
     currentUser() {
       return store.user
     }
@@ -226,17 +261,33 @@ export default {
     },
 
     goToPost() {
-        this.$router.push('/home/posts')
+      this.$router.push('/home/posts')
     },
+
+    async onFilterChange() {
+      this.loading = true
+      try {
+        await this.fetchForums()
+      } finally {
+        this.loading = false
+      }
+    },
+
     async fetchForums() {
+      try {
         this.error = null
-        try {
-            const response = await Api.get('/forums')
-            this.forums = response.data?.forums || []
-        } catch (err) {
-            console.error(err)
-            this.error = 'Failed to load forums.'
+        const params = {}
+
+        if (this.filterBy !== 'all') {
+          params.category = this.filterBy
         }
+
+        const response = await Api.get('/forums', { params })
+        this.forums = response.data?.forums || []
+      } catch (err) {
+        console.error(err)
+        this.error = 'Failed to load forums.'
+      }
     },
     capitalise (value) {
       if (!value) return ''
