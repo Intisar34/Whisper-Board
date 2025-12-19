@@ -134,6 +134,41 @@ exports.createUser = async (req, res, next) => {
   }
 };
 
+// POST: login user
+exports.loginUser = async (req, res, next) => {
+  try{
+    const {email, password} = req.body;
+
+    if(!email || !password) {
+      return res.status(404).json({error: "Email and password is required!"});
+    }
+
+    const user = await User.findOne({email});
+    if(!user) {
+      return res.status(404).json({error: "User not found!"});
+
+    }
+
+    const checkPassword = await bcrypt.compare(password, user.passwordHash);
+    if(!checkPassword) {
+      return res.status(401).json({error: "Incorrect password!"});
+    }
+
+    res.status(200).json({
+      data: {
+        _id: user._id,
+        username: user.username,
+        role: user.role,
+        institution: user.institution,
+        email: user.email
+      }
+    });
+
+  } catch (err) {
+    next(err);
+  }
+};
+
 // GET: get all the users
 exports.getUsers = async (req, res, next) => {
   try {

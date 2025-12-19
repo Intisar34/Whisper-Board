@@ -304,6 +304,7 @@ exports.deleteForumPost = async (req, res, next) => {
     }
 };
 
+
 // PATCH: Like a post
 exports.likePost = async (req, res, next) => {
     try {
@@ -365,4 +366,3 @@ exports.dislikePost = async (req, res, next) => {
         next(err);
     }
 };
-

@@ -66,7 +66,7 @@
         <!-- Side Bar Section for Post and Forum Button-->
         <b-col cols="12" md="3" lg="2" class="mb-4">
             <nav class="sidebar pt-2">
-              <!-- Post button -->
+              <!-- Post button in home-->
               <button
                 type="button"
                 class="w-100 text-start d-flex align-items-center mb-2 sidebarItem"
