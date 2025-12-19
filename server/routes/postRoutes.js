@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
+const postController = require("../controllers/postController");
+
+console.log("CI DEBUG postController keys:", Object.keys(postController));
+
 const {
   createPost,
   getAllPosts,
@@ -19,7 +23,8 @@ const {
   deleteForumPost,
   likePost,
   dislikePost
-} = require("../controllers/postController");
+} = postController;
+
 
 const {
   createPostComments,
