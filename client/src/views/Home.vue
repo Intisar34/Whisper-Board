@@ -105,7 +105,7 @@
         <!-- Main Content Section -->
         <b-col cols="12" md="9" lg="10">
           <!--Post creation section-->
-          <section class="createPost mb-3 d-flex align-items-center">
+          <section class="createPost mb-3 d-flex align-items-center" @click="showCreatePost = true" style="cursor: pointer;">
             <img
               src="/plusIcon.png"
               alt="Create post"
@@ -115,8 +115,12 @@
               type="text"
               class="createInput flex-grow-1"
               placeholder="Start a post ..."
+              readonly
+              style="cursor: pointer;"
             />
           </section>
+
+          <CreatePost v-if="showCreatePost" @close="showCreatePost = false" @post-created="init" />
 
           <!--Sorting section-->
           <div class="d-flex align-items-center mb-3 px-1">
@@ -229,9 +233,13 @@
   
 import { Api } from '@/Api'
 import { store } from '../store'
+import CreatePost from './CreatePost.vue'
 
 export default {
   name: 'Home',
+  components: {
+    CreatePost
+  },
   data () {
     return {
       
@@ -243,7 +251,8 @@ export default {
       error: null,
       sortBy: 'popular',
       search: '',
-      activeSidebar: 'post'
+      activeSidebar: 'post',
+      showCreatePost: false
     }
   },
   computed: {
