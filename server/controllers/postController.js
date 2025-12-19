@@ -5,17 +5,6 @@ const Forum = require('../models/forumModel');
 // POST: Create a post.
 exports.createPost =  async (req,res, next) => { 
     try{
-        // Check if posting to a forum and if user is a member
-        if (req.body.forumID && req.body.userID) {
-            const forum = await Forum.findById(req.body.forumID);
-            if (!forum) {
-                return res.status(404).json({error: "Forum not found"});
-            }
-            if (!forum.members.some(memberId => memberId.toString() === req.body.userID)) {
-                return res.status(403).json({error: "You must be a member of the forum to post."});
-            }
-        }
-
         const post = new Post(req.body);
         const savedPost = await post.save();
 
@@ -216,25 +205,10 @@ exports.createPostForUser = async (req,res,next) => {
 exports.createPostInForum = async (req, res, next) => {
     try {
         const forumID = req.params.forumID;
-        const userID = req.body.userID;
-
-        if (!userID) {
-             return res.status(400).json({error: "UserID is required"});
-        }
-
-        const forum = await Forum.findById(forumID);
-        if (!forum) {
-            return res.status(404).json({error: "Forum not found"});
-        }
-
-        if (!forum.members.some(memberId => memberId.toString() === userID)) {
-            return res.status(403).json({error: "You must be a member of the forum to post."});
-        }
-
         const newPost = await Post.create({
             title: req.body.title,
             body: req.body.body,
-            userID: userID, // will have to extract it from JWT later maybe
+            userID: req.body.userID, // will have to extract it from JWT later maybe
             forumID: forumID          
         });
 
