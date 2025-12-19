@@ -1,0 +1,208 @@
+.backgroundPage {
+  background: linear-gradient(180deg, #fefefe 2%, #A2AFE4 75%);
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: flex-start; 
+  flex-direction: column;
+}
+
+.profileBanner {
+  width: 95%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 50px;
+  display:flex;
+  flex-direction: column;
+}
+
+.profileHeader {
+  background: linear-gradient(90deg, #9eb2d4, #a0b6e1, #93a2ce);
+  height: 20vh;                     
+  min-height: 50px;
+  padding: 40px 35px;
+  color: white;
+  display: flex;
+  border-radius: 20px 20px;     
+  margin-top: 35px;
+  position: relative;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+} 
+
+.profileInfo {
+  display:flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  padding-bottom: 70px;
+}
+
+.profileName {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #040d27;
+}
+
+.profileRole {
+  font-size: 1.2rem;
+  font-weight:600;
+  color: #040d27;
+  margin: 0;           
+  margin-top: 4px
+}
+.profileInstitution {
+  font-size: 1.1rem;
+  font-weight:600;
+  color: #0a1536;
+  margin: 0;           
+  margin-top: 8px
+}
+
+.emailData {
+ position: absolute;
+ top: 35px;
+ right:60px;
+ text-align: right;
+}
+
+.profileEmail {
+  font-size: 1.1rem;
+  font-weight:700;
+  color: #040d27;
+  margin: 0;           
+  margin-bottom: 20px;
+  margin-left: 30px;
+}
+
+.editButton {
+  border-radius: 12px;
+  color:#fafbfe;
+  text-align: center;
+  background: #7d8499;
+  position: absolute;
+  right: 35px;
+  bottom: 20px;
+  width: auto;
+  padding: 10px 20px;
+}
+
+.title {
+  font-weight: bolder;
+  color:#0e1d40;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif
+} 
+
+label { 
+  font-weight: bold; 
+  color: #230858;
+  text-align: left;
+}  
+
+.tallModal {
+  min-height: 700px;
+  padding: 20px;
+  background: linear-gradient(180deg, #fefefe 2%, #99acf3 75%);
+}
+
+.formBox {
+  padding: 25px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+  border-color: #040d27;
+}
+
+.buttonContainer{
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.deleteButton {
+  background-color: #d94e4e !important;
+  border-color: #5a0d0d !important;
+  color: white !important;
+  border-radius: 12px;
+  padding: 10px 25px;
+}
+
+.profileFooter {
+  width: 100%;
+  background: white;
+  padding: 15px 0;
+  border-radius: 0 0 20px 20px; 
+  margin-top: 10px;
+}
+
+.timelineContainer {
+  padding-top: 40px;
+  width: 70%;
+  padding-left: 70px;
+}
+
+.timelineLine {
+  border-left: 3px solid #6E89D6;
+  margin-left: 25px;
+  padding-left: 25px;
+  position: relative;
+}
+
+.timelineItem {
+  position:relative;
+  margin-bottom: 40px;
+}
+
+.timelineDot {
+  width: 14px;
+  height: 14px;
+  background-color: #6E89D6;
+  border-radius: 50%;
+  position: absolute;
+  left: -8px;
+}
+
+.timelineContent {
+  margin-left: 15px;
+  width: 100%;
+}
+
+.postCard {
+  border-radius: 20px;
+  padding: 20px;
+  background: #ffffffb6;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 480px) {
+  .headerContent {
+  flex-direction: column;  
+  align-items: flex-start;
+  }
+
+  .profileInfo {
+  padding-bottom: 10px;
+  }
+
+  .profileName {
+  font-size: 1.2rem;
+  }
+
+  .profileRole {
+    font-size: 1rem;
+  }
+
+  .editButton {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  }
+}
