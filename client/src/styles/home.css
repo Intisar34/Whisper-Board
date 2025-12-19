@@ -3,7 +3,7 @@
 /* Home page screen*/
 .whisperboardPage {
   min-height: 100vh;
-  background-color: #e6e6e6;
+  background: linear-gradient(#FEFEFE 2%, #A2AFE4 75%);
   color: #111827;
   font-family: 'Inter', sans-serif;
 }
