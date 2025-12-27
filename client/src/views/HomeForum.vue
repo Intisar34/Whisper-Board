@@ -4,7 +4,7 @@
         <!--Top bar section for logo, searchbar and user profile-->
     <header class="topBar d-flex align-items-center px-4 py-2">
         <!-- Logo section -->
-        <div class="me-3">
+        <div class="me-3" @click="goToPost" style="cursor: pointer;">
           <img
             src="/WhisperBoardLogo.png"
             alt="WhisperBoard"
