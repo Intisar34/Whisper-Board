@@ -1,6 +1,6 @@
 <template>
   <div class="backgroundColor">
-    <h1 class="logo"> WhisperBoard </h1>
+    <img src="/WhisperBoardLogo.png" alt="WhisperBoard" class="logo">
 
     <div class="paragraphBox">
       <p class="paragraph">
