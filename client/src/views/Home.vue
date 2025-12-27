@@ -150,8 +150,8 @@
             <!-- user icon in post section -->
             <div class="postUserIcon me-3 flex-shrink-0">
               <img
-                src="/userIcon.png"
-                alt="User avatar"
+                src="/postIcon.png"
+                alt="Post"
                 class="userIcon"
               />
             </div>

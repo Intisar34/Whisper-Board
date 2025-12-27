@@ -14,6 +14,24 @@
   width: auto;
 }
 
+/* Responsive Profile Styles */
+@media (max-width: 768px) {
+  .topBar {
+    padding: 0 1rem !important;
+  }
+
+  .topBarLogo {
+    max-height: 32px;
+  }
+}
+
+@media (max-width: 576px) {
+  .topBar {
+    padding: 0 0.5rem !important;
+    height: 56px;
+  }
+}
+
 .bellIcon {
   width: 24px;
   height: 24px;
