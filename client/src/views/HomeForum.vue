@@ -107,17 +107,24 @@
         <b-col cols="12" md="9" lg="10">
 
           <!--Forum creation section-->
-          <button
-            class="createForum mb-3 d-flex align-items-center ms-auto"
+          <section
+            class="createForum mb-3 d-flex align-items-center w-100"
             @click="showCreateForum = true"
+            style="cursor: pointer;"
           >
             <img
               src="/plusIcon.png"
               alt="Create forum"
               class="plusIcon me-3"
             />
-            <span>Start forum</span>
-          </button>
+            <input
+              type="text"
+              class="createInput flex-grow-1"
+              placeholder="Start a forum ..."
+              readonly
+              style="cursor: pointer;"
+            />
+          </section>
 
           <CreateForum v-if="showCreateForum" @close="showCreateForum = false"/>
 
