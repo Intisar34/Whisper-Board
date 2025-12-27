@@ -86,7 +86,7 @@ exports.getUserPosts = async (req, res, next) => {
            return res.status(404).json({error: "User not found"});
         }
 
-        const posts = await Post.find({ userID: user._id});
+        const posts = await Post.find({ userID: user._id}).populate('forumID');
 
         res.status(200).json(posts);
     } catch (err) {
