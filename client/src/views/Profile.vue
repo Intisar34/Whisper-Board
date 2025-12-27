@@ -121,9 +121,9 @@
       </div>
       <div class="profileFooter">
         <BNav tabs fill>
-            <BNavItem @click="setTab('posts')">Posts</BNavItem>
-            <BNavItem @click="setTab('comments')">Comments</BNavItem>
-            <BNavItem @click="setTab('forums')">Forums</BNavItem>
+            <BNavItem :active="activeTab === 'posts'" @click="setTab('posts')">Posts</BNavItem>
+            <BNavItem :active="activeTab === 'comments'" @click="setTab('comments')">Comments</BNavItem>
+            <BNavItem :active="activeTab === 'forums'" @click="setTab('forums')">Forums</BNavItem>
         </BNav>
       </div>
     </div>
