@@ -1,12 +1,12 @@
 <template>
-  <div class="homepage">
-    <div class="newforumBox"> 
+  <div class="homepage" @click.self="$emit('close')">
+    <div class="newforumBox">
+      <button class="closeButton" @click="$emit('close')">×</button>
 
       <div class="mainContent flex-grow-1">
 
         <div class="title">
           <h2>Create Post</h2>
-          <button class="closeButton" @click="$emit('close')">×</button>
         </div>
 
         <div class="forumGroup">
@@ -32,7 +32,7 @@
               {{ forum.name }}
             </option>
           </select>
-          <div v-if="joinedForums.length === 0" class="text-muted small mt-1">
+          <div v-if="!forumsLoading && joinedForums.length === 0" class="text-muted small mt-1">
             You haven't joined any forums yet.
           </div>
         </div>
@@ -64,6 +64,7 @@ export default {
       selectedForumID: '',
       forums: [],
       loading: false,
+      forumsLoading: true, 
       error: null
     }
   },
@@ -83,12 +84,15 @@ export default {
   },
   methods: {
     async fetchForums() {
+      this.forumsLoading = true
       try {
         const response = await Api.get('/forums')
         this.forums = response.data?.forums || []
       } catch (err) {
         console.error(err)
         this.error = 'Failed to load forums.'
+      } finally {
+        this.forumsLoading = false
       }
     },
 

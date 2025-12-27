@@ -1,40 +1,101 @@
 @import url('https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap');
 
-.loginpage {
-  height: 100vh;
+/* Hide any stray bootstrap modal backdrops */
+.modal-backdrop {
+  display: none !important;
+}
+
+.backgroundColor {
+  background: linear-gradient(180deg, #FEFEFE 2%, #A2AFE4 75%);
+  width: 100%;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(#FEFEFE 2%, #A2AFE4 75%);
+  padding: 40px 20px;
+  gap: 120px;
+  box-sizing: border-box;
 }
 
-.loginbox {
-  padding: 40px 60px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  width: 400px;
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #02153E;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-h2 {
-  color: #0e1d40;
-  font-size: 26px;
-  margin-bottom: 25px;
-  font-weight: 800;
+/* Inline message boxes */
+.messageBox {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.messageBox span {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.successMessage {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.errorMessage {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.loginBox {
+  width: 100%;
+  max-width: 450px;
+  min-height: 300px;
+  padding: 30px 40px;
+  background: linear-gradient(180deg, #FEFEFE 2%, #A2AFE4 75%);
+  border-radius: 15px;
+  border: 1px solid rgba(162, 175, 228, 0.5);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.paragraph {
+  font-size: 20px;
+  color: #02153E;
+  line-height: 1.5;
+  font-weight: bolder;
+}
+
+.paragraphBox {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 .logo {
-  font-size: 70px;
-  font-weight: 800;
-  color: #0e1d40;
-  margin-bottom: 20px;
-  font-family: 'Jolly Lodger';
-  position: absolute; 
-  top: 20px;         
-  left: 20px;  
+  width: 180px;
+  height: auto;
+  position: absolute;
+  top: 30px;
+  left: 40px;
 }
 
-.username {
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.email {
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -49,43 +110,133 @@ h2 {
 }
 
 input {
-  padding: 8px;
+  padding: 10px 12px;
   font-size: 14px;
   border: 1px solid #c9c9c9;
-  border-radius: 5px;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
 }
 
-.button1 {
+input:focus {
+  outline: none;
+  border-color: #0e1d40;
+}
+
+.loginButton {
   width: 100%;
   background: #0e1d40;
   color: white;
-  padding: 8px 0;
+  padding: 12px 0;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
-  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 20px 0 10px;
   cursor: pointer;
   transition: 0.2s;
 }
 
-.button2 {
+.loginButton:hover {
+  background-color: #15264A;
+  transform: scale(1.02);
+}
+
+.loginButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.signupButton {
   width: 100%;
-  background: #0e1d40;
-  color: white;
-  padding: 8px 0;
-  border: none;
+  background: transparent;
+  color: #0e1d40;
+  padding: 10px 0;
+  border: 2px solid #0e1d40;
   border-radius: 6px;
   font-size: 14px;
-  margin-top: 10px;
+  font-weight: 600;
+  margin: 5px 0 0;
   cursor: pointer;
   transition: 0.2s;
 }
 
-.button1:hover {
-  background: #122858;
+.signupButton:hover {
+  background-color: #0e1d40;
+  color: white;
+  transform: scale(1.02);
 }
 
-.button2:hover {
-  background: #122858;
+form p {
+  text-align: center;
+  color: #666;
+  font-size: 13px;
+  margin: 15px 0 10px;
 }
 
+/* Tab and smaller screens */
+@media (max-width: 900px) {
+  .backgroundColor {
+    flex-direction: column;
+    gap: 40px;
+    padding-top: 100px;
+  }
+
+  .paragraphBox {
+    display: none;
+  }
+
+  .logo {
+    position: static;
+    margin: 0 auto 20px;
+    display: block;
+  }
+
+  .loginBox {
+    max-width: 400px;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 600px) {
+  .backgroundColor {
+    padding: 20px 15px;
+    padding-top: 30px;
+  }
+
+  .logo {
+    width: 140px;
+    margin-bottom: 15px;
+  }
+
+  .loginBox {
+    padding: 25px 20px;
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .title {
+    font-size: 26px;
+    margin-bottom: 15px;
+  }
+
+  .loginButton {
+    padding: 14px 0;
+    font-size: 16px;
+  }
+
+  .signupButton {
+    padding: 12px 0;
+  }
+
+  input {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+}
