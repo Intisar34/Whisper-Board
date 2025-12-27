@@ -261,6 +261,7 @@ label {
   width: 100%;
 }
 
+/* Post Card Styles */
 .postCard {
   border-radius: 12px;
   padding: 20px;
@@ -272,6 +273,60 @@ label {
 
 .postCard:hover {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.postUserIcon {
+  width: 44px;
+  height: 44px;
+  border: 2px solid #52525b;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.postTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0.25rem 0 !important;
+  padding: 0 !important;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.postBody {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+/* Action pills */
+.pillButton {
+  border: none;
+  border-radius: 20px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  transition: background-color 0.2s;
+}
+
+.pillButton:hover {
+  background-color: #e5e7eb;
+}
+
+.pillIcon {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  opacity: 0.7;
+}
+
+.tinyText {
+  font-size: 0.75rem;
 }
 
 /* Tab screens */

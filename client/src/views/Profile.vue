@@ -136,10 +136,40 @@
               <div class="timelineDot"></div>
 
               <div class="timelineContent">
-                <BCard class="postCard">
-                  <h5>{{ item.title}}</h5>
-                  <p>{{ item.body }}</p>
-                  <small class="text-secondary">{{ item.date }}</small>
+                <BCard v-if="activeTab === 'posts'" class="postCard d-flex flex-row align-items-start border-0 p-3">
+                  <div class="d-flex w-100">
+                    <!-- user icon -->
+                    <div class="postUserIcon me-3 flex-shrink-0">
+                      <img src="/postIcon.png" alt="Post" class="userIcon" />
+                    </div>
+
+                    <div class="flex-grow-1 text-start">
+                      <div class="d-flex align-items-baseline lh-1 mb-1">
+                        <span class="fw-bold small text-dark me-1">
+                          {{ forumName(item) }}
+                        </span>
+                        <span class="text-muted small">&ndash; {{ formatDate(item) }}</span>
+                      </div>
+
+
+
+                      <h2 class="postTitle">
+                        {{ capitalise(item.title) }}
+                      </h2>
+
+                      <p class="postBody">
+                        {{ item.body }}
+                      </p>
+
+
+                    </div>
+                  </div>
+                </BCard>
+                
+                <BCard v-else class="postCard">
+                   <h5>{{ item.title || 'Comment' }}</h5>
+                   <p>{{ item.body || item.name }}</p>
+                   <small v-if="item.date" class="text-secondary">{{ item.date }}</small>
                 </BCard>
               </div>
             </div>
@@ -307,11 +337,7 @@ export default {
           console.log('Currently user has no posts created')
         }
 
-        this.timeline = this.posts.map(post => ({
-          title: post.title,
-          body: post.body,
-          date: post.createdAt
-        }))
+        this.timeline = this.posts.map(post => post)
       } catch (err) {
         console.error('Failed fetching user posts:', err)
       }
@@ -436,6 +462,27 @@ export default {
     logout() {
       store.clearUser()
       this.$router.push('/login')
+    },
+
+    // Helper methods for Post Card UI
+    capitalise(value) {
+      if (!value) return ''
+      return value.charAt(0).toUpperCase() + value.slice(1)
+    },
+    formatDate(post) {
+      if (!post.createdAt) return ''
+      const date = new Date(post.createdAt)
+      return date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      })
+    },
+    forumName(post) {
+      return (post.forumID && post.forumID.name) ? this.capitalise(post.forumID.name) : 'No Forum Name'
+    },
+    usernameLabel(post) {
+      return (post.user && post.user.username) ? `@${post.user.username}` : '@unknown'
     }
   }
 }

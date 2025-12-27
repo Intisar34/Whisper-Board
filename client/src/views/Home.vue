@@ -4,7 +4,7 @@
         <!--Top bar section for logo, searchbar and user profile-->
     <header class="topBar d-flex align-items-center px-4 py-2">
         <!-- Logo section -->
-        <div class="me-3">
+        <div class="me-3" @click="goToHome" style="cursor: pointer;">
           <img
             src="/WhisperBoardLogo.png"
             alt="WhisperBoard"
@@ -447,6 +447,15 @@ export default {
         console.error(err);
         alert('Failed to dislike post');
       }
+    },
+
+    goToHome() {
+      // If already on home, reload or do nothing 
+       if (this.$route.path === '/home/posts') {
+         this.$router.go(0)
+       } else {
+         this.$router.push('/home/posts')
+       }
     },
 
     goToProfile() {
