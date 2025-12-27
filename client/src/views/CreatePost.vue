@@ -1,12 +1,12 @@
 <template>
-  <div class="homepage">
-    <div class="newforumBox"> 
+  <div class="homepage" @click.self="$emit('close')">
+    <div class="newforumBox">
+      <button class="closeButton" @click="$emit('close')">×</button>
 
       <div class="mainContent flex-grow-1">
 
         <div class="title">
           <h2>Create Post</h2>
-          <button class="closeButton" @click="$emit('close')">×</button>
         </div>
 
         <div class="forumGroup">
