@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap');
 
+/* Hide any stray bootstrap modal backdrops */
+.modal-backdrop {
+  display: none !important;
+}
+
 .backgroundColor {
   background: linear-gradient(180deg, #FEFEFE 2%, #A2AFE4 75%);
   width: 100%;
@@ -193,4 +198,85 @@ form p {
   text-align: left;
   gap: 5px;
   width: 100%;
+}
+
+/* Tab and smaller screens */
+@media (max-width: 900px) {
+  .backgroundColor {
+    flex-direction: column;
+    gap: 40px;
+    padding-top: 100px;
+  }
+
+  .paragraphBox {
+    display: none;
+  }
+
+  .logo {
+    position: static;
+    margin: 0 auto 20px;
+    display: block;
+  }
+
+  .signUpBox {
+    max-width: 500px;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 600px) {
+  .backgroundColor {
+    padding: 20px 15px;
+    padding-top: 30px;
+  }
+
+  .logo {
+    width: 140px;
+    margin-bottom: 15px;
+  }
+
+  .signUpBox {
+    padding: 25px 20px;
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .title {
+    font-size: 26px;
+    margin-bottom: 15px;
+  }
+
+  .passwordRow {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .password,
+  .confirmPassword {
+    flex: none;
+    width: 100%;
+  }
+
+  .createButton {
+    padding: 14px 0;
+    font-size: 16px;
+  }
+
+  .loginButton {
+    padding: 12px 0;
+  }
+
+  input {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .roleDropdown {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  label {
+    font-size: 14px;
+  }
 }
