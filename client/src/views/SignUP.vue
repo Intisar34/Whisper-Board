@@ -12,6 +12,16 @@
     <div class="signUpBox">
       <h1 class="title">Sign up</h1>
 
+      <!-- Success Message -->
+      <div v-if="successMessage" class="messageBox successMessage">
+        <span>✓</span> {{ successMessage }}
+      </div>
+
+      <!-- Error Message -->
+      <div v-if="errorMessage" class="messageBox errorMessage">
+        <span>✕</span> {{ errorMessage }}
+      </div>
+
       <form v-on:submit.prevent="createUser">
         <div class="institution">
           <label for="institution">University</label>
@@ -52,7 +62,9 @@
         </div>
         </div>
 
-        <button class="createButton" type="submit">Create Account</button>
+        <button class="createButton" type="submit" :disabled="isLoading">
+          {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+        </button>
           <p>--- Already have an account? ---</p>
         <button class="loginButton" type="button" @click="goToLogin">Log In</button>
       </form>
@@ -74,15 +86,28 @@ export default {
       password: '',
       confirmPassword: '',
       role: '',
-      otherRoleName: ''
+      otherRoleName: '',
+      errorMessage: '',
+      successMessage: '',
+      isLoading: false
     }
   },
   methods: {
+    clearMessages() {
+      this.errorMessage = ''
+      this.successMessage = ''
+    },
+
     createUser() {
+      this.clearMessages()
+
+      // Password match validation
       if (this.password !== this.confirmPassword) {
-        alert('passwords do not match, try again')
+        this.errorMessage = 'Passwords do not match. Please try again.'
         return
       }
+
+      this.isLoading = true
 
       Api.post('/users', {
         institution: this.institution,
@@ -93,19 +118,24 @@ export default {
       })
         .then(response => {
           console.log('User Created:', response.data.data.user)
-          alert('Account successfully created! Welcome, Your username is: ' + response.data.data.user.username)
-          this.goToLogin()
-          console.log('connected to the backend')
+          this.successMessage = `Account successfully created! Your username is: ${response.data.data.user.username}. Redirecting to login...`
+          
+          // Redirect to login after 2 seconds
+          setTimeout(() => {
+            this.goToLogin()
+          }, 2000)
         })
         .catch(error => {
           if (error.response) {
-            alert('Error: ' + error.response.data.error)
+            this.errorMessage = error.response.data.error
           } else if (error.request) {
-            alert('No response from server. Please try again later.')
+            this.errorMessage = 'No response from server. Please try again later.'
           } else {
-            alert('Error: ' + error.message)
+            this.errorMessage = error.message
           }
-          console.log('connected to the backend')
+        })
+        .finally(() => {
+          this.isLoading = false
         })
     },
 
