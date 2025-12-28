@@ -172,7 +172,7 @@
                 <button
                   class="pillButton d-flex align-items-center"
                   type="button"
-                  @click="likePost(post._id)"
+                  @click.stop="likePost(post._id)"
                 >
                   <img
                     src="/likeIcon.png"
@@ -186,7 +186,7 @@
                 <button
                   class="pillButton d-flex align-items-center"
                   type="button"
-                  @click="dislikePost(post._id)"
+                  @click.stop="dislikePost(post._id)"
                 >
                   <img
                     src="/dislikeIcon.png"
