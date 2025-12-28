@@ -45,6 +45,11 @@
     background: #FFF;
 }
 
-.searchIcon {
+.forumClickable {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
 
+.forumClickable:hover {
+  background-color: #f3f4f6;
 }
