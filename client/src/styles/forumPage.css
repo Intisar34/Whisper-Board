@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Oleo+Script&family=Inter:wght@400;500;600;700&display=swap');
+
+.page {
+    min-height: 100vh;
+    background: linear-gradient(#FEFEFE 2%, #A2AFE4 75%);
+    color: #111827;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.forumInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.forumPageName {
+    color: #030128;
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.forumDescription {
+    color: rgba(0, 0, 0, 0.70);
+    font-family: Inter;
+    font-size: 60px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.postCard {
+    border-radius: 39px;
+    background: rgba(255, 255, 255, 0.50);
+}
+
+.searchBar {
+    border-radius: 23px;
+    border: 1px solid #02153E;
+    background: #FFF;
+}
+
+.searchIcon {
+
+}
