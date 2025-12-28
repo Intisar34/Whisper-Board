@@ -8,7 +8,7 @@
             <div class="userContainer">
                 <BAvatar size="4em" src="/userIcon.png" rounded="sm" class="align-self-start"/>
                 <h2 class="username">{{ post?.userID?.username }}</h2>
-                <time class="postDate">{{ new Date(post?.createdAt).toLocaleString() }}</time>
+                <span class="text-muted small">&ndash; {{ formatDate(post) }}</span>
             </div>
 
             <button class="closeButton" @click="$router.push('/home/posts')">
@@ -156,6 +156,41 @@ export default {
       } catch (err) {
         console.error('Failed to load post', err)
       }
+    },
+
+    formatDate (post) {
+      if (!post) return ''
+
+      const raw = post.postDate || post.createdAt
+      if (!raw) return ''
+
+      const date = new Date(raw)
+      const today = new Date()
+
+      const t = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      )
+      const d = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+      )
+
+      const diffMs = t - d
+      const oneDay = 24 * 60 * 60 * 1000
+      const diffDays = Math.round(diffMs / oneDay)
+
+      if (diffDays === 0) return 'Today'
+      if (diffDays === 1) return 'Yesterday'
+      if (diffDays > 1 && diffDays < 7) return `${diffDays} days ago`
+
+      return date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      })
     }
   }
 }
