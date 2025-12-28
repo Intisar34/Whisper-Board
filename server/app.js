@@ -8,6 +8,7 @@ var commentRoutes = require('./routes/commentRoutes');
 var postRouter = require('./routes/postRoutes');
 var forumRoutes = require('./routes/forumRoutes');
 var userRoutes = require('./routes/userRoutes');
+var translateText = require ('./routes/translateRoute')
 
 // Variables
 require('dotenv').config();
@@ -37,6 +38,7 @@ app.use(cors());
 app.use('/api/v1/comments', commentRoutes);
 app.use('/api/v1/forums', forumRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use(translateText)
 
 // Import routes
 app.get('/api', function(req, res) {
