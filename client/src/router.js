@@ -6,6 +6,7 @@ import signUP from './views/SignUP.vue'
 import Login from './views/Login.vue'
 import Profile from './views/Profile.vue'
 import Post from './components/Post.vue'
+import Forum from './components/Forum.vue'
 
 const routes = [
   { path: '/', redirect: '/signup' },
@@ -14,7 +15,8 @@ const routes = [
   { path: '/signup', name: 'signUP', component: signUP },
   { path: '/login', name: 'login', component: Login },
   { path: '/profile', name: 'profile', component: Profile },
-  { path: '/post', name: 'post', component: Post }
+  { path: '/post', name: 'post', component: Post },
+  { path: '/forums/:forumId', name: 'forumPage', component: Forum }
 
 ]
 
