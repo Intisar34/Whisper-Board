@@ -1,0 +1,175 @@
+/* Create Post Modal Overlay */
+.homepage {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+/* Modal Box */
+.newforumBox {
+  background: linear-gradient(180deg, #fefefe 2%, #c4d0f5 100%);
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+  /* Essential for absolute positioning of children */
+}
+
+/* Title Section */
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* Ensures vertical centering */
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.title h2 {
+  margin: 0;
+  color: #0e1d40;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 32px;
+  font-weight: 400;
+  cursor: pointer;
+  color: #6b7280;
+  line-height: 1;
+  transition: color 0.2s;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: 32px;
+  z-index: 10;
+}
+
+.closeButton:hover {
+  color: #0e1d40;
+}
+
+
+
+/* Main Content */
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Form Groups */
+.forumGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.forumGroup label {
+  font-weight: 600;
+  color: #0e1d40;
+  font-size: 0.9rem;
+}
+
+/* Inputs */
+.input,
+.textarea,
+.form-select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.input:focus,
+.textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #6E89D6;
+  box-shadow: 0 0 0 3px rgba(110, 137, 214, 0.15);
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* Error Message */
+.errorText {
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 10px 14px;
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+}
+
+/* Button Section */
+.button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.createButton {
+  padding: 12px 24px;
+  background-color: #0e1d40;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.createButton:hover {
+  background-color: #1a2a50;
+  transform: translateY(-1px);
+}
+
+.createButton:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .newforumBox {
+    margin: 15px;
+    padding: 20px;
+    max-height: 90vh;
+  }
+
+  .title h2 {
+    font-size: 1.25rem;
+  }
+}

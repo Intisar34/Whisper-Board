@@ -16,8 +16,8 @@
             </button>
 
             <div class="translationContainer">
-                <button class="translationButton">
-                   Translate
+                <button class="translationButton" @click="translatePost">
+                  {{ translatedPost ? 'Show original' : 'Translate' }}
                 </button>
             </div>
 
@@ -59,7 +59,7 @@
                 <time class="postDate">{{ comment.date }}</time>
             </div>
 
-            <p class="commentContent">{{ comment.body }}</p>
+            <p class="commentContent">{{  comment.translated  || comment.body}}</p>
 
             <div class="commentActions">
                 <button class="pillButton" type="button">
@@ -77,8 +77,8 @@
                 </button>
             </div>
             <div class="translationContainer">
-                <button class="translationButton">
-                   Translate
+                <button class="translationButton" @click="translateComment(comment)">
+                  {{ comment.translated ? 'Show original' : 'Translate' }}
                 </button>
             </div>
         </div>
@@ -88,6 +88,7 @@
 <script>
 import { Api } from '@/Api'
 import { store } from '@/store.js'
+import { sendTranslation } from '@/translation.js'
 
 export default {
   name: 'Post',
@@ -158,7 +159,7 @@ export default {
       }
     },
 
-    formatDate (post) {
+    formatDate(post) {
       if (!post) return ''
 
       const raw = post.postDate || post.createdAt
@@ -191,6 +192,31 @@ export default {
         month: 'short',
         day: 'numeric'
       })
+    },
+
+    async translatePost() {
+      try {
+        if (this.translatedPost) {
+          this.translatedPost = ''
+          return
+        }
+
+        this.translatedPost = await sendTranslation(this.postBody, 'sv')
+      } catch (err) {
+        console.error('Post translation failed:', err)
+      }
+    },
+
+    async translateComment(comment) {
+      try {
+        if (comment.translated) {
+          comment.translated = null
+          return
+        }
+        comment.translated = await sendTranslation(comment.body, 'sv')
+      } catch (err) {
+        console.error('Comment translation failed:', err)
+      }
     }
   }
 }

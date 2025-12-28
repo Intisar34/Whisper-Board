@@ -4,7 +4,7 @@
         <!--Top bar section for logo, searchbar and user profile-->
     <header class="topBar d-flex align-items-center px-4 py-2">
         <!-- Logo section -->
-        <div class="me-3">
+        <div class="me-3" @click="goToHome" style="cursor: pointer;">
           <img
             src="/WhisperBoardLogo.png"
             alt="WhisperBoard"
@@ -43,16 +43,22 @@
         </button>
 
         <!-- User section -->
-        <div class="userIconBox d-flex align-items-center cursor-pointer" @click="$router.push('/profile')">
-          <div class="userIconOutline">
-            <img
-              src="/userIcon.png"
-              alt="User avatar"
-              class="userIcon"
-            />
-          </div>
-          <span class="ms-2 fw-bold text-dark small">{{ currentUser ? currentUser.username : 'Not logged in' }}</span>
-        </div>
+        <BDropdown variant="link" toggle-class="text-decoration-none p-0" no-caret>
+          <template #button-content>
+            <div class="userIconBox d-flex align-items-center cursor-pointer">
+              <div class="userIconOutline">
+                <img
+                  src="/userIcon.png"
+                  alt="User avatar"
+                  class="userIcon"
+                />
+              </div>
+              <span class="ms-2 fw-bold text-dark small">{{ currentUser ? currentUser.username : 'Not logged in' }}</span>
+            </div>
+          </template>
+          <BDropdownItem @click="goToProfile">Profile</BDropdownItem>
+          <BDropdownItem @click="logout"><span class="text-danger">Sign out</span></BDropdownItem>
+        </BDropdown>
     </header>
 
     <b-container fluid class="px-4 mt-4">
@@ -60,7 +66,7 @@
         <!-- Side Bar Section for Post and Forum Button-->
         <b-col cols="12" md="3" lg="2" class="mb-4">
             <nav class="sidebar pt-2">
-              <!-- Post button -->
+              <!-- Post button in home-->
               <button
                 type="button"
                 class="w-100 text-start d-flex align-items-center mb-2 sidebarItem"
@@ -99,7 +105,7 @@
         <!-- Main Content Section -->
         <b-col cols="12" md="9" lg="10">
           <!--Post creation section-->
-          <section class="createPost mb-3 d-flex align-items-center">
+          <section class="createPost mb-3 d-flex align-items-center" @click="showCreatePost = true" style="cursor: pointer;">
             <img
               src="/plusIcon.png"
               alt="Create post"
@@ -109,8 +115,12 @@
               type="text"
               class="createInput flex-grow-1"
               placeholder="Start a post ..."
+              readonly
+              style="cursor: pointer;"
             />
           </section>
+
+          <CreatePost v-if="showCreatePost" @close="showCreatePost = false" @post-created="init" />
 
           <!--Sorting section-->
           <div class="d-flex align-items-center mb-3 px-1">
@@ -141,8 +151,8 @@
             <!-- user icon in post section -->
             <div class="postUserIcon me-3 flex-shrink-0">
               <img
-                src="/userIcon.png"
-                alt="User avatar"
+                src="/postIcon.png"
+                alt="Post"
                 class="userIcon"
               />
             </div>
@@ -224,9 +234,13 @@
   
 import { Api } from '@/Api'
 import { store } from '../store'
+import CreatePost from './CreatePost.vue'
 
 export default {
   name: 'Home',
+  components: {
+    CreatePost
+  },
   data () {
     return {
       
@@ -238,7 +252,8 @@ export default {
       error: null,
       sortBy: 'popular',
       search: '',
-      activeSidebar: 'post'
+      activeSidebar: 'post',
+      showCreatePost: false
     }
   },
   computed: {
@@ -294,6 +309,11 @@ export default {
           params.sort = '-postDate'
         } else if (this.sortBy === 'oldest') {
           params.sort = 'postDate'
+        }
+
+        // Filter by users joined forums
+        if (this.currentUser) {
+            params.userId = this.currentUser._id
         }
 
         const response = await Api.get('/posts', { params })
@@ -432,6 +452,24 @@ export default {
         console.error(err);
         alert('Failed to dislike post');
       }
+    },
+
+    goToHome() {
+      // If already on home, reload or do nothing 
+       if (this.$route.path === '/home/posts') {
+         this.$router.go(0)
+       } else {
+         this.$router.push('/home/posts')
+       }
+    },
+
+    goToProfile() {
+      this.$router.push('/profile')
+    },
+
+    logout() {
+      store.clearUser()
+      this.$router.push('/login')
     }
   }
 }
