@@ -7,8 +7,8 @@
         <div class="postContainer">
             <div class="userContainer">
                 <BAvatar size="4em" src="/userIcon.png" rounded="sm" class="align-self-start"/>
-                <h2 class="username">{{ store.user.username }}</h2>
-                <time class="postDate">12h-ago</time>
+                <h2 class="username">{{ post?.userID?.username }}</h2>
+                <time class="postDate">{{ new Date(post?.createdAt).toLocaleString() }}</time>
             </div>
 
             <button class="closeButton" @click="$router.push('/home/posts')">
@@ -21,14 +21,10 @@
                 </button>
             </div>
 
-            <h2 class="postTitle"> I’m Done With Math 😤</h2>
+            <h2 class="postTitle">{{ post?.title }}</h2>
 
             <article class="postContent">
-                I swear, I’m actually losing my mind.
-                I just failed my math exam
-                — like FAILED failed — and now I have to drag myself through this
-                whole nightmare again.
-                I’m dropping out and becoming a carrot farmer.
+            {{ translatedPost || post?.body }}
             </article>
 
            <div class="commentActions">
@@ -99,14 +95,22 @@ export default {
   data() {
     return {
       store,
+      post: null,
       commentDetail: '',
       comments: [],
-      postID: '69336c54248334432b7ea31a'
+      translatedPost: ''
+    }
+  },
+
+  computed: {
+    postId() {
+      return this.$route.params.id
     }
   },
 
   mounted() {
     this.getComment()
+    this.fetchPost()
   },
 
   methods: {
@@ -115,7 +119,7 @@ export default {
         if (!this.commentDetail.trim()) return
         const response = await Api.post(`/users/${store.user.username}/comments`, {
           body: this.commentDetail,
-          postID: '69336c54248334432b7ea31a'
+          postID: this.postId
         })
 
         this.comments.push({
@@ -132,15 +136,25 @@ export default {
 
     async getComment() {
       try {
-        const response = await Api.get(`/posts/${this.postID}/comments`)
+        const response = await Api.get(`/posts/${this.postId}/comments`)
 
         this.comments = response.data.comments.map(comment => ({
           body: comment.body,
           postID: comment.postID,
-          date: comment.createdAt
+          date: comment.createdAt,
+          username: comment.user?.username
         }))
       } catch (err) {
         console.error(err)
+      }
+    },
+
+    async fetchPost() {
+      try {
+        const response = await Api.get(`/posts/${this.postId}`)
+        this.post = response.data.specificPost
+      } catch (err) {
+        console.error('Failed to load post', err)
       }
     }
   }
