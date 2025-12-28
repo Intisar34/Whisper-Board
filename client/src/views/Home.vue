@@ -131,11 +131,12 @@
             </div>
           </div>
 
-
-          <article
+         <article
             v-for="post in filteredPosts"
             :key="post._id"
             class="postCard mb-3 p-3 d-flex align-items-start"
+            @click="goToPost(post._id)"
+            style="cursor: pointer;"
           >
             <!-- user icon in post section -->
             <div class="postUserIcon me-3 flex-shrink-0">
@@ -387,6 +388,10 @@ export default {
 
     goToForum () {
       this.$router.push('/home/forums')
+    },
+
+    goToPost(postId) {
+      this.$router.push(`/posts/${postId}`)
     },
 
     async likePost(postId) {
