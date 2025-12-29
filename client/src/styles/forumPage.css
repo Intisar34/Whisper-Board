@@ -13,30 +13,73 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-
+    margin-top: 60px;
 }
 
 .forumPageName {
     color: #030128;
-    font-family: 'Inter', sans-serif;
+    font-family: 'jsMath-cmr10';
     font-size: 36px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 600;
     line-height: normal;
+    padding-bottom: 30px;
 }
 
 .forumDescription {
     color: rgba(0, 0, 0, 0.70);
     font-family: Inter;
-    font-size: 60px;
+    font-size: 24px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    padding-top: 30px;
 }
 
 .postCard {
-    border-radius: 39px;
-    background: rgba(255, 255, 255, 0.50);
+  border-radius: 12px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s;
+}
+
+.postCard:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.postUserIcon {
+  width: 44px;
+  height: 44px;
+  border: 2px solid #52525b;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.postTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0.25rem 0 !important;
+  padding: 0 !important;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.postBody {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.line {
+    stroke-width: 3px;
+    stroke: #000;
+    margin-left: 450px;
 }
 
 .searchBar {
