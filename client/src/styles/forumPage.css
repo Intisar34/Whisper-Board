@@ -1,91 +1,165 @@
 @import url('https://fonts.googleapis.com/css2?family=Oleo+Script&family=Inter:wght@400;500;600;700&display=swap');
 
 .page {
-    min-height: 100vh;
-    background: linear-gradient(#FEFEFE 2%, #A2AFE4 75%);
-    color: #111827;
-    font-family: 'Inter', sans-serif;
-    display: flex;
-    flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(#FEFEFE 2%, #A2AFE4 75%);
+  color: #111827;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.topBarLogo {
+  max-height: 45px;
+  width: auto;
 }
 
 .forumInfo {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 60px;
+  max-width: 750px; 
+  width: 100%; 
+  margin: 0 auto; 
 }
 
 .forumPageName {
-    color: #030128;
-    font-family: 'jsMath-cmr10';
-    font-size: 36px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    padding-bottom: 30px;
+  color: #030128;
+  font-family: 'jsMath-cmr10';
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  padding-bottom: 10px;
+  text-align: center;
 }
 
 .forumDescription {
-    color: rgba(0, 0, 0, 0.70);
-    font-family: Inter;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    padding-top: 30px;
-}
-
-.postCard {
-  border-radius: 12px;
-  padding: 20px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.2s;
-}
-
-.postCard:hover {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.postUserIcon {
-  width: 44px;
-  height: 44px;
-  border: 2px solid #52525b;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-}
-
-.postTitle {
-  font-size: 1.125rem;
-  font-weight: 700;
-  margin: 0.25rem 0 !important;
-  padding: 0 !important;
-  color: #111827;
-  line-height: 1.4;
-}
-
-.postBody {
-  font-size: 0.95rem;
-  color: #4b5563;
-  line-height: 1.5;
-  margin-bottom: 0.5rem;
+  color: rgba(0, 0, 0, 0.70);
+  font-family: Inter;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding-top: 30px;
 }
 
 .line {
-    stroke-width: 3px;
-    stroke: #000;
-    margin-left: 450px;
+  width: 100%; 
+  height: 3px; 
+  stroke-width: 1px; 
+  stroke: #000; 
+  margin: 10px 0;
 }
 
 .searchBar {
-    border-radius: 23px;
-    border: 1px solid #02153E;
-    background: #FFF;
+ border-radius: 23px;
+ border: 1px solid #02153E;
+ background: #FFF;
+}
+
+.forumClickable {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.forumClickable:hover {
+  background-color: #f3f4f6;
+}
+
+.postBox {
+  max-width: 750px;
+  width: 100% !important;
+  margin: 12px auto !important;
+  border-radius: 20px !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid #d1d5db !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.postBox:hover {
+  box-shadow: 0 4px 6px -1px rgba(240, 238, 238, 0.174);
+  cursor: pointer;
+}
+
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 64px;
+  margin-bottom: 17px;
+}
+
+.postBox .card-body {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  text-align: left;
+}
+
+.postMeta { 
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  text-align: left;
+  margin-left: 10px;
+  margin-top:10px;
+}
+
+.postBoxTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Inter';
+  margin-bottom: 4px;
+  color: #02153E;;
+  line-height: 1.3;
+  padding-bottom: 5px;
+}
+
+.rightColumn {
+  margin-left: auto;          
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;      
+  justify-content: space-between;
+  height: 100%;
+}
+
+.postBoxBody {
+  font-size: 0.95rem;
+  color: #5e6775;
+  line-height: 1.45;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.translateButton { 
+  align-self: flex-end;
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.43);;
+  font-size: 0.875rem;
+  font-family: 'Inter';
+  cursor: pointer;
+  padding-top: 30px;
+  letter-spacing: 1.7px;
+} 
+
+.line {
+  width: 100%; 
+  height: 3px; 
+  stroke-width: 3px; 
+  stroke: #000; 
+  margin: 10px 0;
+}
+
+.searchBar {
+ border-radius: 23px;
+ border: 1px solid #02153E;
+ background: #FFF;
 }
 
 .forumClickable {
