@@ -201,7 +201,7 @@ export default {
           return
         }
 
-        this.translatedPost = await sendTranslation(this.postBody, 'sv')
+        this.translatedPost = await sendTranslation(this.post.body, 'sv')
       } catch (err) {
         console.error('Post translation failed:', err)
       }
