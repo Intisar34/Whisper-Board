@@ -185,7 +185,7 @@ exports.createPostForUser = async (req,res,next) => {
             title: req.body.title,
             body: req.body.body,
             userID: user._id,
-            forumID: req.body.forumID // extract from JWT maybe later on
+            forumID: req.body.forumID
     });  
     
         res.status(201).json(post)
@@ -208,7 +208,7 @@ exports.createPostInForum = async (req, res, next) => {
         const newPost = await Post.create({
             title: req.body.title,
             body: req.body.body,
-            userID: req.body.userID, // will have to extract it from JWT later maybe
+            userID: req.body.userID,
             forumID: forumID          
         });
 
@@ -262,8 +262,10 @@ exports.deleteUserSpecificPost = async (req, res, next) => {
 exports.getForumPosts = async (req, res, next) => {
     try {
         const { forumID } = req.params;
+        const sortQuery = req.query.sort || null;
 
-        const posts = await Post.find({ forumID: forumID });
+        const posts = await Post.find({ forumID: forumID }).sort(sortQuery);
+
         res.status(200).json(posts);
     } catch (err) {
         next(err);
