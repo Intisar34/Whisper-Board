@@ -1,8 +1,6 @@
 <template>
     <div class="postPage">
-        <div class="logoContainer">
-            <h1 class="logo"> WhisperBoard</h1>
-        </div>
+        <TopBar :showSearch="false" />
 
         <div class="postContainer">
             <div class="userContainer">
@@ -10,10 +8,6 @@
                 <h2 class="username">{{ post?.userID?.username }}</h2>
                 <span class="text-muted small">&ndash; {{ formatDate(post) }}</span>
             </div>
-
-            <button class="closeButton" @click="$router.push('/home/posts')">
-                <img src="/closeButton.svg">
-            </button>
 
             <div class="translationContainer">
                 <button class="translationButton" @click="translatePost">
@@ -89,9 +83,13 @@
 import { Api } from '@/Api'
 import { store } from '@/store.js'
 import { sendTranslation } from '@/translation.js'
+import TopBar from './TopBar.vue'
 
 export default {
   name: 'Post',
+  components: {
+    TopBar
+  },
 
   data() {
     return {

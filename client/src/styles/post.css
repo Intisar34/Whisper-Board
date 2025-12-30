@@ -1,11 +1,9 @@
 .postPage {
-  border-radius: 8px;
   background: linear-gradient(180deg, #FEFEFE 1.92%, #A2AFE4 75%);
   width: 100%;
   min-height: 100vh;
-  display:flex;
-  flex-direction:column;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .logoContainer {
@@ -30,14 +28,14 @@
 .postContainer {
   background: linear-gradient(180deg, #FEFEFE 1.78%, #CBD2EE 55.13%);
   border-radius: 16px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 750px;
   margin: 20px auto;
   padding: 24px;
   box-sizing: border-box;
   border: 1px solid #5165b6;
-  position:relative
+  position: relative
 }
 
 .postTitle {
@@ -52,12 +50,12 @@
 }
 
 .postContent {
-  color: #2C3E50; 
+  color: #2C3E50;
   font-family: Inter;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
-  background: transparent; 
+  background: transparent;
   border: none;
   padding: 0;
   margin-bottom: 24px;
@@ -68,11 +66,12 @@
 }
 
 .userContainer {
-  display:flex;
+  display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 16px;
 }
+
 .username {
   color: #000;
   font-family: Inter;
@@ -94,7 +93,7 @@
 }
 
 .translationContainer {
-  display:flex;
+  display: flex;
   flex-direction: row-reverse;
   background: transparent;
 }
@@ -103,7 +102,7 @@
   color: 000000;
   background: transparent;
   font-family: Inter;
-  border:none;
+  border: none;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
@@ -140,7 +139,7 @@
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #3897f0; 
+  background-color: #3897f0;
   border: none;
   border-radius: 50%;
   width: 36px;
@@ -150,7 +149,7 @@
   justify-content: center;
   cursor: pointer;
   color: white;
-  opacity: 0.5; 
+  opacity: 0.5;
   transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
@@ -173,7 +172,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  position:absolute;
+  position: absolute;
   width: 35px;
   height: 35px;
   color: white;
@@ -190,7 +189,7 @@
 .commentContainer {
   max-width: 750px;
   width: 100%;
-  margin: 8px auto 0; 
+  margin: 8px auto 0;
   padding: 8px 12px;
   border-radius: 30px;
   background: #ECEDF3;
@@ -209,25 +208,26 @@
   font-weight: 500;
   line-height: normal;
   max-width: 85%;
-  text-align: left; 
+  text-align: left;
   margin: 0;
-}   
+}
 
 .commentActions {
   display: flex;
-  flex-direction: row;     
-  gap: 12px;             
+  flex-direction: row;
+  gap: 12px;
   margin-top: 20px;
 }
 
 .pillButton {
   display: flex;
   align-items: center;
-  gap: 6px;           
-  padding: 6px 12px;  
-  border-radius: 8px; 
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
   border: none;
-  background: rgba(0, 0, 0, 0.099);;
+  background: rgba(0, 0, 0, 0.099);
+  ;
   cursor: pointer;
   font-family: Inter, sans-serif;
   font-size: 13px;
