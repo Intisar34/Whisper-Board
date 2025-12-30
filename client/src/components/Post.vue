@@ -15,10 +15,10 @@
                 </button>
             </div>
 
-            <h2 class="postTitle">{{ post?.title }}</h2>
+            <h2 class="postTitle">{{ translatedPost ? translatedPost.title : post?.title }}</h2>
 
             <article class="postContent">
-            {{ translatedPost || post?.body }}
+            {{ translatedPost ? translatedPost.body : post?.body }}
             </article>
 
            <div class="commentActions">
@@ -97,7 +97,7 @@ export default {
       post: null,
       commentDetail: '',
       comments: [],
-      translatedPost: ''
+      translatedPost: null
     }
   },
 
@@ -195,11 +195,19 @@ export default {
     async translatePost() {
       try {
         if (this.translatedPost) {
-          this.translatedPost = ''
+          this.translatedPost = null
           return
         }
 
-        this.translatedPost = await sendTranslation(this.post.body, 'sv')
+        const [translatedTitle, translatedBody] = await Promise.all([
+          sendTranslation(this.post.title, 'sv'),
+          sendTranslation(this.post.body, 'sv')
+        ])
+
+        this.translatedPost = {
+          title: translatedTitle,
+          body: translatedBody
+        }
       } catch (err) {
         console.error('Post translation failed:', err)
       }
