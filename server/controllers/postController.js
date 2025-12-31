@@ -64,7 +64,7 @@ exports.deleteAllPosts = async (req,res,next) => {
 exports.getPost = async (req,res,next) => {
     try{
         const postID = req.params.id;// get id from URL
-        const specificPost = await Post.findById(postID); // find the post by ID   
+        const specificPost = await Post.findById(postID).populate('userID', 'username'); // find the post by ID   
       
         if(!specificPost){
         return res.status(404).json({error: "Post not found"})

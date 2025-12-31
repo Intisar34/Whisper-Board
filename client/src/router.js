@@ -16,7 +16,8 @@ const routes = [
   { path: '/login', name: 'login', component: Login },
   { path: '/profile', name: 'profile', component: Profile },
   { path: '/post', name: 'post', component: Post },
-  { path: '/forums/:forumId', name: 'forumPage', component: Forum }
+  { path: '/forums/:forumId', name: 'forumPage', component: Forum },
+  { path: '/posts/:id', name: 'post', component: Post }
 
 ]
 
