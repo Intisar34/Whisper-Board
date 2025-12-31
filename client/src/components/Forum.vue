@@ -48,24 +48,24 @@
 
     <!-- Forum Box -->
      <div class="forumContainer">
-        <div class="forumHeader">
+        <div class="forumHeader d-flex align-items-start justify-content-between">
             <div class="forumHeaderLeft">
                 <img src="/forumIcon.png" alt="Forum" class="forumLogo">
                 <h1 class="forumName">{{ forumDetail.name }}</h1>
             </div>
 
             <!-- Search section -->
-        <div class="flex-grow-1 mx-md-5 mx-2">
-          <div class="search d-flex align-items-center px-3 searchBar">
+        <div class="d-flex align-items-center gap-3">
+          <div class="search d-flex align-items-center px-3 forumSearch me-5">
             <img
               src="/searchIcon.png"
               alt="Search"
-              class="searchIcon"
+              class="searchIconForum"
             />
             <input
               type="text"
               class="form-control border-0 bg-transparent shadow-none ms-2"
-              placeholder="Search post/forum ..."
+              placeholder="Search posts.."
               v-model="search"
             />
           </div>
@@ -146,8 +146,7 @@ export default {
       loadingAlert: true,
       search: '',
       sortBy: 'popular',
-      loading: false,
-      username: ''
+      loading: false
     }
   },
 
@@ -164,8 +163,10 @@ export default {
   },
 
   async created() {
-    await this.fetchForum()
-    await this.fetchPostsForum()
+    await Promise.all([
+      this.fetchForum(),
+      this.fetchPostsForum()
+    ])
   },
 
   methods: {
@@ -231,19 +232,6 @@ export default {
     currentUser() {
       return store.user
     }
-
-    // async fetchUserPost() {
-    //   for (const post of this.posts) {
-    //     try {
-    //       const response = await Api.get(`/users/${post.userID.use}`)
-    //       post.username = response.data.data.username
-    //     } catch (err) {
-    //       if (err.response && err.response.status === 404) {
-    //         post.username = 'user'
-    //       } else {
-    //         console.error(err)
-    //         post.username = 'user'
-    //       }
   }
 }
 </script>

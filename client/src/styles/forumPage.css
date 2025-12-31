@@ -72,10 +72,17 @@
   height: 60%;
 }
 
-.searchBar {
- border-radius: 23px;
+.forumSearch {
+ border-radius: 12px;
  border: 1px solid #02153E;
  background: #FFF;
+ width: auto;
+}
+
+.searchIconForum {
+  width: 18px;
+  height: 18px;
+  opacity: 0.6;
 }
 
 .divider {
@@ -175,10 +182,3 @@
   letter-spacing: 1.7px;
 } 
 
-
-.searchBar {
- border-radius: 12px;
- border: 1px solid #02153E;
- background: #FFF;
- margin-left: 300px;
-}
