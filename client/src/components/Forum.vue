@@ -109,7 +109,7 @@
            <p>No posts to see here yet. Create a post!</p>
         </BAlert>
 
-        <BCard class="postBox" v-for="(item, i) in filteredPosts" :key="i">
+        <BCard class="postBox" v-for="(item, i) in filteredPosts" :key="i" @click="openPost(item._id)">
             <div class="userInfo">
                 <BAvatar size="2.5em" src="/userIcon.png" rounded="sm" class="align-self-start"/>
                 <span class="fw-bold text-muted small">{{ item.userID.username }}</span>
@@ -222,6 +222,10 @@ export default {
 
     goToHome() {
       this.$router.push('/home/posts')
+    },
+
+    openPost(postID) {
+      this.$router.push(`/posts/${postID}`)
     },
 
     logout() {
