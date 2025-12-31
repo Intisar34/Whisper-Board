@@ -120,7 +120,8 @@ exports.createPostComments = async (req, res, next) => {
         const newComment = await Comments.create({
             body,
             postID,
-            userID: checkUser._id
+            userID: checkUser._id,
+            parentComment: parentComment || null
         });
 
         res.status(201).json({comment: newComment});
@@ -139,7 +140,9 @@ exports.getPostComments = async (req, res, next) => {
             return res.status(404).json({error: "Post not found!"});
         }
 
-        const comments = await Comments.find({postID});
+        const comments = await Comments.find({postID}).populate('user', 'username')
+        .populate({path:'parentComment', populate:{path:'user', select:'username'}});
+        
         res.status(200).json({comments: comments});
     } catch (err) {
         next(err);
@@ -202,7 +205,8 @@ exports.createUserSpecificComment = async (req, res, next) => {
         const newComment = await Comments.create({
             body,
             postID,
-            userID: checkUser._id 
+            userID: checkUser._id,
+            parentComment: parentComment || null
         });
 
         res.status(201).json({comment: newComment});      
