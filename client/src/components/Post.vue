@@ -24,19 +24,19 @@
 
             <div class="postFooter mt-4">
                 <div class="commentActions">
-                    <button class="pillButton" type="button">
+                    <button class="pillButton" type="button" @click="likePost">
                         <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
-                        <span class="tinyText">5</span>
+                        <span class="tinyText">{{ post?.likes?.length || 0 }}</span>
                     </button>
 
-                    <button class="pillButton" type="button">
+                    <button class="pillButton" type="button" @click="dislikePost">
                         <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
-                        <span class="tinyText">2</span>
+                        <span class="tinyText">{{ post?.dislikes?.length || 0 }}</span>
                     </button>
 
                     <button class="pillButton" type="button">
-                        <img src="/commentIcon.png" alt="Dislikes" class="pillIcon me-1"/>
-                        <span class="tinyText">4</span>
+                        <img src="/commentIcon.png" alt="Comments" class="pillIcon me-1"/>
+                        <span class="tinyText">{{ comments.length }}</span>
                     </button>
                 </div>
 
@@ -69,12 +69,12 @@
                 <div class="commentActions">
                     <button class="pillButton" type="button">
                         <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
-                        <span class="tinyText">2</span>
+                        <span class="tinyText">0</span>
                     </button>
 
                     <button class="pillButton" type="button">
                         <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
-                        <span class="tinyText">2</span>
+                        <span class="tinyText">0</span>
                     </button>
 
                     <button class="pillButton" type="button">
@@ -165,6 +165,50 @@ export default {
         this.post = response.data.specificPost
       } catch (err) {
         console.error('Failed to load post', err)
+      }
+    },
+
+    async likePost() {
+      if (!store.user) {
+        alert('You must be logged in to like a post.')
+        return
+      }
+      try {
+        const response = await Api.patch(`/posts/${this.postId}/like`, {
+            userID: store.user._id
+        });
+        
+        const updatedPost = response.data;
+
+        if (this.post?.userID && typeof this.post.userID === 'object') {
+           updatedPost.userID = this.post.userID;
+        }
+        this.post = updatedPost;
+      } catch (err) {
+        console.error(err);
+        alert('Failed to like post');
+      }
+    },
+
+    async dislikePost() {
+      if (!store.user) {
+        alert('You must be logged in to dislike a post.')
+        return
+      }
+      try {
+        const response = await Api.patch(`/posts/${this.postId}/dislike`, {
+            userID: store.user._id
+        });
+        
+        const updatedPost = response.data;
+
+        if (this.post?.userID && typeof this.post.userID === 'object') {
+           updatedPost.userID = this.post.userID;
+        }
+        this.post = updatedPost;
+      } catch (err) {
+        console.error(err);
+        alert('Failed to dislike post');
       }
     },
 
