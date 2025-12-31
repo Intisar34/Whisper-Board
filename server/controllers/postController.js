@@ -264,7 +264,7 @@ exports.getForumPosts = async (req, res, next) => {
         const { forumID } = req.params;
         const sortQuery = req.query.sort || null;
 
-        const posts = await Post.find({ forumID: forumID }).sort(sortQuery);
+        const posts = await Post.find({ forumID: forumID }).sort(sortQuery).populate('userID', 'username');
 
         res.status(200).json(posts);
     } catch (err) {
