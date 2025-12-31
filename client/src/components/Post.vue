@@ -2,17 +2,18 @@
     <div class="postPage">
         <TopBar :showSearch="false" />
 
+        <div class="backButtonContainer">
+            <router-link to="/home/posts" class="backButton">
+                ← Back to Home
+            </router-link>
+        </div>
+
         <div class="postContainer">
             <div class="userContainer">
-                <BAvatar size="4em" src="/userIcon.png" rounded="sm" class="align-self-start"/>
-                <h2 class="username">{{ post?.userID?.username }}</h2>
-                <span class="text-muted small">&ndash; {{ formatDate(post) }}</span>
-            </div>
-
-            <div class="translationContainer">
-                <button class="translationButton" @click="translatePost">
-                  {{ translatedPost ? 'Show original' : 'Translate' }}
-                </button>
+                <img src="/postIcon.png" class="postIconImg" alt="Post"/>
+                <span class="username ms-2">{{ post?.userID?.username }}</span>
+                <span class="text-muted mx-2">–</span>
+                <span class="postDate">{{ formatDate(post) }}</span>
             </div>
 
             <h2 class="postTitle">{{ translatedPost ? translatedPost.title : post?.title }}</h2>
@@ -21,58 +22,68 @@
             {{ translatedPost ? translatedPost.body : post?.body }}
             </article>
 
-           <div class="commentActions">
-                <button class="pillButton" type="button">
-                    <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
-                    <span class="tinyText">5</span>
-                </button>
+            <div class="postFooter mt-4">
+                <div class="commentActions">
+                    <button class="pillButton" type="button">
+                        <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
+                        <span class="tinyText">5</span>
+                    </button>
 
-                <button class="pillButton" type="button">
-                    <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
-                    <span class="tinyText">2</span>
-                </button>
+                    <button class="pillButton" type="button">
+                        <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
+                        <span class="tinyText">2</span>
+                    </button>
 
-                <button class="pillButton" type="button">
-                    <img src="/commentIcon.png" alt="Dislikes" class="pillIcon me-1"/>
-                    <span class="tinyText">4</span>
+                    <button class="pillButton" type="button">
+                        <img src="/commentIcon.png" alt="Dislikes" class="pillIcon me-1"/>
+                        <span class="tinyText">4</span>
+                    </button>
+                </div>
+
+                <button class="pillButton translateAction" @click="translatePost">
+                  <span class="tinyText fw-bold">{{ translatedPost ? 'Show Original' : 'Translate Post' }}</span>
                 </button>
             </div>
 
-            <div class="commentInput">
-                <BFormTextarea class="commentText" v-model="commentDetail" rows="1" auto-grow placeholder="comment..."/>
-                <button class="sendButton" type="submit" @click="createComment">
-                   <img src="/sendIcon.svg"/>
-                </button>
+            <div class="commentSection">
+                <div class="commentInput">
+                    <BFormTextarea class="commentText" v-model="commentDetail" rows="1" auto-grow placeholder="comment..."/>
+                    <button class="sendButton" type="submit" @click="createComment">
+                       <img src="/sendIcon.svg"/>
+                    </button>
+                </div>
             </div>
 
         </div>
-        <div class="commentContainer" v-for="(comment, index) in comments" :key="index">
+    <div class="commentContainer" v-for="(comment, index) in comments" :key="index">
            <div class="userContainer">
-                <BAvatar size="1.5em" src="/userIcon.png" rounded="sm" class="align-self-start"/>
-                <h2 class="username">{{ store.user.username }}</h2>
-                <time class="postDate">{{ comment.date }}</time>
+                <BAvatar size="2em" src="/userIcon.png" rounded="sm"/>
+                <span class="username ms-2">{{ store.user.username }}</span>
+                <span class="text-muted mx-2">–</span>
+                <span class="postDate">{{ formatDate({ createdAt: comment.date }) }}</span>
             </div>
 
             <p class="commentContent">{{  comment.translated  || comment.body}}</p>
 
-            <div class="commentActions">
-                <button class="pillButton" type="button">
-                    <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
-                    <span class="tinyText">2</span>
-                </button>
+            <div class="commentFooter">
+                <div class="commentActions">
+                    <button class="pillButton" type="button">
+                        <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
+                        <span class="tinyText">2</span>
+                    </button>
 
-                <button class="pillButton" type="button">
-                    <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
-                    <span class="tinyText">2</span>
-                </button>
+                    <button class="pillButton" type="button">
+                        <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
+                        <span class="tinyText">2</span>
+                    </button>
 
-                <button class="pillButton" type="button">
-                    reply
-                </button>
-            </div>
-            <div class="translationContainer">
-                <button class="translationButton" @click="translateComment(comment)">
-                  {{ comment.translated ? 'Show original' : 'Translate' }}
+                    <button class="pillButton" type="button">
+                        reply
+                    </button>
+                </div>
+                
+                <button class="pillButton translateAction" @click="translateComment(comment)">
+                  <span class="tinyText">{{ comment.translated ? 'Show Original' : 'Translate' }}</span>
                 </button>
             </div>
         </div>
@@ -228,6 +239,7 @@ export default {
 }
 </script>
 
-<style src="../styles/post.css">
-
+<style>
+@import '../styles/home.css';
+@import '../styles/post.css';
 </style>
