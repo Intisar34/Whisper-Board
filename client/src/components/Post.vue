@@ -72,7 +72,7 @@
                     <span class="tinyText">2</span>
                 </button>
 
-                <button class="pillButton" type="button">
+                <button class="pillButton" type="button" @click="startReply(comment)">
                     reply
                 </button>
             </div>
@@ -99,7 +99,9 @@ export default {
       post: null,
       commentDetail: '',
       comments: [],
-      translatedPost: ''
+      translatedPost: '',
+      reply: null,
+      replyTo: ''
     }
   },
 
@@ -143,7 +145,7 @@ export default {
           body: comment.body,
           postID: comment.postID,
           date: comment.createdAt,
-          username: comment.user?.username
+          username: comment.userID?.username
         }))
       } catch (err) {
         console.error(err)
@@ -217,6 +219,14 @@ export default {
       } catch (err) {
         console.error('Comment translation failed:', err)
       }
+    },
+
+    startReply(comment) {
+      this.reply = comment
+      this.replyTo = comment.username
+
+      // Prefill textarea with username
+      this.commentDetail = `@${comment.username} `
     }
   }
 }
