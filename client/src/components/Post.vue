@@ -56,7 +56,7 @@
            <div class="userContainer">
                 <BAvatar size="1.5em" src="/userIcon.png" rounded="sm" class="align-self-start"/>
                 <h2 class="username">{{ store.user.username }}</h2>
-                <time class="postDate">{{ comment.date }}</time>
+                <time class="commentDate">{{ formatDate(comment) }}</time>
             </div>
 
             <p class="commentContent">{{  comment.translated  || comment.body}}</p>
@@ -161,10 +161,10 @@ export default {
       }
     },
 
-    formatDate(post) {
-      if (!post) return ''
+    formatDate(item) {
+      if (!item) return ''
 
-      const raw = post.postDate || post.createdAt
+      const raw = item.postDate || item.createdAt || item.date
       if (!raw) return ''
 
       const date = new Date(raw)
