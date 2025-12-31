@@ -112,7 +112,7 @@
         <BCard class="postBox" v-for="(item, i) in filteredPosts" :key="i">
             <div class="userInfo">
                 <BAvatar size="2.5em" src="/userIcon.png" rounded="sm" class="align-self-start"/>
-                <span class="fw-bold text-muted small">{{ currentUser() ? currentUser().username : 'Not logged in' }}</span>
+                <span class="fw-bold text-muted small">{{ item.userID.username }}</span>
             </div>
 
             <div class="postInfo">
@@ -146,7 +146,8 @@ export default {
       loadingAlert: true,
       search: '',
       sortBy: 'popular',
-      loading: false
+      loading: false,
+      username: ''
     }
   },
 
@@ -230,6 +231,19 @@ export default {
     currentUser() {
       return store.user
     }
+
+    // async fetchUserPost() {
+    //   for (const post of this.posts) {
+    //     try {
+    //       const response = await Api.get(`/users/${post.userID.use}`)
+    //       post.username = response.data.data.username
+    //     } catch (err) {
+    //       if (err.response && err.response.status === 404) {
+    //         post.username = 'user'
+    //       } else {
+    //         console.error(err)
+    //         post.username = 'user'
+    //       }
   }
 }
 </script>
