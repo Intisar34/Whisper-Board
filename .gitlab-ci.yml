@@ -14,7 +14,7 @@ stages:
 build:
   stage: build
   tags:
-    - emergency-runner
+    - docker
   script:
     - cd server
     - npm install
@@ -22,7 +22,7 @@ build:
 test:
   stage: test
   tags:
-    - emergency-runner
+    - docker
   services:
     - name: mongo:latest
       alias: mongo
