@@ -52,10 +52,10 @@
             </div>
 
         </div>
-        <div class="commentContainer" v-for="(comment, index) in comments" :key="index">
+        <div class="commentContainer" v-for="comment in comments" :key="comment._id">
            <div class="userContainer">
                 <BAvatar size="1.5em" src="/userIcon.png" rounded="sm" class="align-self-start"/>
-                <h2 class="username">{{ store.user.username }}</h2>
+                <h2 class="username">{{ comment.userID?.username }}</h2>
                 <time class="commentDate">{{ formatDate(comment) }}</time>
             </div>
 
@@ -120,18 +120,18 @@ export default {
     async createComment() {
       try {
         if (!this.commentDetail.trim()) return
-        const response = await Api.post(`/users/${store.user.username}/comments`, {
-          body: this.commentDetail,
-          postID: this.postId
-        })
 
-        this.comments.push({
-          body: response.data.comment.body,
-          postID: response.data.comment.postID,
-          date: response.data.comment.createdAt
+        await Api.post(`/users/${store.user.username}/comments`, {
+          body: this.commentDetail,
+          postID: this.postId,
+          parentComment: this.reply?._id || null
         })
 
         this.commentDetail = ''
+        this.reply = null
+        this.replyTo = ''
+
+        await this.getComment()
       } catch (err) {
         console.error(err)
       }
@@ -141,12 +141,8 @@ export default {
       try {
         const response = await Api.get(`/posts/${this.postId}/comments`)
 
-        this.comments = response.data.comments.map(comment => ({
-          body: comment.body,
-          postID: comment.postID,
-          date: comment.createdAt,
-          username: comment.userID?.username
-        }))
+        this.comments = response.data.comments
+        console.log(response.data.comments)
       } catch (err) {
         console.error(err)
       }
@@ -203,7 +199,7 @@ export default {
           return
         }
 
-        this.translatedPost = await sendTranslation(this.postBody, 'sv')
+        this.translatedPost = await sendTranslation(this.post.body, 'sv')
       } catch (err) {
         console.error('Post translation failed:', err)
       }
@@ -223,10 +219,10 @@ export default {
 
     startReply(comment) {
       this.reply = comment
-      this.replyTo = comment.username
+      this.replyTo = comment.userID.username
 
       // Prefill textarea with username
-      this.commentDetail = `@${comment.username} `
+      this.commentDetail = `@${comment.userID.username} `
     }
   }
 }
