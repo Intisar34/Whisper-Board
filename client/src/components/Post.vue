@@ -269,10 +269,24 @@ export default {
           return
         }
 
+        const cachedTitle = store.getTranslation(this.post.title, 'sv')
+        const cachedBody = store.getTranslation(this.post.body, 'sv')
+
+        if (cachedTitle && cachedBody) {
+          this.translatedPost = {
+            title: cachedTitle,
+            body: cachedBody
+          }
+          return
+        }
+
         const [translatedTitle, translatedBody] = await Promise.all([
           sendTranslation(this.post.title, 'sv'),
           sendTranslation(this.post.body, 'sv')
         ])
+
+        store.addTranslation(this.post.title, translatedTitle, 'sv')
+        store.addTranslation(this.post.body, translatedBody, 'sv')
 
         this.translatedPost = {
           title: translatedTitle,
@@ -289,7 +303,16 @@ export default {
           comment.translated = null
           return
         }
-        comment.translated = await sendTranslation(comment.body, 'sv')
+
+        const cached = store.getTranslation(comment.body, 'sv')
+        if (cached) {
+          comment.translated = cached
+          return
+        }
+
+        const translatedText = await sendTranslation(comment.body, 'sv')
+        store.addTranslation(comment.body, translatedText, 'sv')
+        comment.translated = translatedText
       } catch (err) {
         console.error('Comment translation failed:', err)
       }
