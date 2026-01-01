@@ -44,7 +44,7 @@
                 </button>
             </div>
 
-            <div class="commentInput">
+            <div class="commentInput" ref="commentInput">
                 <BFormTextarea class="commentText" v-model="commentDetail" rows="1" auto-grow placeholder="comment..."/>
                 <button class="sendButton" type="submit" @click="createComment">
                    <img src="/sendIcon.svg"/>
@@ -223,9 +223,19 @@ export default {
 
       // Prefill textarea with username
       this.commentDetail = `@${comment.userID.username} `
+
+      // Scroll up to the comment input
+      this.$nextTick(() => {
+        const reply = this.$refs.commentInput
+        if (reply) {
+          reply.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          reply.querySelector('textarea').focus()
+        }
+      })
     }
   }
 }
+
 </script>
 
 <style src="../styles/post.css">
