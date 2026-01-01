@@ -139,7 +139,7 @@ exports.getPostComments = async (req, res, next) => {
             return res.status(404).json({error: "Post not found!"});
         }
 
-        const comments = await Comments.find({postID});
+        const comments = await Comments.find({postID}).populate('userID', 'username');
         res.status(200).json({comments: comments});
     } catch (err) {
         next(err);

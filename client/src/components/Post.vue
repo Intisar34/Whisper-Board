@@ -36,7 +36,7 @@
 
                     <button class="pillButton" type="button">
                         <img src="/commentIcon.png" alt="Comments" class="pillIcon me-1"/>
-                        <span class="tinyText">{{ comments.length }}</span>
+                        <span class="tinyText">{{ post?.commentsCount || 0 }}</span>
                     </button>
                 </div>
 
@@ -58,7 +58,7 @@
     <div class="commentContainer" v-for="(comment, index) in comments" :key="index">
            <div class="userContainer">
                 <BAvatar size="2em" src="/userIcon.png" rounded="sm"/>
-                <span class="username ms-2">{{ store.user.username }}</span>
+                <span class="username ms-2">{{ comment.username || 'Username not found' }}</span>
                 <span class="text-muted mx-2">–</span>
                 <span class="postDate">{{ formatDate({ createdAt: comment.date }) }}</span>
             </div>
@@ -138,6 +138,10 @@ export default {
           date: response.data.comment.createdAt
         })
 
+        if (this.post) {
+            this.post.commentsCount = (this.post.commentsCount || 0) + 1;
+        }
+
         this.commentDetail = ''
       } catch (err) {
         console.error(err)
@@ -152,7 +156,7 @@ export default {
           body: comment.body,
           postID: comment.postID,
           date: comment.createdAt,
-          username: comment.user?.username
+          username: comment.userID?.username || 'Username not found'
         }))
       } catch (err) {
         console.error(err)
