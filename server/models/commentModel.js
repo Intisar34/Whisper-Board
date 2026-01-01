@@ -20,12 +20,13 @@ const commentSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-
+    
     parentComment: {
         type: Schema.Types.ObjectId,
         ref: "Comment",
-        deafault: null
+        default: null
     }
+
 
 },  {timestamps: true});
 

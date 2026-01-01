@@ -103,7 +103,7 @@ exports.deleteCommentByID = async (req, res, next) => {
 // Create comments inside a post (relationship)
 exports.createPostComments = async (req, res, next) => {
     try {
-        const { postID } = req.params;
+        const { postID, parentComment } = req.params;
         const { body, username } = req.body;
 
         const checkPost = await Posts.findById(postID);
@@ -140,9 +140,21 @@ exports.getPostComments = async (req, res, next) => {
             return res.status(404).json({error: "Post not found!"});
         }
 
-        const comments = await Comments.find({postID}).populate('user', 'username')
-        .populate({path:'parentComment', populate:{path:'user', select:'username'}});
+        let comments = await Comments.find({ postID })
+          .populate('userID', 'username');
         
+        // Only populate parentComment if it exists
+        comments = await Promise.all(
+          comments.map(async (comment) => {
+            if (comment.parentComment) {
+              const parent = await Comments.findById(comment.parentComment)
+                .populate('userID', 'username');
+              return { ...comment.toObject(), parentComment: parent };
+            }
+            return comment.toObject();
+          })
+        );
+
         res.status(200).json({comments: comments});
     } catch (err) {
         next(err);
@@ -195,7 +207,7 @@ exports.deletePostComments = async (req, res, next) => {
 exports.createUserSpecificComment = async (req, res, next) => {
     try{
         const username = req.params.username;
-        const {body, postID} = req.body;
+        const {body, postID, parentComment} = req.body;
 
         const checkUser = await Users.findOne({username});
         if (!checkUser) {
@@ -207,6 +219,7 @@ exports.createUserSpecificComment = async (req, res, next) => {
             postID,
             userID: checkUser._id,
             parentComment: parentComment || null
+
         });
 
         res.status(201).json({comment: newComment});      
