@@ -22,7 +22,7 @@ build:
 test:
   stage: test
   tags:
-    - docker
+    - emergency-runner
   services:
     - name: mongo:latest
       alias: mongo
