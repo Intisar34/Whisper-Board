@@ -221,7 +221,7 @@ exports.getUserComments = async (req, res, next) => {
             return res.status(404).json({error: "User not found"})
         }
 
-        const comments = await Comments.find({userID: user._id})
+        const comments = await Comments.find({userID: user._id}).populate('postID', 'title')
 
         return res.status(200).json(comments)
 

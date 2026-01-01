@@ -86,10 +86,10 @@
         height: 36px;
     }
 
-     /* Hide username on mobile */
+    /* Hide username on mobile */
     .userIconBox span {
         display: none;
-       
+
     }
 
     .bellIcon {
@@ -229,14 +229,20 @@
 }
 
 .forumIconBox {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border: 2px solid #52525b;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: white;
+}
+
+.forumIconBox .userIcon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
 }
 
 .forumTitle {

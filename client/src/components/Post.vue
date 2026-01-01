@@ -10,8 +10,10 @@
 
         <div class="postContainer">
             <div class="userContainer">
-                <img src="/postIcon.png" class="postIconImg" alt="Post"/>
-                <span class="username ms-2">{{ post?.userID?.username }}</span>
+                <div class="postPageUserIcon">
+                  <img src="/postIcon.png" class="postIconImg" alt="Post"/>
+                </div>
+                <span class="username ms-2">by {{ post?.userID?.username }}</span>
                 <span class="text-muted mx-2">–</span>
                 <span class="postDate">{{ formatDate(post) }}</span>
             </div>
@@ -55,9 +57,18 @@
             </div>
 
         </div>
+
+    <div v-if="comments.length > 0" class="commentsHeader">
+        <span class="separatorLine"></span>
+        <span class="separatorText">Comments</span>
+        <span class="separatorLine"></span>
+    </div>
+
     <div class="commentContainer" v-for="(comment, index) in comments" :key="index">
            <div class="userContainer">
-                <BAvatar size="2em" src="/userIcon.png" rounded="sm"/>
+                <div class="commentUserIcon">
+                  <img src="/userIcon.png" alt="User"/>
+                </div>
                 <span class="username ms-2">{{ comment.username || 'Username not found' }}</span>
                 <span class="text-muted mx-2">–</span>
                 <span class="postDate">{{ formatDate({ createdAt: comment.date }) }}</span>

@@ -85,11 +85,38 @@
   margin-bottom: 16px;
 }
 
-.postIconImg {
+.postPageUserIcon {
   width: 48px;
   height: 48px;
+  border: 2px solid #52525b;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.postIconImg {
+  width: 28px;
+  height: 28px;
   object-fit: contain;
+}
+
+.commentUserIcon {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #52525b;
   border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.commentUserIcon img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
 }
 
 .username {
@@ -280,4 +307,30 @@
 
 .commentContainer .postDate {
   font-size: 10px;
+}
+
+.commentsHeader {
+  width: 95%;
+  max-width: 800px;
+  margin: 20px auto 10px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  opacity: 0.8;
+}
+
+.separatorLine {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #d1d5db;
+}
+
+.separatorText {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
