@@ -276,14 +276,37 @@ label {
 }
 
 .postUserIcon {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border: 2px solid #52525b;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: white;
+}
+
+.postUserIcon .userIcon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.profileCommentUserIcon {
+  width: 48px;
+  height: 48px;
+  border: 2px solid #52525b;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.profileCommentUserIcon .userIcon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 .postTitle {

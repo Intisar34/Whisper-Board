@@ -1,84 +1,100 @@
 <template>
     <div class="postPage">
-        <div class="logoContainer">
-            <h1 class="logo"> WhisperBoard</h1>
+        <TopBar :showSearch="false" />
+
+        <div class="backButtonContainer">
+            <router-link to="/home/posts" class="backButton">
+                ← Back to Home
+            </router-link>
         </div>
 
         <div class="postContainer">
             <div class="userContainer">
-                <BAvatar size="4em" src="/userIcon.png" rounded="sm" class="align-self-start"/>
-                <h2 class="username">{{ post?.userID?.username }}</h2>
-                <span class="text-muted small">&ndash; {{ formatDate(post) }}</span>
+                <div class="postPageUserIcon">
+                  <img src="/postIcon.png" class="postIconImg" alt="Post"/>
+                </div>
+                <span class="username ms-2">by {{ post?.userID?.username }}</span>
+                <span class="text-muted mx-2">–</span>
+                <span class="postDate">{{ formatDate(post) }}</span>
             </div>
 
-            <button class="closeButton" @click="$router.push('/home/posts')">
-                <img src="/closeButton.svg">
-            </button>
-
-            <div class="translationContainer">
-                <button class="translationButton" @click="translatePost">
-                  {{ translatedPost ? 'Show original' : 'Translate' }}
-                </button>
-            </div>
-
-            <h2 class="postTitle">{{ post?.title }}</h2>
+            <h2 class="postTitle">{{ translatedPost ? translatedPost.title : post?.title }}</h2>
 
             <article class="postContent">
-            {{ translatedPost || post?.body }}
+            {{ translatedPost ? translatedPost.body : post?.body }}
             </article>
 
-           <div class="commentActions">
-                <button class="pillButton" type="button">
-                    <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
-                    <span class="tinyText">5</span>
-                </button>
+            <div class="postFooter mt-4">
+                <div class="commentActions">
+                    <button class="pillButton" type="button" @click="likePost">
+                        <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
+                        <span class="tinyText">{{ post?.likes?.length || 0 }}</span>
+                    </button>
 
-                <button class="pillButton" type="button">
-                    <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
-                    <span class="tinyText">2</span>
-                </button>
+                    <button class="pillButton" type="button" @click="dislikePost">
+                        <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
+                        <span class="tinyText">{{ post?.dislikes?.length || 0 }}</span>
+                    </button>
 
-                <button class="pillButton" type="button">
-                    <img src="/commentIcon.png" alt="Dislikes" class="pillIcon me-1"/>
-                    <span class="tinyText">4</span>
+                    <button class="pillButton" type="button">
+                        <img src="/commentIcon.png" alt="Comments" class="pillIcon me-1"/>
+                        <span class="tinyText">{{ post?.commentsCount || 0 }}</span>
+                    </button>
+                </div>
+
+                <button class="pillButton translateAction" @click="translatePost">
+                  <span class="tinyText fw-bold">{{ translatedPost ? 'Show Original' : 'Translate Post' }}</span>
                 </button>
             </div>
 
-            <div class="commentInput">
-                <BFormTextarea class="commentText" v-model="commentDetail" rows="1" auto-grow placeholder="comment..."/>
-                <button class="sendButton" type="submit" @click="createComment">
-                   <img src="/sendIcon.svg"/>
-                </button>
+            <div class="commentSection">
+                <div class="commentInput">
+                    <BFormTextarea class="commentText" v-model="commentDetail" rows="1" auto-grow placeholder="comment..."/>
+                    <button class="sendButton" type="submit" @click="createComment">
+                       <img src="/sendIcon.svg"/>
+                    </button>
+                </div>
             </div>
 
         </div>
-        <div class="commentContainer" v-for="(comment, index) in comments" :key="index">
+
+    <div v-if="comments.length > 0" class="commentsHeader">
+        <span class="separatorLine"></span>
+        <span class="separatorText">Comments</span>
+        <span class="separatorLine"></span>
+    </div>
+
+    <div class="commentContainer" v-for="(comment, index) in comments" :key="index">
            <div class="userContainer">
-                <BAvatar size="1.5em" src="/userIcon.png" rounded="sm" class="align-self-start"/>
-                <h2 class="username">{{ store.user.username }}</h2>
-                <time class="postDate">{{ comment.date }}</time>
+                <div class="commentUserIcon">
+                  <img src="/userIcon.png" alt="User"/>
+                </div>
+                <span class="username ms-2">{{ comment.username || 'Username not found' }}</span>
+                <span class="text-muted mx-2">–</span>
+                <span class="postDate">{{ formatDate({ createdAt: comment.date }) }}</span>
             </div>
 
             <p class="commentContent">{{  comment.translated  || comment.body}}</p>
 
-            <div class="commentActions">
-                <button class="pillButton" type="button">
-                    <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
-                    <span class="tinyText">2</span>
-                </button>
+            <div class="commentFooter">
+                <div class="commentActions">
+                    <button class="pillButton" type="button">
+                        <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
+                        <span class="tinyText">0</span>
+                    </button>
 
-                <button class="pillButton" type="button">
-                    <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
-                    <span class="tinyText">2</span>
-                </button>
+                    <button class="pillButton" type="button">
+                        <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
+                        <span class="tinyText">0</span>
+                    </button>
 
-                <button class="pillButton" type="button">
-                    reply
-                </button>
-            </div>
-            <div class="translationContainer">
-                <button class="translationButton" @click="translateComment(comment)">
-                  {{ comment.translated ? 'Show original' : 'Translate' }}
+                    <button class="pillButton" type="button">
+                        reply
+                    </button>
+                </div>
+                
+                <button class="pillButton translateAction" @click="translateComment(comment)">
+                  <span class="tinyText">{{ comment.translated ? 'Show Original' : 'Translate' }}</span>
                 </button>
             </div>
         </div>
@@ -89,9 +105,13 @@
 import { Api } from '@/Api'
 import { store } from '@/store.js'
 import { sendTranslation } from '@/translation.js'
+import TopBar from './TopBar.vue'
 
 export default {
   name: 'Post',
+  components: {
+    TopBar
+  },
 
   data() {
     return {
@@ -99,7 +119,7 @@ export default {
       post: null,
       commentDetail: '',
       comments: [],
-      translatedPost: ''
+      translatedPost: null
     }
   },
 
@@ -129,6 +149,10 @@ export default {
           date: response.data.comment.createdAt
         })
 
+        if (this.post) {
+            this.post.commentsCount = (this.post.commentsCount || 0) + 1;
+        }
+
         this.commentDetail = ''
       } catch (err) {
         console.error(err)
@@ -143,7 +167,7 @@ export default {
           body: comment.body,
           postID: comment.postID,
           date: comment.createdAt,
-          username: comment.user?.username
+          username: comment.userID?.username || 'Username not found'
         }))
       } catch (err) {
         console.error(err)
@@ -156,6 +180,50 @@ export default {
         this.post = response.data.specificPost
       } catch (err) {
         console.error('Failed to load post', err)
+      }
+    },
+
+    async likePost() {
+      if (!store.user) {
+        alert('You must be logged in to like a post.')
+        return
+      }
+      try {
+        const response = await Api.patch(`/posts/${this.postId}/like`, {
+            userID: store.user._id
+        });
+        
+        const updatedPost = response.data;
+
+        if (this.post?.userID && typeof this.post.userID === 'object') {
+           updatedPost.userID = this.post.userID;
+        }
+        this.post = updatedPost;
+      } catch (err) {
+        console.error(err);
+        alert('Failed to like post');
+      }
+    },
+
+    async dislikePost() {
+      if (!store.user) {
+        alert('You must be logged in to dislike a post.')
+        return
+      }
+      try {
+        const response = await Api.patch(`/posts/${this.postId}/dislike`, {
+            userID: store.user._id
+        });
+        
+        const updatedPost = response.data;
+
+        if (this.post?.userID && typeof this.post.userID === 'object') {
+           updatedPost.userID = this.post.userID;
+        }
+        this.post = updatedPost;
+      } catch (err) {
+        console.error(err);
+        alert('Failed to dislike post');
       }
     },
 
@@ -197,11 +265,33 @@ export default {
     async translatePost() {
       try {
         if (this.translatedPost) {
-          this.translatedPost = ''
+          this.translatedPost = null
           return
         }
 
-        this.translatedPost = await sendTranslation(this.postBody, 'sv')
+        const cachedTitle = store.getTranslation(this.post.title, 'sv')
+        const cachedBody = store.getTranslation(this.post.body, 'sv')
+
+        if (cachedTitle && cachedBody) {
+          this.translatedPost = {
+            title: cachedTitle,
+            body: cachedBody
+          }
+          return
+        }
+
+        const [translatedTitle, translatedBody] = await Promise.all([
+          sendTranslation(this.post.title, 'sv'),
+          sendTranslation(this.post.body, 'sv')
+        ])
+
+        store.addTranslation(this.post.title, translatedTitle, 'sv')
+        store.addTranslation(this.post.body, translatedBody, 'sv')
+
+        this.translatedPost = {
+          title: translatedTitle,
+          body: translatedBody
+        }
       } catch (err) {
         console.error('Post translation failed:', err)
       }
@@ -213,7 +303,16 @@ export default {
           comment.translated = null
           return
         }
-        comment.translated = await sendTranslation(comment.body, 'sv')
+
+        const cached = store.getTranslation(comment.body, 'sv')
+        if (cached) {
+          comment.translated = cached
+          return
+        }
+
+        const translatedText = await sendTranslation(comment.body, 'sv')
+        store.addTranslation(comment.body, translatedText, 'sv')
+        comment.translated = translatedText
       } catch (err) {
         console.error('Comment translation failed:', err)
       }
@@ -222,6 +321,7 @@ export default {
 }
 </script>
 
-<style src="../styles/post.css">
-
+<style>
+@import '../styles/home.css';
+@import '../styles/post.css';
 </style>
