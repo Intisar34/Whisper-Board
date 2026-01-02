@@ -94,7 +94,7 @@
             </div>
           </div>
 
-          <BAlert :model-value="true" variant="light" v-if="!loadingPosts && filteredPosts.length === 0">
+          <BAlert :model-value="true" variant="light" v-if="!loadingPosts && posts.length === 0">
             <h4 class="alert-heading">{{ alertTitle}}</h4>
             <p>{{ alertBody }} <BLink :to="'/home/forums'" class="me-2">{{ translatedAlert ? 'här': 'here' }}</BLink></p>
             <button class="pillButton translateAction ms-auto" @click="translateAlert">
