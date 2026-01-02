@@ -258,7 +258,7 @@ exports.likeComment = async (req, res, next) => {
             return res.status(400).json({ error: 'UserID is required' });
         }
 
-        const comment = await Comment.findById(id);
+        const comment = await Comments.findById(id);
 
         if (!comment) {
             return res.status(404).json({ error: 'Comment not found' });
@@ -289,10 +289,10 @@ exports.dislikeComment = async (req, res, next) => {
             return res.status(400).json({ error: 'UserID is required' });
         }
 
-        const comment = await Post.findById(id);
+        const comment = await Comments.findById(id);
 
         if (!comment) {
-            return res.status(404).json({ error: 'Post not found' });
+            return res.status(404).json({ error: 'Comment not found' });
         }
 
         // if already disliked, undislike, if not, dislike and pull like.

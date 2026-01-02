@@ -17,7 +17,7 @@ router.get("/", getComments);
 router.get("/:id", getCommentByID);
 router.delete("/:id", deleteCommentByID);
 router.put("/:id", updateComment);
-router.patch("/:id", likeComment);
-router.patch("/:id", dislikeComment)
+router.patch("/:id/like", likeComment);
+router.patch("/:id/dislike", dislikeComment)
 
 module.exports = router;
