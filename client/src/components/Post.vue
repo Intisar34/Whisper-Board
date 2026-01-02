@@ -64,35 +64,35 @@
         <span class="separatorLine"></span>
     </div>
 
-    <div class="commentContainer" v-for="(comment, index) in comments" :key="index">
+    <div class="commentContainer" v-for="comment in comments" :key="comment._id">
            <div class="userContainer">
                 <div class="commentUserIcon">
                   <img src="/userIcon.png" alt="User"/>
                 </div>
-                <span class="username ms-2">{{ comment.username || 'Username not found' }}</span>
+                <span class="username ms-2">{{ comment.userID?.username || 'Username not found' }}</span>
                 <span class="text-muted mx-2">–</span>
-                <span class="postDate">{{ formatDate({ createdAt: comment.date }) }}</span>
+                <span class="postDate">{{ formatDate(comment) }}</span>
             </div>
 
             <p class="commentContent">{{  comment.translated  || comment.body}}</p>
 
             <div class="commentFooter">
                 <div class="commentActions">
-                    <button class="pillButton" type="button">
+                    <button class="pillButton" type="button" @click="likeComment(comment)">
                         <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
-                        <span class="tinyText">0</span>
+                        <span class="tinyText">{{comment?.likes?.length || 0 }} </span>
                     </button>
 
-                    <button class="pillButton" type="button">
+                    <button class="pillButton" type="button" @click="dislikeComment(comment)">
                         <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
-                        <span class="tinyText">0</span>
+                        <span class="tinyText">{{comment?.dislikes?.length || 0 }}</span>
                     </button>
 
                     <button class="pillButton" type="button" @click="startReply(comment)">
                         reply
                     </button>
                 </div>
-                
+
                 <button class="pillButton translateAction" @click="translateComment(comment)">
                   <span class="tinyText">{{ comment.translated ? 'Show Original' : 'Translate' }}</span>
                 </button>
@@ -164,8 +164,8 @@ export default {
     async getComment() {
       try {
         const response = await Api.get(`/posts/${this.postId}/comments`)
-
         this.comments = response.data.comments
+
         console.log(response.data.comments)
       } catch (err) {
         console.error(err)
@@ -188,18 +188,18 @@ export default {
       }
       try {
         const response = await Api.patch(`/posts/${this.postId}/like`, {
-            userID: store.user._id
-        });
-        
-        const updatedPost = response.data;
+          userID: store.user._id
+        })
+
+        const updatedPost = response.data
 
         if (this.post?.userID && typeof this.post.userID === 'object') {
-           updatedPost.userID = this.post.userID;
+          updatedPost.userID = this.post.userID
         }
-        this.post = updatedPost;
+        this.post = updatedPost
       } catch (err) {
-        console.error(err);
-        alert('Failed to like post');
+        console.error(err)
+        alert('Failed to like post')
       }
     },
 
@@ -210,18 +210,18 @@ export default {
       }
       try {
         const response = await Api.patch(`/posts/${this.postId}/dislike`, {
-            userID: store.user._id
-        });
-        
-        const updatedPost = response.data;
+          userID: store.user._id
+        })
+
+        const updatedPost = response.data
 
         if (this.post?.userID && typeof this.post.userID === 'object') {
-           updatedPost.userID = this.post.userID;
+          updatedPost.userID = this.post.userID
         }
-        this.post = updatedPost;
+        this.post = updatedPost
       } catch (err) {
-        console.error(err);
-        alert('Failed to dislike post');
+        console.error(err)
+        alert('Failed to dislike post')
       }
     },
 
@@ -331,6 +331,42 @@ export default {
           reply.querySelector('textarea').focus()
         }
       })
+    },
+
+    async likeComment(comment) {
+      if (!store.user) {
+        alert('You must be logged in to like a comment.')
+        return
+      }
+      try {
+        const response = await Api.patch(`/comments/${comment._id}/like`, {
+          userID: store.user._id
+        })
+
+        comment.likes = response.data.likes
+        comment.dislikes = response.data.dislikes
+      } catch (err) {
+        console.error(err.response?.data || err.message)
+        alert('Failed to like comment')
+      }
+    },
+
+    async dislikeComment(comment) {
+      if (!store.user) {
+        alert('You must be logged in to dislike a post.')
+        return
+      }
+      try {
+        const response = await Api.patch(`/comments/${comment._id}/dislike`, {
+          userID: store.user._id
+        })
+
+        comment.dislikes = response.data.dislikes
+        comment.likes = response.data.likes
+      } catch (err) {
+        console.error(err)
+        alert('Failed to dislike comment')
+      }
     }
   }
 }
