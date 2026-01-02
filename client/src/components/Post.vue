@@ -191,12 +191,8 @@ export default {
           userID: store.user._id
         })
 
-        const updatedPost = response.data
-
-        if (this.post?.userID && typeof this.post.userID === 'object') {
-          updatedPost.userID = this.post.userID
-        }
-        this.post = updatedPost
+        this.post.likes = response.data.likes
+        this.post.dislikes = response.data.dislikes
       } catch (err) {
         console.error(err)
         alert('Failed to like post')
@@ -213,12 +209,8 @@ export default {
           userID: store.user._id
         })
 
-        const updatedPost = response.data
-
-        if (this.post?.userID && typeof this.post.userID === 'object') {
-          updatedPost.userID = this.post.userID
-        }
-        this.post = updatedPost
+        this.post.dislikes = response.data.dislikes
+        this.post.likes = response.data.likes
       } catch (err) {
         console.error(err)
         alert('Failed to dislike post')
@@ -353,7 +345,7 @@ export default {
 
     async dislikeComment(comment) {
       if (!store.user) {
-        alert('You must be logged in to dislike a post.')
+        alert('You must be logged in to dislike a comment.')
         return
       }
       try {
