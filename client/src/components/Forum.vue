@@ -90,6 +90,11 @@
             </div>
           </div>
 
+          <BAlert :model-value="true" variant="light" v-if="!loadingPosts && filteredPosts.length === 0">
+            <h4 class="alert-heading">OH!</h4>
+            <p>Looks like there are no posts yet. Click <BLink :to="'/home/forums'" class="me-2">here</BLink> to join the forum and create a post!</p>
+          </BAlert>
+
           <!-- Post section -->
         <BCard class="postCard d-flex flex-row align-items-start border-0 p-2 mb-4" v-for="item in filteredPosts" :key="item._id" @click="openPost(item._id)">
              <div class="d-flex w-100">
@@ -153,7 +158,7 @@ export default {
       },
       posts: [],
       forumId: this.$route.params.forumId,
-      loadingAlert: true,
+      loadingPosts: true,
       search: '',
       sortBy: 'popular',
       loading: false
@@ -201,6 +206,7 @@ export default {
     },
 
     async fetchPostsForum() {
+      this.loadingPosts = true
       try {
         const params = {}
 
@@ -216,7 +222,7 @@ export default {
       } catch (err) {
         console.error(err)
       } finally {
-        this.loading = false
+        this.loadingPosts = false
       }
     },
 
