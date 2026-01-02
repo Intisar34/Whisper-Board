@@ -20,9 +20,21 @@ export const store = reactive({
         localStorage.setItem('user', JSON.stringify(userData))
     },
 
-    
+
     clearUser() { // clear the user and remove from the local storage
         this.user = null
         localStorage.removeItem('user')
+    },
+
+    translationCache: {},
+
+    getTranslation(text, targetLang = 'sv') {
+        const key = `${text}_${targetLang}`
+        return this.translationCache[key]
+    },
+
+    addTranslation(text, translatedText, targetLang = 'sv') {
+        const key = `${text}_${targetLang}`
+        this.translationCache[key] = translatedText
     }
 })

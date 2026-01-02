@@ -1,6 +1,7 @@
 const Post = require('../models/postModel');
 const User = require('../models/userModel');
 const Forum = require('../models/forumModel');
+const Comment = require('../models/commentModel');
 
 // POST: Create a post.
 exports.createPost =  async (req,res, next) => { 
@@ -43,7 +44,15 @@ exports.getAllPosts = async (req,res,next) => {
 
         const getPosts = await query.exec();
 
-        res.status(200).json(getPosts);
+        const postsWithComments = await Promise.all(getPosts.map(async (post) => {
+            const commentsCount = await Comment.countDocuments({ postID: post._id });
+            return {
+                ...post.toObject(),
+                commentsCount
+            };
+        }));
+
+        res.status(200).json(postsWithComments);
     } catch(err){
         next(err);
     }
@@ -70,7 +79,14 @@ exports.getPost = async (req,res,next) => {
         return res.status(404).json({error: "Post not found"})
         }
 
-        res.status(200).json({ specificPost });
+        const commentsCount = await Comment.countDocuments({ postID: specificPost._id });
+
+        res.status(200).json({ 
+            specificPost: {
+                ...specificPost.toObject(),
+                commentsCount
+            }
+        });
     } catch(err) {
         next(err);
     }

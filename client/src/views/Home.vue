@@ -210,7 +210,7 @@
                 <button
                   class="pillButton d-flex align-items-center"
                   type="button"
-                  disabled
+                  @click.stop="goToPost(post._id)"
                 >
                   <img
                     src="/commentIcon.png"

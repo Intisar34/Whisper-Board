@@ -1,66 +1,77 @@
 .postPage {
-  border-radius: 8px;
   background: linear-gradient(180deg, #FEFEFE 1.92%, #A2AFE4 75%);
   width: 100%;
   min-height: 100vh;
-  display:flex;
-  flex-direction:column;
-  padding: 20px;
-}
-
-.logoContainer {
   display: flex;
-  margin-bottom: 40px;
   flex-direction: column;
-  justify-content: center;
-  margin-bottom: 40px;
-  align-items: center;
 }
 
-.logo {
-  color: #02153E;
-  text-align: center;
-  font-family: "Jolly Lodger";
-  font-size: 48px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+.backButtonContainer {
+  position: fixed;
+  top: 80px;
+  left: 24px;
+  z-index: 100;
 }
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  color: #374151;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.backButton:hover {
+  background-color: #ffffff;
+  color: #111827;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+
 
 .postContainer {
-  background: linear-gradient(180deg, #FEFEFE 1.78%, #CBD2EE 55.13%);
-  border-radius: 16px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1); 
-  width: 100%;
-  max-width: 750px;
-  margin: 20px auto;
-  padding: 24px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.05);
+  width: 95%;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 32px;
   box-sizing: border-box;
-  border: 1px solid #5165b6;
-  position:relative
+  border: 1px solid #f0f0f0;
+  position: relative;
 }
 
 .postTitle {
-  color: #02153E;
-  font-family: Inter;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: normal;
+  color: #111827;
+  font-family: Inter, sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.3;
   text-align: left;
-  padding-bottom: 30px;
-  margin-bottom: 16px;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f3f4f6;
 }
 
 .postContent {
-  color: #2C3E50; 
-  font-family: Inter;
-  font-size: 16px;
+  color: #374151;
+  font-family: Inter, sans-serif;
+  font-size: 1.1rem;
   font-weight: 400;
-  line-height: 1.5;
-  background: transparent; 
+  line-height: 1.8;
+  background: transparent;
   border: none;
   padding: 0;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   resize: none;
   text-align: left;
   word-break: break-word;
@@ -68,47 +79,89 @@
 }
 
 .userContainer {
-  display:flex;
+  display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 16px;
 }
+
+.postPageUserIcon {
+  width: 48px;
+  height: 48px;
+  border: 2px solid #52525b;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.postIconImg {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.commentUserIcon {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #52525b;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.commentUserIcon img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
 .username {
-  color: #000;
+  color: #111827;
   font-family: Inter;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 600;
-  padding-top: 5px;
+  line-height: 1;
+  padding: 0;
+  margin-left: 0;
 }
 
 .commentDate {
-  color: #02153E;
-  text-align: center;
+  color: #6b7280;
   font-family: Inter;
-  font-size: 12px;
-  font-style: normal;
+  font-size: 14px;
   font-weight: 400;
-  line-height: normal;
-  letter-spacing: 1.08px;
-  padding-bottom: 7px;
+}
+
+.separator {
+  color: #9ca3af;
+  font-weight: 400;
 }
 
 .translationContainer {
-  display:flex;
+  display: flex;
   flex-direction: row-reverse;
   background: transparent;
 }
 
-.translationButton {
-  color: 000000;
-  background: transparent;
-  font-family: Inter;
-  border:none;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  letter-spacing: 2.4px;
+.translateAction {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: none;
+  transition: all 0.2s;
+}
+
+.translateAction:hover {
+  background-color: #dbeafe;
+}
+
+.commentSection {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #f3f4f6;
 }
 
 .commentInput {
@@ -118,6 +171,7 @@
 
 .activityBox {
   display: flex;
+  align-items: center;
   gap: 12px;
   margin-top: 16px;
   margin-bottom: 15px;
@@ -140,7 +194,7 @@
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #3897f0; 
+  background-color: #3897f0;
   border: none;
   border-radius: 50%;
   width: 36px;
@@ -150,7 +204,7 @@
   justify-content: center;
   cursor: pointer;
   color: white;
-  opacity: 0.5; 
+  opacity: 0.5;
   transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
@@ -166,74 +220,64 @@
   cursor: pointer
 }
 
-.closeButton {
-  border-radius: 50%;
-  background-color: #cbe6ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position:absolute;
-  width: 35px;
-  height: 35px;
-  color: white;
-  border: none;
-  right: 20px;
-  top: 20px;
-}
 
-.closeButton svg {
-  width: 60%;
-  height: 60%;
-}
 
 .commentContainer {
-  max-width: 750px;
-  width: 100%;
-  margin: 8px auto 0; 
-  padding: 8px 12px;
-  border-radius: 30px;
-  background: #ECEDF3;
-  border: 1px solid #02153E;
+  max-width: 800px;
+  width: 95%;
+  margin: 16px auto;
+  padding: 32px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #f3f4f6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 12px 16px;
 }
 
 .commentContent {
-  color: rgba(0, 0, 0, 0.68);
-  font-family: Inter;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  max-width: 85%;
-  text-align: left; 
-  margin: 0;
-}   
+  color: #4b5563;
+  font-family: Inter, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  max-width: 90%;
+  text-align: left;
+  margin: 8px 0 16px 0;
+}
+
+.postFooter,
+.commentFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
 
 .commentActions {
   display: flex;
-  flex-direction: row;     
-  gap: 12px;             
-  margin-top: 20px;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  margin-top: 0;
 }
 
 .pillButton {
   display: flex;
   align-items: center;
-  gap: 6px;           
-  padding: 6px 12px;  
-  border-radius: 8px; 
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
   border: none;
-  background: rgba(0, 0, 0, 0.099);;
+  background: rgba(0, 0, 0, 0.099);
+  ;
   cursor: pointer;
   font-family: Inter, sans-serif;
   font-size: 13px;
   font-weight: 600;
   transition: background-color 0.2s ease;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 
@@ -263,4 +307,30 @@
 
 .commentContainer .postDate {
   font-size: 10px;
+}
+
+.commentsHeader {
+  width: 95%;
+  max-width: 800px;
+  margin: 20px auto 10px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  opacity: 0.8;
+}
+
+.separatorLine {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #d1d5db;
+}
+
+.separatorText {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
