@@ -166,9 +166,32 @@
                   </div>
                 </BCard>
                 
+                <BCard v-else-if="activeTab === 'comments'" class="postCard d-flex flex-row align-items-start border-0 p-3">
+                  <div class="d-flex w-100">
+                    <!-- comment icon -->
+                    <div class="profileCommentUserIcon me-3 flex-shrink-0">
+                      <img src="/commentIcon.png" alt="Comment" class="userIcon" />
+                    </div>
+
+                    <div class="flex-grow-1 text-start">
+                      <div class="d-flex align-items-baseline lh-1 mb-1">
+                        <span class="text-muted small">Commented on &ndash; {{ formatDate(item) }}</span>
+                      </div>
+
+                      <h2 class="postTitle">
+                        {{ item.postTitle || 'Untitled Post' }}
+                      </h2>
+
+                      <p class="postBody">
+                        {{ item.body }}
+                      </p>
+                    </div>
+                  </div>
+                </BCard>
+                
                 <BCard v-else class="postCard">
-                   <h5>{{ item.title || 'Comment' }}</h5>
-                   <p>{{ item.body || item.name }}</p>
+                   <h5>{{ item.title || item.name || 'Forum' }}</h5>
+                   <p>{{ item.body || item.description }}</p>
                    <small v-if="item.date" class="text-secondary">{{ item.date }}</small>
                 </BCard>
               </div>
@@ -359,7 +382,9 @@ export default {
         }
 
         this.timeline = this.comments.map(comment => ({
-          body: comment.body
+          body: comment.body,
+          postTitle: comment.postID?.title || 'Untitled Post',
+          createdAt: comment.createdAt
         }
         ))
       } catch (err) {
