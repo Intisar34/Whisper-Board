@@ -57,17 +57,8 @@
             <!-- Search section -->
         <div class="d-flex align-items-center gap-3">
           <div class="search d-flex align-items-center px-3 forumSearch me-5">
-            <img
-              src="/searchIcon.png"
-              alt="Search"
-              class="searchIconForum"
-            />
-            <input
-              type="text"
-              class="form-control border-0 bg-transparent shadow-none ms-2"
-              placeholder="Search posts.."
-              v-model="search"
-            />
+            <img src="/searchIcon.png" alt="Search" class="searchIconForum"/>
+            <input type="text" class="form-control border-0 bg-transparent shadow-none ms-2" placeholder="Search posts.." v-model="search"/>
           </div>
         </div>
 
@@ -88,11 +79,7 @@
         <div class="d-flex align-items-center mb-3 px-1">
             <span class="small me-1 text-muted">Sort by :</span>
             <div class="customSelectWrapper">
-              <select
-                v-model="sortBy"
-                @change="onSortChange"
-                class="customSelect fw-bold small"
-              >
+              <select v-model="sortBy" @change="onSortChange" class="customSelect fw-bold small">
                 <option value="popular">Popular</option>
                 <option value="newest">Latest</option>
                 <option value="oldest">Oldest</option>
@@ -104,27 +91,50 @@
           </div>
 
           <!-- Post section -->
-        <BAlert :model-value="true" variant="info" v-if="!loadingAlert && filteredPosts.length === 0">
-           <h4 class="alert-heading">OH!</h4>
-           <p>No posts to see here yet. Create a post!</p>
-        </BAlert>
+        <BCard class="postCard d-flex flex-row align-items-start border-0 p-2 mb-4" v-for="item in filteredPosts" :key="item._id" @click="openPost(item._id)">
+             <div class="d-flex w-100">
+              <div class="postUserIcon me-3 flex-shrink-0">
+               <img src="/postIcon.png" alt="Post" class="userIcon"/>
+              </div>
 
-        <BCard class="postBox" v-for="(item, i) in filteredPosts" :key="i" @click="openPost(item._id)">
-            <div class="userInfo">
-                <BAvatar size="2.5em" src="/userIcon.png" rounded="sm" class="align-self-start"/>
-                <span class="fw-bold text-muted small">{{ item.userID.username }}</span>
-            </div>
-
-            <div class="postInfo">
-                <h1 class="postBoxTitle"> {{ item.title }}</h1>
-                <p class="postBoxBody"> {{ item.body }}</p>
-            </div>
-            <div class="rightColumn">
+              <div class="flex-grow-1 text-start">
+               <div class="d-flex align-items-baseline lh-1 mb-1">
                 <span class="text-muted small">&ndash; {{ formatDate(item) }}</span>
-                <button class="translateButton">Translate</button>
-            </div>
-            </BCard>
-            </div>
+               </div>
+
+               <div class="text-muted tinyText mb-2">
+                 {{ item.userID?.username || "Unknown user" }}
+               </div>
+
+               <h2 class="postTitle">
+                 {{ capitalise(item.title) }}
+               </h2>
+               <p class="postBody">
+                 {{ item.body }}
+               </p>
+               <footer class="d-flex align-items-center gap-2 mt-3">
+                <!-- Like Buttion -->
+                <button class="pillButton d-flex align-items-center" type="button" @click.stop="likePost(item._id)">
+                  <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
+                  {{ item.likes ? item.likes.length : 0 }}
+                </button>
+
+                <!-- Dislike Button -->
+                <button class="pillButton d-flex align-items-center" type="button" @click.stop="dislikePost(item._id)">
+                  <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
+                  {{ item.dislikes ? item.dislikes.length : 0 }}
+                </button>
+
+                <!-- Comment Button -->
+                <button class="pillButton d-flex align-items-center" type="button" disabled>
+                  <img src="/commentIcon.png" alt="Comments" class="pillIcon me-1"/>
+                  {{ item.commentsCount ?? 0 }}
+                </button>
+               </footer>
+              </div>
+             </div>
+         </BCard>
+        </div>
     </div>
 </template>
 
@@ -220,8 +230,61 @@ export default {
       })
     },
 
+    async likePost(postId) {
+      if (!store.user) {
+        alert('You must be logged in to like a post.')
+        return
+      }
+      try {
+        const response = await Api.patch(`/posts/${postId}/like`, {
+          userID: store.user._id
+        })
+        const updatedPost = response.data
+        const index = this.posts.findIndex(p => p._id === postId)
+        if (index !== -1) {
+          this.posts[index] = {
+            ...this.posts[index],
+            likes: updatedPost.likes,
+            dislikes: updatedPost.dislikes
+          }
+        }
+      } catch (err) {
+        console.error(err)
+        alert('Failed to like post')
+      }
+    },
+
+    async dislikePost(postId) {
+      if (!store.user) {
+        alert('You must be logged in to dislike a post.')
+        return
+      }
+      try {
+        const response = await Api.patch(`/posts/${postId}/dislike`, {
+          userID: store.user._id
+        })
+        const updatedPost = response.data
+        const index = this.posts.findIndex(p => p._id === postId)
+        if (index !== -1) {
+          this.posts[index] = {
+            ...this.posts[index],
+            likes: updatedPost.likes,
+            dislikes: updatedPost.dislikes
+          }
+        }
+      } catch (err) {
+        console.error(err)
+        alert('Failed to dislike post')
+      }
+    },
+
     goToHome() {
       this.$router.push('/home/posts')
+    },
+
+    capitalise(value) {
+      if (!value) return ''
+      return value.charAt(0).toUpperCase() + value.slice(1)
     },
 
     openPost(postID) {
