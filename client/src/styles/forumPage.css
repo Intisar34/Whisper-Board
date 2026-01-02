@@ -102,17 +102,23 @@
   padding-top: 30px;
 }
 
-.translateButton { 
-  align-self: flex-end;
-  background: none;
+.translationContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  background: transparent;
+  padding-left: 300px;
+}
+
+.translateAction {
+  background-color: #eff6ff;
+  color: #2563eb;
   border: none;
-  color: rgba(0, 0, 0, 0.43);;
-  font-size: 0.875rem;
-  font-family: 'Inter';
-  cursor: pointer;
-  padding-top: 30px;
-  letter-spacing: 1.7px;
-} 
+  transition: all 0.2s;
+}
+
+.translateAction:hover {
+  background-color: #dbeafe;
+}
 
 .postCard {
   background-color: #ffffff;
