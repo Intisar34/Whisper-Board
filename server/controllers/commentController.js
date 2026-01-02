@@ -247,3 +247,66 @@ exports.getUserComments = async (req, res, next) => {
     }
 }
 
+
+// Like a comment
+exports.likeComment = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { userID } = req.body;
+
+        if (!userID) {
+            return res.status(400).json({ error: 'UserID is required' });
+        }
+
+        const comment = await Comment.findById(id);
+
+        if (!comment) {
+            return res.status(404).json({ error: 'Comment not found' });
+        }
+
+        // If already liked, unlike, if not, like and pull dislike.
+        if (comment.likes.includes(userID)) {
+            comment.likes.pull(userID);
+        } else {
+            comment.likes.push(userID);
+            comment.dislikes.pull(userID);
+        }
+
+        await comment.save();
+        res.status(200).json(comment);
+    } catch (err) {
+        next(err);
+    }
+};
+
+// Dislike a comment
+exports.dislikeComment = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { userID } = req.body;
+
+        if (!userID) {
+            return res.status(400).json({ error: 'UserID is required' });
+        }
+
+        const comment = await Post.findById(id);
+
+        if (!comment) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
+        // if already disliked, undislike, if not, dislike and pull like.
+        if (comment.dislikes.includes(userID)) {
+            comment.dislikes.pull(userID);
+        } else {
+            comment.dislikes.push(userID);
+            comment.likes.pull(userID);
+        }
+
+        await comment.save();
+        res.status(200).json(comment);
+    } catch (err) {
+        next(err);
+    }
+};
+
