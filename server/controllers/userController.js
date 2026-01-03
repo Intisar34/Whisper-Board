@@ -1,4 +1,4 @@
-const bcrypt =require('bcrypt');
+const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 const Post = require('../models/postModel');
 const Comment = require('../models/commentModel');
@@ -12,12 +12,12 @@ const USERNAME_CHAR_LIMIT = 12;
 
 // validate if it follows the email format
 function validateEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 // validate the password
 function validatePassword(password) {
-    return (
+  return (
     typeof password === 'string' &&
     password.length >= 8 &&
     /[a-zA-Z]/.test(password) &&
@@ -31,12 +31,12 @@ const USERNAME_CHARS =
 
 // generate random username, with 12 character limit
 function generateUsername() {
-    let username = '';
-    for (let i = 0; i < USERNAME_CHAR_LIMIT; i++) {
-        const idx = Math.floor(Math.random() * USERNAME_CHARS.length);
-        username += USERNAME_CHARS[idx];
-    }
-    return username;
+  let username = '';
+  for (let i = 0; i < USERNAME_CHAR_LIMIT; i++) {
+    const idx = Math.floor(Math.random() * USERNAME_CHARS.length);
+    username += USERNAME_CHARS[idx];
+  }
+  return username;
 }
 
 // create unique username, if a username exists try 5 more times
@@ -54,8 +54,24 @@ async function createUniqueUsername() {
 // list of predefied roles for user
 const ALLOWED_ROLES = ['Student', 'Alumni', 'Teacher', 'TA', 'other'];
 
+// validate language
+const ALLOWED_LANGUAGES = ['sv', 'en', 'es', 'de', 'fr', 'no', 'da', 'fi'];
+
+function validateLanguage(lang) {
+  if (!lang) return null; // optional update
+  if (!ALLOWED_LANGUAGES.includes(lang)) {
+    return `Language must be one of: ${ALLOWED_LANGUAGES.join(', ')}`;
+  }
+  return null;
+}
+
 // validate institution and role input by user
-function validateRoleAndInstitution({ role, institution, otherRoleName }) {
+function validateRoleAndInstitution({ role, institution, otherRoleName, preferredLanguage }) {
+  if (preferredLanguage) {
+    const langError = validateLanguage(preferredLanguage);
+    if (langError) return langError;
+  }
+
   if (!institution || typeof institution !== 'string' || !institution.trim()) {
     return 'Institution is required';
   }
@@ -136,22 +152,22 @@ exports.createUser = async (req, res, next) => {
 
 // POST: login user
 exports.loginUser = async (req, res, next) => {
-  try{
-    const {email, password} = req.body;
+  try {
+    const { email, password } = req.body;
 
-    if(!email || !password) {
-      return res.status(404).json({error: "Email and password is required!"});
+    if (!email || !password) {
+      return res.status(404).json({ error: "Email and password is required!" });
     }
 
-    const user = await User.findOne({email});
-    if(!user) {
-      return res.status(404).json({error: "User not found!"});
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
 
     }
 
     const checkPassword = await bcrypt.compare(password, user.passwordHash);
-    if(!checkPassword) {
-      return res.status(401).json({error: "Incorrect password!"});
+    if (!checkPassword) {
+      return res.status(401).json({ error: "Incorrect password!" });
     }
 
     res.status(200).json({
@@ -160,7 +176,10 @@ exports.loginUser = async (req, res, next) => {
         username: user.username,
         role: user.role,
         institution: user.institution,
-        email: user.email
+        role: user.role,
+        institution: user.institution,
+        email: user.email,
+        preferredLanguage: user.preferredLanguage || 'sv'
       }
     });
 
@@ -204,9 +223,9 @@ exports.getUserByUsername = async (req, res, next) => {
     const userObj = user.toObject();
 
     userObj.links = [
-      { rel: 'self',    href: `${baseUrl}/users/${user.username}` },
-      { rel: 'posts',   href: `${baseUrl}/users/${user.username}/posts` },
-      { rel: 'forums',  href: `${baseUrl}/users/${user.username}/forums` },
+      { rel: 'self', href: `${baseUrl}/users/${user.username}` },
+      { rel: 'posts', href: `${baseUrl}/users/${user.username}/posts` },
+      { rel: 'forums', href: `${baseUrl}/users/${user.username}/forums` },
       { rel: 'comments', href: `${baseUrl}/users/${user.username}/comments` },
     ];
 
@@ -218,9 +237,9 @@ exports.getUserByUsername = async (req, res, next) => {
 
 // PUT: update the whole user
 exports.updateUserPut = async (req, res, next) => {
-try {
+  try {
     const { username } = req.params;
-    const { email, password, institution, role, otherRoleName } = req.body;
+    const { email, password, institution, role, otherRoleName, preferredLanguage } = req.body;
 
     if (!email || !institution || !role) {
       return res.status(400).json({ error: 'Missing required fields for PUT' });
@@ -230,7 +249,7 @@ try {
       return res.status(422).json({ error: 'Invalid email format' });
     }
 
-    const roleError = validateRoleAndInstitution({ role, institution, otherRoleName });
+    const roleError = validateRoleAndInstitution({ role, institution, otherRoleName, preferredLanguage });
     if (roleError) {
       return res.status(422).json({ error: roleError });
     }
@@ -240,6 +259,7 @@ try {
       institution: institution.trim(),
       role,
       otherRoleName: role === 'other' ? otherRoleName?.trim() : undefined,
+      preferredLanguage
     };
 
     if (password) {
@@ -270,77 +290,79 @@ try {
 
 // PATCH: update specific details of a user
 exports.updateUserPatch = async (req, res, next) => {
-    try{
-        const { username } = req.params;
-        const updates = { ...req.body };
+  try {
+    const { username } = req.params;
+    const updates = { ...req.body };
 
-        const currentUser = await User.findOne({ username });
-        if (!currentUser) {
-            return res.status(404).json({ error: 'User not found'});
-        }
-
-        if (updates.email && !validateEmail(updates.email)) {
-            return res.status(422).json({ error: 'Invalid email format'});
-        }
-
-        if (updates.password) {
-            if (!validatePassword(updates.password)) {
-                return res.status(422).json({
-                    error: 'Password must be at least 8 characters and contain letters and numbers'
-                });
-            }
-            updates.passwordHash = await bcrypt.hash(updates.password, SALT_ROUNDS);
-            delete updates.password;
-        }
-        
-        const newInstitution = updates.institution !== undefined ? updates.institution : currentUser.institution;
-        const newRole = updates.role !== undefined ? updates.role : currentUser.role;
-        const newOtherRoleName = updates.otherRoleName !== undefined ? updates.otherRoleName : currentUser.otherRoleName;
-
-        const roleError = validateRoleAndInstitution({
-            role: newRole,
-            institution: newInstitution,
-            otherRoleName: newOtherRoleName,
-        });
-        
-        if (roleError) {
-            return res.status(422).json({ error: roleError });
-        }
-     
-        if (updates.institution) {
-            updates.institution = updates.institution.trim();
-        }
-        if (updates.role === 'other' && updates.otherRoleName) {
-           updates.otherRoleName = updates.otherRoleName.trim();
-        }
-     
-        const user = await User.findOneAndUpdate({ username }, updates, {
-            new: true,
-            runValidators: true,
-        }).select('-passwordHash');
-     
-        res.json({ data: user });
-
-    } catch (err) {
-        next(err);
+    const currentUser = await User.findOne({ username });
+    if (!currentUser) {
+      return res.status(404).json({ error: 'User not found' });
     }
+
+    if (updates.email && !validateEmail(updates.email)) {
+      return res.status(422).json({ error: 'Invalid email format' });
+    }
+
+    if (updates.password) {
+      if (!validatePassword(updates.password)) {
+        return res.status(422).json({
+          error: 'Password must be at least 8 characters and contain letters and numbers'
+        });
+      }
+      updates.passwordHash = await bcrypt.hash(updates.password, SALT_ROUNDS);
+      delete updates.password;
+    }
+
+    const newInstitution = updates.institution !== undefined ? updates.institution : currentUser.institution;
+    const newRole = updates.role !== undefined ? updates.role : currentUser.role;
+    const newOtherRoleName = updates.otherRoleName !== undefined ? updates.otherRoleName : currentUser.otherRoleName;
+    const newPreferredLanguage = updates.preferredLanguage !== undefined ? updates.preferredLanguage : currentUser.preferredLanguage;
+
+    const roleError = validateRoleAndInstitution({
+      role: newRole,
+      institution: newInstitution,
+      otherRoleName: newOtherRoleName,
+      preferredLanguage: newPreferredLanguage
+    });
+
+    if (roleError) {
+      return res.status(422).json({ error: roleError });
+    }
+
+    if (updates.institution) {
+      updates.institution = updates.institution.trim();
+    }
+    if (updates.role === 'other' && updates.otherRoleName) {
+      updates.otherRoleName = updates.otherRoleName.trim();
+    }
+
+    const user = await User.findOneAndUpdate({ username }, updates, {
+      new: true,
+      runValidators: true,
+    }).select('-passwordHash');
+
+    res.json({ data: user });
+
+  } catch (err) {
+    next(err);
+  }
 };
 
 // DELETE: delete a specific user
 exports.deleteUserByUsername = async (req, res, next) => {
-    try {
-        const {username} = req.params;
-        const user = await User.findOneAndDelete({ username});
+  try {
+    const { username } = req.params;
+    const user = await User.findOneAndDelete({ username });
 
-        if(!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        await Post.deleteMany({ userID: user._id });
-        await Comment.deleteMany({ userID: user._id });
-
-        res.status(204).send();
-    } catch (err) {
-    next(err);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
+
+    await Post.deleteMany({ userID: user._id });
+    await Comment.deleteMany({ userID: user._id });
+
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
 };

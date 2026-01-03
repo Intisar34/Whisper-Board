@@ -43,7 +43,9 @@
                 </div>
 
                 <button class="pillButton translateAction" @click="translatePost">
-                  <span class="tinyText fw-bold">{{ translatedPost ? 'Show Original' : 'Translate Post' }}</span>
+                  <span class="tinyText fw-bold">
+                    {{ isTranslatingPost ? 'translating...' : (postTranslationError ? 'Failed translation' : (translatedPost ? 'Show Original' : 'Translate Post')) }}
+                  </span>
                 </button>
             </div>
 
@@ -94,7 +96,9 @@
                 </div>
 
                 <button class="pillButton translateAction" @click="translateComment(comment)">
-                  <span class="tinyText">{{ comment.translated ? 'Show Original' : 'Translate' }}</span>
+                  <span class="tinyText">
+                    {{ comment.isTranslating ? 'translating...' : (comment.translationError ? 'Failed translation' : (comment.translated ? 'Show Original' : 'Translate')) }}
+                  </span>
                 </button>
             </div>
         </div>
@@ -121,7 +125,9 @@ export default {
       comments: [],
       translatedPost: null,
       reply: null,
-      replyTo: ''
+      replyTo: '',
+      isTranslatingPost: false,
+      postTranslationError: false
     }
   },
 
@@ -143,8 +149,16 @@ export default {
 
         await Api.post(`/users/${store.user.username}/comments`, {
           body: this.commentDetail,
-          postID: this.postId,
-          parentComment: this.reply?._id || null
+          postID: this.postId
+        })
+
+        this.comments.push({
+          body: response.data.comment.body,
+          postID: response.data.comment.postID,
+          date: response.data.comment.createdAt,
+          translated: null,
+          isTranslating: false,
+          translationError: false
         })
 
         if (this.post) {
@@ -164,9 +178,18 @@ export default {
     async getComment() {
       try {
         const response = await Api.get(`/posts/${this.postId}/comments`)
-        this.comments = response.data.comments
 
-        console.log(response.data.comments)
+        this.comments = response.data.comments.map(comment => ({
+          body: comment.body,
+          postID: comment.postID,
+          date: comment.createdAt,
+          postID: comment.postID,
+          date: comment.createdAt,
+          username: comment.userID?.username || 'Username not found',
+          translated: null,
+          isTranslating: false,
+          translationError: false
+        }))
       } catch (err) {
         console.error(err)
       }
@@ -259,31 +282,39 @@ export default {
           return
         }
 
-        const cachedTitle = store.getTranslation(this.post.title, 'sv')
-        const cachedBody = store.getTranslation(this.post.body, 'sv')
+        this.isTranslatingPost = true
+        this.postTranslationError = false
+
+        const targetLang = store.user?.preferredLanguage || 'sv'
+        const cachedTitle = store.getTranslation(this.post.title, targetLang)
+        const cachedBody = store.getTranslation(this.post.body, targetLang)
 
         if (cachedTitle && cachedBody) {
           this.translatedPost = {
             title: cachedTitle,
             body: cachedBody
           }
+          this.isTranslatingPost = false
           return
         }
 
         const [translatedTitle, translatedBody] = await Promise.all([
-          sendTranslation(this.post.title, 'sv'),
-          sendTranslation(this.post.body, 'sv')
+          sendTranslation(this.post.title, targetLang),
+          sendTranslation(this.post.body, targetLang)
         ])
 
-        store.addTranslation(this.post.title, translatedTitle, 'sv')
-        store.addTranslation(this.post.body, translatedBody, 'sv')
+        store.addTranslation(this.post.title, translatedTitle, targetLang)
+        store.addTranslation(this.post.body, translatedBody, targetLang)
 
         this.translatedPost = {
           title: translatedTitle,
           body: translatedBody
         }
+        this.isTranslatingPost = false
       } catch (err) {
         console.error('Post translation failed:', err)
+        this.isTranslatingPost = false
+        this.postTranslationError = true
       }
     },
 
@@ -294,17 +325,25 @@ export default {
           return
         }
 
-        const cached = store.getTranslation(comment.body, 'sv')
+        comment.isTranslating = true
+        comment.translationError = false
+
+        const targetLang = store.user?.preferredLanguage || 'sv'
+        const cached = store.getTranslation(comment.body, targetLang)
         if (cached) {
           comment.translated = cached
+          comment.isTranslating = false
           return
         }
 
-        const translatedText = await sendTranslation(comment.body, 'sv')
-        store.addTranslation(comment.body, translatedText, 'sv')
+        const translatedText = await sendTranslation(comment.body, targetLang)
+        store.addTranslation(comment.body, translatedText, targetLang)
         comment.translated = translatedText
+        comment.isTranslating = false
       } catch (err) {
         console.error('Comment translation failed:', err)
+        comment.isTranslating = false
+        comment.translationError = true
       }
     },
 

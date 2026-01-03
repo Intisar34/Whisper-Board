@@ -1,6 +1,6 @@
 <template>
   <div class="whisperboardPage">
-    
+
         <!--Top bar section for logo, searchbar and user profile-->
     <header class="topBar d-flex align-items-center px-4 py-2">
         <!-- Logo section -->
@@ -101,7 +101,6 @@
               </button>
           </nav>
         </b-col>
-        
 
         <!-- Main Content Section -->
         <b-col cols="12" md="9" lg="10">
@@ -154,7 +153,7 @@
           <div v-if="loading" class="text-center">
             Loading...
           </div>
-          
+
           <div v-else-if="error" class="text-danger">
              {{ error }}
           </div>
@@ -163,7 +162,7 @@
           <article
             v-for="forum in filteredForums"
             :key="forum._id"
-            class="forumCard mb-3 p-3 d-flex align-items-start"
+            class="forumCard mb-3 p-3 d-flex align-items-start forumClickable"
           >
             <!-- forum icon -->
             <div class="forumIconBox me-3 flex-shrink-0">
@@ -173,15 +172,14 @@
                 class="userIcon"
               />
             </div>
-
-            <div class="flex-grow-1 text-start">
+            <div class="flex-grow-1 text-start" @click="openForum(forum._id)">
               <div class="d-flex align-items-baseline lh-1 mb-2">
                 <h2 class="forumTitle m-0 me-1">
                   {{ capitalise(forum.name) }}
                 </h2>
                 <span class="text-muted small">&ndash; {{ formatDate(forum.createdAt) }}</span>
               </div>
-            
+
               <p class="forumBody mb-0">
                 {{ forum.description }}
               </p>
@@ -190,14 +188,14 @@
             <!-- Join and Leave Button for forum-->
             <div class="ms-3 align-self-center">
 
-              <button 
+              <button
                 v-if="!isJoined(forum)"
                 class="btn btn-sm btn-primary"
                 @click.stop="joinForum(forum._id)"
               >
                 Join
               </button>
-              <button 
+              <button
                 v-else
                 class="btn btn-sm btn-outline-danger"
                 @click.stop="leaveForum(forum._id)"
@@ -215,7 +213,6 @@
   </div>
 </template>
 
-
 <script>
 import { Api } from '@/Api'
 import CreateForum from './Createforum.vue'
@@ -226,7 +223,7 @@ export default {
   components: {
     CreateForum
   },
-  data () {
+  data() {
     return {
       search: '',
       activeSidebar: 'forum',
@@ -234,7 +231,11 @@ export default {
       loading: false,
       error: null,
       showCreateForum: false,
-      filterBy: 'all'
+      filterBy: 'all',
+      forum: {
+        name: '',
+        description: ''
+      }
     }
   },
   computed: {
@@ -252,11 +253,11 @@ export default {
       return store.user
     }
   },
-  created () {
+  created() {
     this.init()
   },
   methods: {
-    async init () {
+    async init() {
       this.loading = true
       try {
         await this.fetchForums()
@@ -296,11 +297,16 @@ export default {
         this.error = 'Failed to load forums.'
       }
     },
-    capitalise (value) {
+
+    openForum(forumID) {
+      this.$router.push(`/forums/${forumID}`)
+    },
+
+    capitalise(value) {
       if (!value) return ''
       return value.charAt(0).toUpperCase() + value.slice(1)
     },
-    formatDate (dateString) {
+    formatDate(dateString) {
       if (!dateString) return ''
       const date = new Date(dateString)
       return date.toLocaleDateString(undefined, {
@@ -324,7 +330,7 @@ export default {
         const response = await Api.patch(`/forums/${forumId}/join`, {
           userID: this.currentUser._id
         })
-        
+
         // Update local store
         const updatedForum = response.data.forum
         const index = this.forums.findIndex(f => f._id === forumId)
