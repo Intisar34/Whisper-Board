@@ -36,18 +36,31 @@ exports.getAllPosts = async (req,res,next) => {
             filter.forumID = { $in: joinedForumIds };
         }
 
-        let query = Post.find(filter);
+        let getPosts;
 
-        if(sortQuery){
-            query = query.sort(sortQuery);
+        if (sortQuery === 'popular') {
+            getPosts = await Post.aggregate([
+                { $match: filter },
+                {
+                    $addFields: {
+                        likesCount: { $size: { $ifNull: ["$likes", []] } }
+                    }
+                },
+                { $sort: { likesCount: -1 } }
+            ]);
+        } else {
+            let query = Post.find(filter);
+            if(sortQuery){
+                query = query.sort(sortQuery);
+            }
+            getPosts = await query.exec();
         }
-
-        const getPosts = await query.exec();
 
         const postsWithComments = await Promise.all(getPosts.map(async (post) => {
             const commentsCount = await Comment.countDocuments({ postID: post._id });
+            const postObj = post.toObject ? post.toObject() : post;
             return {
-                ...post.toObject(),
+                ...postObj,
                 commentsCount
             };
         }));

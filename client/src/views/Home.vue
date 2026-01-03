@@ -132,7 +132,7 @@
                 class="customSelect fw-bold small"
               >
                 <option value="popular">Popular</option>
-                <option value="newest">Latest</option>
+                <option value="newest">Newest</option>
                 <option value="oldest">Oldest</option>
               </select>
             </div>
@@ -305,7 +305,9 @@ export default {
         const params = {}
 
         // sort query param
-        if (this.sortBy === 'popular' || this.sortBy === 'newest') {
+        if (this.sortBy === 'popular') {
+          params.sort = 'popular'
+        } else if (this.sortBy === 'newest') {
           params.sort = '-postDate'
         } else if (this.sortBy === 'oldest') {
           params.sort = 'postDate'
