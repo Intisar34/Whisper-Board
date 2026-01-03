@@ -428,6 +428,8 @@ export default {
         const updatedPost = response.data;
         const index = this.posts.findIndex(p => p._id === postId);
         if (index !== -1) {
+
+          updatedPost.commentsCount = this.posts[index].commentsCount;
           this.posts.splice(index, 1, updatedPost);
         }
       } catch (err) {
@@ -448,6 +450,8 @@ export default {
         const updatedPost = response.data;
         const index = this.posts.findIndex(p => p._id === postId);
         if (index !== -1) {
+
+          updatedPost.commentsCount = this.posts[index].commentsCount;
           this.posts.splice(index, 1, updatedPost);
         }
       } catch (err) {

@@ -9,20 +9,61 @@
         </div>
 
         <div class="postContainer">
-            <div class="userContainer">
-                <div class="postPageUserIcon">
-                  <img src="/postIcon.png" class="postIconImg" alt="Post"/>
+            <div class="commentHeader">
+                <div class="userContainer">
+                    <div class="postPageUserIcon">
+                    <img src="/postIcon.png" class="postIconImg" alt="Post"/>
+                    </div>
+                    <span class="username ms-2">by {{ post?.userID?.username }}</span>
+                    <span class="text-muted mx-2">–</span>
+                    <span class="postDate">{{ formatDate(post) }}</span>
                 </div>
-                <span class="username ms-2">by {{ post?.userID?.username }}</span>
-                <span class="text-muted mx-2">–</span>
-                <span class="postDate">{{ formatDate(post) }}</span>
+                
+                <div class="commentIconActions" v-if="isPostOwner()">
+                    <button 
+                        class="editIconBtn" 
+                        type="button" 
+                        @click="startEditPost"
+                    >
+                        <img src="/Edit.svg" alt="Edit"/>
+                    </button>
+                    <button 
+                        class="deleteIconBtn" 
+                        type="button" 
+                        @click="deletePost"
+                    >
+                        <img src="/Delete.svg" alt="Delete"/>
+                    </button>
+                </div>
             </div>
 
-            <h2 class="postTitle">{{ translatedPost ? translatedPost.title : post?.title }}</h2>
+            <!-- View Mode -->
+            <template v-if="!editingPost">
+                <h2 class="postTitle">{{ translatedPost ? translatedPost.title : post?.title }}</h2>
 
-            <article class="postContent">
-            {{ translatedPost ? translatedPost.body : post?.body }}
-            </article>
+                <article class="postContent">
+                {{ translatedPost ? translatedPost.body : post?.body }}
+                </article>
+            </template>
+
+            <!-- Edit Mode -->
+            <div v-else class="editInputWrapper">
+                <BFormInput
+                    class="editTitleInput mb-3"
+                    v-model="editPostTitle"
+                    placeholder="Post Title"
+                />
+                <BFormTextarea 
+                    class="editTextarea" 
+                    v-model="editPostBody" 
+                    rows="6" 
+                    auto-grow 
+                />
+                <div class="editInputActions">
+                    <button class="pillButton cancelReply" @click="cancelEditPost">Cancel</button>
+                    <button class="pillButton submitReply" @click="saveEditPost">Save</button>
+                </div>
+            </div>
 
             <div class="postFooter mt-4">
                 <div class="commentActions">
@@ -253,7 +294,11 @@ export default {
       editText: '',
       expandedReplies: {},
       isTranslatingPost: false,
-      postTranslationError: false
+      isTranslatingPost: false,
+      postTranslationError: false,
+      editingPost: false,
+      editPostTitle: '',
+      editPostBody: ''
     }
   },
 
@@ -586,6 +631,61 @@ export default {
       } catch (err) {
         console.error('Failed to delete comment:', err)
         alert('Failed to delete comment')
+      }
+    },
+
+    isPostOwner() {
+      if (!store.user || !this.post) return false
+      return this.post.userID?._id === store.user._id || 
+             this.post.userID === store.user._id
+    },
+
+    startEditPost() {
+      this.editingPost = true
+      this.editPostTitle = this.post.title
+      this.editPostBody = this.post.body
+    },
+
+    cancelEditPost() {
+      this.editingPost = false
+      this.editPostTitle = ''
+      this.editPostBody = ''
+    },
+
+    async saveEditPost() {
+      if (!this.editPostTitle.trim() || !this.editPostBody.trim()) {
+        alert('Title and body cannot be empty')
+        return
+      }
+
+      try {
+        const response = await Api.put(`/posts/${this.postId}`, {
+          title: this.editPostTitle,
+          body: this.editPostBody
+        })
+
+        const updated = response.data.updatedPost || response.data
+        
+        this.post.title = updated.title || this.editPostTitle
+        this.post.body = updated.body || this.editPostBody
+
+        this.editingPost = false
+        this.editPostTitle = ''
+        this.editPostBody = ''
+      } catch (err) {
+        console.error('Failed to save post:', err)
+        alert('Failed to save changes')
+      }
+    },
+
+    async deletePost() {
+      try {
+        await Api.delete(`/posts/${this.postId}`)
+
+        this.$router.push('/home/posts')
+      } catch (err) {
+        console.error('Failed to delete post:', err)
+        alert('Failed to delete post')
       }
     }
   }
