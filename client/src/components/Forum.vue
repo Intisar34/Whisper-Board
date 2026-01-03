@@ -73,7 +73,9 @@
         <article class="forumDescription">{{ translatedForum ? translatedForum.description : forumDetail?.description }}</article>
 
         <button class="pillButton translateAction ms-auto" @click="translateForum">
-            <span class="tinyText fw-bold">{{ translatedForum ? 'Show Original' : 'Translate Forum' }}</span>
+            <span class="tinyText fw-bold">
+              {{ isTranslatingForum ? 'translating...' : (forumTranslationError ? 'Failed translation' : (translatedForum ? 'Show Original' : 'Translate Forum')) }}
+            </span>
         </button>
 
         <!-- Line to separate forum description and post -->
@@ -98,7 +100,9 @@
             <h4 class="alert-heading">{{ alertTitle}}</h4>
             <p>{{ alertBody }} <BLink :to="'/home/forums'" class="me-2">{{ translatedAlert ? 'här': 'here' }}</BLink></p>
             <button class="pillButton translateAction ms-auto" @click="translateAlert">
-              <span class="tinyText fw-bold">{{ translatedAlert ? 'Show Original' : 'Translate' }}</span>
+              <span class="tinyText fw-bold">
+                {{ isTranslatingAlert ? 'translating...' : (alertTranslationError ? 'Failed translation' : (translatedAlert ? 'Show Original' : 'Translate')) }}
+              </span>
             </button>
           </BAlert>
 
@@ -144,7 +148,9 @@
                 </button>
                 <!-- Translation Button -->
                 <button class="pillButton translateAction ms-auto" @click.stop="translatePost(item)">
-                  <span class="tinyText fw-bold">{{ item.translated ? 'Show Original' : 'Translate Post' }}</span>
+                  <span class="tinyText fw-bold">
+                    {{ item.isTranslating ? 'translating...' : (item.translationError ? 'Failed translation' : (item.translated ? 'Show Original' : 'Translate Post')) }}
+                  </span>
                 </button>
                </footer>
               </div>
@@ -174,8 +180,12 @@ export default {
       search: '',
       sortBy: 'popular',
       loading: false,
-      translatedForum: '',
-      translatedAlert: ''
+      translatedForum: null,
+      translatedAlert: null,
+      isTranslatingForum: false,
+      forumTranslationError: false,
+      isTranslatingAlert: false,
+      alertTranslationError: false
     }
   },
 
@@ -238,7 +248,7 @@ export default {
         }
 
         const response = await Api.get(`/forums/${this.forumId}/posts`, { params })
-        this.posts = Array.isArray(response.data) ? response.data : []
+        this.posts = Array.isArray(response.data) ? response.data.map(post => ({ ...post, isTranslating: false, translationError: false })) : []
       } catch (err) {
         console.error(err)
       } finally {
@@ -311,30 +321,38 @@ export default {
           return
         }
 
-        const cachedBody = store.getTranslation(post.body, 'sv')
-        const cachedTitle = store.getTranslation(post.title, 'sv')
+        post.isTranslating = true
+        post.translationError = false
+
+        const targetLang = store.user?.preferredLanguage || 'sv'
+        const cachedBody = store.getTranslation(post.body, targetLang)
+        const cachedTitle = store.getTranslation(post.title, targetLang)
         if (cachedBody && cachedTitle) {
           post.translated = {
             title: cachedTitle || post.title,
             body: cachedBody || post.body
           }
+          post.isTranslating = false
           return
         }
 
         const [translatedTitle, translatedBody] = await Promise.all([
-          sendTranslation(post.title, 'sv'),
-          sendTranslation(post.body, 'sv')
+          sendTranslation(post.title, targetLang),
+          sendTranslation(post.body, targetLang)
         ])
 
-        store.addTranslation(post.title, translatedTitle, 'sv')
-        store.addTranslation(post.body, translatedBody, 'sv')
+        store.addTranslation(post.title, translatedTitle, targetLang)
+        store.addTranslation(post.body, translatedBody, targetLang)
 
         post.translated = {
           title: translatedTitle,
           body: translatedBody
         }
+        post.isTranslating = false
       } catch (err) {
         console.error('Post translation failed:', err)
+        post.isTranslating = false
+        post.translationError = true
       }
     },
 
@@ -345,31 +363,39 @@ export default {
           return
         }
 
-        const cachedTitle = store.getTranslation(this.forumDetail.name, 'sv')
-        const cachedBody = store.getTranslation(this.forumDetail.description, 'sv')
+        this.isTranslatingForum = true
+        this.forumTranslationError = false
+
+        const targetLang = store.user?.preferredLanguage || 'sv'
+        const cachedTitle = store.getTranslation(this.forumDetail.name, targetLang)
+        const cachedBody = store.getTranslation(this.forumDetail.description, targetLang)
 
         if (cachedTitle && cachedBody) {
           this.translatedForum = {
             name: cachedTitle,
             description: cachedBody
           }
+          this.isTranslatingForum = false
           return
         }
 
         const [translatedTitle, translatedBody] = await Promise.all([
-          sendTranslation(this.forumDetail.name, 'sv'),
-          sendTranslation(this.forumDetail.description, 'sv')
+          sendTranslation(this.forumDetail.name, targetLang),
+          sendTranslation(this.forumDetail.description, targetLang)
         ])
 
-        store.addTranslation(this.forumDetail.name, translatedTitle, 'sv')
-        store.addTranslation(this.forumDetail.description, translatedBody, 'sv')
+        store.addTranslation(this.forumDetail.name, translatedTitle, targetLang)
+        store.addTranslation(this.forumDetail.description, translatedBody, targetLang)
 
         this.translatedForum = {
           name: translatedTitle,
           description: translatedBody
         }
+        this.isTranslatingForum = false
       } catch (err) {
         console.error('Post translation failed:', err)
+        this.isTranslatingForum = false
+        this.forumTranslationError = true
       }
     },
 
@@ -380,34 +406,43 @@ export default {
           return
         }
 
+        this.isTranslatingAlert = true
+        this.alertTranslationError = false
+
         const alertTitle = 'OH!'
         const alertBody = 'Looks like there are no posts yet. Click here to join the forum and create a post!'
 
-        const cachedTitle = store.getTranslation(alertTitle, 'sv')
-        const cachedBody = store.getTranslation(alertBody, 'sv')
+        const targetLang = store.user?.preferredLanguage || 'sv'
+
+        const cachedTitle = store.getTranslation(alertTitle, targetLang)
+        const cachedBody = store.getTranslation(alertBody, targetLang)
 
         if (cachedTitle && cachedBody) {
           this.translatedAlert = {
             title: cachedTitle,
             body: cachedBody
           }
+          this.isTranslatingAlert = false
           return
         }
 
         const [translatedTitle, translatedBody] = await Promise.all([
-          sendTranslation(alertTitle, 'sv'),
-          sendTranslation(alertBody, 'sv')
+          sendTranslation(alertTitle, targetLang),
+          sendTranslation(alertBody, targetLang)
         ])
 
-        store.addTranslation(alertTitle, translatedTitle, 'sv')
-        store.addTranslation(alertBody, translatedBody, 'sv')
+        store.addTranslation(alertTitle, translatedTitle, targetLang)
+        store.addTranslation(alertBody, translatedBody, targetLang)
 
         this.translatedAlert = {
           title: translatedTitle,
           body: translatedBody
         }
+        this.isTranslatingAlert = false
       } catch (err) {
         console.error('Post translation failed:', err)
+        this.isTranslatingAlert = false
+        this.alertTranslationError = true
       }
     },
 

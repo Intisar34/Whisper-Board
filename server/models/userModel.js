@@ -40,6 +40,11 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        preferredLanguage: {
+            type: String,
+            default: 'sv',
+            enum: ['sv', 'en', 'es', 'de', 'fr', 'no', 'da', 'fi'],
+        },
     },
     { timestamps: true}
 );
