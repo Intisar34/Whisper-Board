@@ -68,16 +68,47 @@
 
     <!-- Top-level comments -->
     <div class="commentContainer" v-for="comment in comments" :key="comment._id">
-        <div class="userContainer">
-            <div class="commentUserIcon">
-                <img src="/userIcon.png" alt="User"/>
+        <div class="commentHeader">
+            <div class="userContainer">
+                <div class="commentUserIcon">
+                    <img src="/userIcon.png" alt="User"/>
+                </div>
+                <span class="username ms-2">{{ comment.userID?.username || 'Unknown' }}</span>
+                <span class="text-muted mx-2">–</span>
+                <span class="postDate">{{ formatDate(comment) }}</span>
             </div>
-            <span class="username ms-2">{{ comment.userID?.username || 'Unknown' }}</span>
-            <span class="text-muted mx-2">–</span>
-            <span class="postDate">{{ formatDate(comment) }}</span>
+            <div class="commentIconActions" v-if="isCommentOwner(comment)">
+                <button 
+                    class="editIconBtn" 
+                    type="button" 
+                    @click="startEdit(comment)"
+                >
+                    <img src="/Edit.svg" alt="Edit"/>
+                </button>
+                <button 
+                    class="deleteIconBtn" 
+                    type="button" 
+                    @click="deleteComment(comment)"
+                >
+                    <img src="/Delete.svg" alt="Delete"/>
+                </button>
+            </div>
         </div>
-
-        <p class="commentContent">{{ comment.translated || comment.body }}</p>
+        <!-- Comment body or edit mode -->
+        <p v-if="editingComment !== comment._id" class="commentContent">{{ comment.translated || comment.body }}</p>
+        
+        <div v-else class="editInputWrapper">
+            <BFormTextarea 
+                class="editTextarea" 
+                v-model="editText" 
+                rows="2" 
+                auto-grow 
+            />
+            <div class="editInputActions">
+                <button class="pillButton cancelReply" @click="cancelEdit">Cancel</button>
+                <button class="pillButton submitReply" @click="saveEdit(comment)">Save</button>
+            </div>
+        </div>
 
         <div class="commentFooter">
             <div class="commentActions">
@@ -130,16 +161,47 @@
         <!-- Nested Replies -->
         <div v-if="expandedReplies[comment._id] && comment.replies?.length" class="repliesContainer">
             <div class="replyComment" v-for="reply in comment.replies" :key="reply._id">
-                <div class="userContainer">
-                    <div class="replyUserIcon">
-                        <img src="/userIcon.png" alt="User"/>
+                <div class="replyHeader">
+                    <div class="userContainer">
+                        <div class="replyUserIcon">
+                            <img src="/userIcon.png" alt="User"/>
+                        </div>
+                        <span class="username ms-2">{{ reply.userID?.username || 'Unknown' }}</span>
+                        <span class="text-muted mx-2">–</span>
+                        <span class="postDate">{{ formatDate(reply) }}</span>
                     </div>
-                    <span class="username ms-2">{{ reply.userID?.username || 'Unknown' }}</span>
-                    <span class="text-muted mx-2">–</span>
-                    <span class="postDate">{{ formatDate(reply) }}</span>
+                    <div class="commentIconActions" v-if="isCommentOwner(reply)">
+                        <button 
+                            class="editIconBtn" 
+                            type="button" 
+                            @click="startEdit(reply)"
+                        >
+                            <img src="/Edit.svg" alt="Edit"/>
+                        </button>
+                        <button 
+                            class="deleteIconBtn" 
+                            type="button" 
+                            @click="deleteComment(reply)"
+                        >
+                            <img src="/Delete.svg" alt="Delete"/>
+                        </button>
+                    </div>
                 </div>
-
-                <p class="replyContent">{{ reply.translated || reply.body }}</p>
+                <!-- Reply body or edit mode -->
+                <p v-if="editingComment !== reply._id" class="replyContent">{{ reply.translated || reply.body }}</p>
+                
+                <div v-else class="editInputWrapper">
+                    <BFormTextarea 
+                        class="editTextarea" 
+                        v-model="editText" 
+                        rows="2" 
+                        auto-grow 
+                    />
+                    <div class="editInputActions">
+                        <button class="pillButton cancelReply" @click="cancelEdit">Cancel</button>
+                        <button class="pillButton submitReply" @click="saveEdit(reply)">Save</button>
+                    </div>
+                </div>
 
                 <div class="replyFooter">
                     <div class="commentActions">
@@ -187,6 +249,8 @@ export default {
       translatedPost: null,
       replyingTo: null,
       replyText: '',
+      editingComment: null,
+      editText: '',
       expandedReplies: {},
       isTranslatingPost: false,
       postTranslationError: false
@@ -441,6 +505,33 @@ export default {
       this.expandedReplies[comment._id] = !this.expandedReplies[comment._id]
     },
 
+    startEdit(comment) {
+      this.editingComment = comment._id
+      this.editText = comment.body
+    },
+
+    cancelEdit() {
+      this.editingComment = null
+      this.editText = ''
+    },
+
+    async saveEdit(comment) {
+      if (!this.editText.trim()) return
+
+      try {
+        await Api.put(`/comments/${comment._id}`, {
+          body: this.editText
+        })
+
+        this.editingComment = null
+        this.editText = ''
+        await this.getComment()
+      } catch (err) {
+        console.error('Failed to edit comment:', err)
+        alert('Failed to save changes')
+      }
+    },
+
     async likeComment(comment) {
       if (!store.user) {
         alert('You must be logged in to like a comment.')
@@ -469,11 +560,32 @@ export default {
           userID: store.user._id
         })
 
-        comment.dislikes = response.data.dislikes
+              comment.dislikes = response.data.dislikes
         comment.likes = response.data.likes
       } catch (err) {
         console.error(err)
         alert('Failed to dislike comment')
+      }
+    },
+
+    isCommentOwner(comment) {
+      if (!store.user) return false
+      return comment.userID?._id === store.user._id || 
+             comment.userID === store.user._id
+    },
+
+    async deleteComment(comment) {
+      try {
+        await Api.delete(`/comments/${comment._id}`)
+        
+        if (this.post) {
+          this.post.commentsCount = Math.max(0, (this.post.commentsCount || 1) - 1)
+        }
+        
+        await this.getComment()
+      } catch (err) {
+        console.error('Failed to delete comment:', err)
+        alert('Failed to delete comment')
       }
     }
   }

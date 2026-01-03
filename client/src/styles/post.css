@@ -458,6 +458,106 @@
   background: #2563eb;
 }
 
+.deleteBtn {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.deleteBtn:hover {
+  background: #fecaca;
+}
+
+.editBtn {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.editBtn:hover {
+  background: #bfdbfe;
+}
+
+/* Comment/Reply header with edit icon */
+.commentHeader,
+.replyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.editIconBtn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.editIconBtn:hover {
+  opacity: 1;
+}
+
+.editIconBtn img {
+  width: 20px;
+  height: 20px;
+}
+
+.commentIconActions {
+  display: flex;
+  gap: 8px;
+}
+
+.deleteIconBtn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.deleteIconBtn:hover {
+  opacity: 1;
+}
+
+.deleteIconBtn img {
+  width: 20px;
+  height: 20px;
+}
+
+.editInputWrapper {
+  margin: 12px 0;
+  padding: 12px;
+  background: #f3f4f6;
+  border-radius: 12px;
+}
+
+.editTextarea {
+  color: #2C3E50;
+  background-color: #ffffff !important;
+  font-family: Inter;
+  font-size: 14px;
+  border: 1px solid #e5e7eb !important;
+  resize: none;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.editTextarea:focus {
+  border-color: #3b82f6 !important;
+  outline: none;
+}
+
+.editInputActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
 /* Adjusts comment container for replies */
 .commentContainer .userContainer {
   margin-bottom: 8px;
