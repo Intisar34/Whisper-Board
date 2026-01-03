@@ -284,8 +284,9 @@ export default {
         this.isTranslatingPost = true
         this.postTranslationError = false
 
-        const cachedTitle = store.getTranslation(this.post.title, 'sv')
-        const cachedBody = store.getTranslation(this.post.body, 'sv')
+        const targetLang = store.user?.preferredLanguage || 'sv'
+        const cachedTitle = store.getTranslation(this.post.title, targetLang)
+        const cachedBody = store.getTranslation(this.post.body, targetLang)
 
         if (cachedTitle && cachedBody) {
           this.translatedPost = {
@@ -297,12 +298,12 @@ export default {
         }
 
         const [translatedTitle, translatedBody] = await Promise.all([
-          sendTranslation(this.post.title, 'sv'),
-          sendTranslation(this.post.body, 'sv')
+          sendTranslation(this.post.title, targetLang),
+          sendTranslation(this.post.body, targetLang)
         ])
 
-        store.addTranslation(this.post.title, translatedTitle, 'sv')
-        store.addTranslation(this.post.body, translatedBody, 'sv')
+        store.addTranslation(this.post.title, translatedTitle, targetLang)
+        store.addTranslation(this.post.body, translatedBody, targetLang)
 
         this.translatedPost = {
           title: translatedTitle,
@@ -326,15 +327,16 @@ export default {
         comment.isTranslating = true
         comment.translationError = false
 
-        const cached = store.getTranslation(comment.body, 'sv')
+        const targetLang = store.user?.preferredLanguage || 'sv'
+        const cached = store.getTranslation(comment.body, targetLang)
         if (cached) {
           comment.translated = cached
           comment.isTranslating = false
           return
         }
 
-        const translatedText = await sendTranslation(comment.body, 'sv')
-        store.addTranslation(comment.body, translatedText, 'sv')
+        const translatedText = await sendTranslation(comment.body, targetLang)
+        store.addTranslation(comment.body, translatedText, targetLang)
         comment.translated = translatedText
         comment.isTranslating = false
       } catch (err) {

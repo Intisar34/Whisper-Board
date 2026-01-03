@@ -324,8 +324,9 @@ export default {
         post.isTranslating = true
         post.translationError = false
 
-        const cachedBody = store.getTranslation(post.body, 'sv')
-        const cachedTitle = store.getTranslation(post.title, 'sv')
+        const targetLang = store.user?.preferredLanguage || 'sv'
+        const cachedBody = store.getTranslation(post.body, targetLang)
+        const cachedTitle = store.getTranslation(post.title, targetLang)
         if (cachedBody && cachedTitle) {
           post.translated = {
             title: cachedTitle || post.title,
@@ -336,12 +337,12 @@ export default {
         }
 
         const [translatedTitle, translatedBody] = await Promise.all([
-          sendTranslation(post.title, 'sv'),
-          sendTranslation(post.body, 'sv')
+          sendTranslation(post.title, targetLang),
+          sendTranslation(post.body, targetLang)
         ])
 
-        store.addTranslation(post.title, translatedTitle, 'sv')
-        store.addTranslation(post.body, translatedBody, 'sv')
+        store.addTranslation(post.title, translatedTitle, targetLang)
+        store.addTranslation(post.body, translatedBody, targetLang)
 
         post.translated = {
           title: translatedTitle,
@@ -365,8 +366,9 @@ export default {
         this.isTranslatingForum = true
         this.forumTranslationError = false
 
-        const cachedTitle = store.getTranslation(this.forumDetail.name, 'sv')
-        const cachedBody = store.getTranslation(this.forumDetail.description, 'sv')
+        const targetLang = store.user?.preferredLanguage || 'sv'
+        const cachedTitle = store.getTranslation(this.forumDetail.name, targetLang)
+        const cachedBody = store.getTranslation(this.forumDetail.description, targetLang)
 
         if (cachedTitle && cachedBody) {
           this.translatedForum = {
@@ -378,12 +380,12 @@ export default {
         }
 
         const [translatedTitle, translatedBody] = await Promise.all([
-          sendTranslation(this.forumDetail.name, 'sv'),
-          sendTranslation(this.forumDetail.description, 'sv')
+          sendTranslation(this.forumDetail.name, targetLang),
+          sendTranslation(this.forumDetail.description, targetLang)
         ])
 
-        store.addTranslation(this.forumDetail.name, translatedTitle, 'sv')
-        store.addTranslation(this.forumDetail.description, translatedBody, 'sv')
+        store.addTranslation(this.forumDetail.name, translatedTitle, targetLang)
+        store.addTranslation(this.forumDetail.description, translatedBody, targetLang)
 
         this.translatedForum = {
           name: translatedTitle,
@@ -410,8 +412,10 @@ export default {
         const alertTitle = 'OH!'
         const alertBody = 'Looks like there are no posts yet. Click here to join the forum and create a post!'
 
-        const cachedTitle = store.getTranslation(alertTitle, 'sv')
-        const cachedBody = store.getTranslation(alertBody, 'sv')
+        const targetLang = store.user?.preferredLanguage || 'sv'
+
+        const cachedTitle = store.getTranslation(alertTitle, targetLang)
+        const cachedBody = store.getTranslation(alertBody, targetLang)
 
         if (cachedTitle && cachedBody) {
           this.translatedAlert = {
@@ -423,12 +427,12 @@ export default {
         }
 
         const [translatedTitle, translatedBody] = await Promise.all([
-          sendTranslation(alertTitle, 'sv'),
-          sendTranslation(alertBody, 'sv')
+          sendTranslation(alertTitle, targetLang),
+          sendTranslation(alertBody, targetLang)
         ])
 
-        store.addTranslation(alertTitle, translatedTitle, 'sv')
-        store.addTranslation(alertBody, translatedBody, 'sv')
+        store.addTranslation(alertTitle, translatedTitle, targetLang)
+        store.addTranslation(alertBody, translatedBody, targetLang)
 
         this.translatedAlert = {
           title: translatedTitle,

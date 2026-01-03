@@ -92,6 +92,10 @@
                     <BFormInput id="input-6" v-model="form.otherRoleName" placeholder="Enter your role..."/>
                  </BFormGroup>
 
+                 <BFormGroup id="input-group-7" label="Preferred Language" label-for="input-7">
+                    <BFormSelect id="input-7" v-model="form.preferredLanguage" :options="languageOptions"/>
+                 </BFormGroup>
+
                  <div class="d-flex justify-content-end mt-4">
                   <BButton type="submit" variant="primary"> Save changes</BButton>
                  </div>
@@ -228,6 +232,7 @@ export default {
         email: '',
         role: '',
         otherRoleName: '',
+        preferredLanguage: '',
         password: '',
         links: []
       },
@@ -237,6 +242,16 @@ export default {
         { text: 'Alumni', value: 'Alumni' },
         { text: 'TA', value: 'TA' },
         { text: 'Other', value: 'other' }
+      ],
+      languageOptions: [
+        { text: 'Swedish', value: 'sv' },
+        { text: 'English', value: 'en' },
+        { text: 'Spanish', value: 'es' },
+        { text: 'German', value: 'de' },
+        { text: 'French', value: 'fr' },
+        { text: 'Norwegian', value: 'no' },
+        { text: 'Danish', value: 'da' },
+        { text: 'Finnish', value: 'fi' }
       ],
 
       originalForm: {},
@@ -264,6 +279,7 @@ export default {
         this.form.email = user.email
         this.form.role = user.role
         this.form.otherRoleName = user.otherRoleName || ''
+        this.form.preferredLanguage = user.preferredLanguage || 'sv'
         this.form.password = user.password
         this.form.links = user.links || []
 
@@ -273,6 +289,7 @@ export default {
           institution: user.institution,
           role: user.role,
           otherRoleName: user.otherRoleName || '',
+          preferredLanguage: user.preferredLanguage || 'sv',
           password: user.password
         }
       } catch (err) {
@@ -330,13 +347,31 @@ export default {
       }
     },
 
-    // Update user password
     async updateUserPassword() {
       try {
         const request = await Api.patch(`/users/${this.store.user.username}`, {
           password: this.form.password
         })
         console.log(request.data.data)
+      } catch (err) {
+        this.errorMessage = err.response?.data?.error || 'Something went wrong'
+        this.showError = true
+
+        throw err
+      }
+    },
+
+    // Update user language
+    async updateUserLanguage() {
+      try {
+        const request = await Api.patch(`/users/${this.store.user.username}`, {
+          preferredLanguage: this.form.preferredLanguage
+        })
+        console.log(request.data.data)
+        // Update local user store if needed, though fetchUserDetail usually refreshes it
+        if (store.user) {
+             store.user.preferredLanguage = this.form.preferredLanguage;
+        }
       } catch (err) {
         this.errorMessage = err.response?.data?.error || 'Something went wrong'
         this.showError = true
@@ -436,6 +471,10 @@ export default {
 
         if (this.form.password !== this.originalForm.password) {
           await this.updateUserPassword()
+        }
+
+        if (this.form.preferredLanguage !== this.originalForm.preferredLanguage) {
+          await this.updateUserLanguage()
         }
 
         await this.fetchUserDetail()
