@@ -43,7 +43,9 @@
                 </div>
 
                 <button class="pillButton translateAction" @click="translatePost">
-                  <span class="tinyText fw-bold">{{ translatedPost ? 'Show Original' : 'Translate Post' }}</span>
+                  <span class="tinyText fw-bold">
+                    {{ isTranslatingPost ? 'translating...' : (postTranslationError ? 'Failed translation' : (translatedPost ? 'Show Original' : 'Translate Post')) }}
+                  </span>
                 </button>
             </div>
 
@@ -94,7 +96,9 @@
                 </div>
                 
                 <button class="pillButton translateAction" @click="translateComment(comment)">
-                  <span class="tinyText">{{ comment.translated ? 'Show Original' : 'Translate' }}</span>
+                  <span class="tinyText">
+                    {{ comment.isTranslating ? 'translating...' : (comment.translationError ? 'Failed translation' : (comment.translated ? 'Show Original' : 'Translate')) }}
+                  </span>
                 </button>
             </div>
         </div>
@@ -119,7 +123,9 @@ export default {
       post: null,
       commentDetail: '',
       comments: [],
-      translatedPost: null
+      translatedPost: null,
+      isTranslatingPost: false,
+      postTranslationError: false
     }
   },
 
@@ -146,7 +152,10 @@ export default {
         this.comments.push({
           body: response.data.comment.body,
           postID: response.data.comment.postID,
-          date: response.data.comment.createdAt
+          date: response.data.comment.createdAt,
+          translated: null,
+          isTranslating: false,
+          translationError: false
         })
 
         if (this.post) {
@@ -167,7 +176,10 @@ export default {
           body: comment.body,
           postID: comment.postID,
           date: comment.createdAt,
-          username: comment.userID?.username || 'Username not found'
+          username: comment.userID?.username || 'Username not found',
+          translated: null,
+          isTranslating: false,
+          translationError: false
         }))
       } catch (err) {
         console.error(err)
@@ -269,6 +281,9 @@ export default {
           return
         }
 
+        this.isTranslatingPost = true
+        this.postTranslationError = false
+
         const cachedTitle = store.getTranslation(this.post.title, 'sv')
         const cachedBody = store.getTranslation(this.post.body, 'sv')
 
@@ -277,6 +292,7 @@ export default {
             title: cachedTitle,
             body: cachedBody
           }
+          this.isTranslatingPost = false
           return
         }
 
@@ -292,8 +308,11 @@ export default {
           title: translatedTitle,
           body: translatedBody
         }
+        this.isTranslatingPost = false
       } catch (err) {
         console.error('Post translation failed:', err)
+        this.isTranslatingPost = false
+        this.postTranslationError = true
       }
     },
 
@@ -304,17 +323,24 @@ export default {
           return
         }
 
+        comment.isTranslating = true
+        comment.translationError = false
+
         const cached = store.getTranslation(comment.body, 'sv')
         if (cached) {
           comment.translated = cached
+          comment.isTranslating = false
           return
         }
 
         const translatedText = await sendTranslation(comment.body, 'sv')
         store.addTranslation(comment.body, translatedText, 'sv')
         comment.translated = translatedText
+        comment.isTranslating = false
       } catch (err) {
         console.error('Comment translation failed:', err)
+        comment.isTranslating = false
+        comment.translationError = true
       }
     }
   }
