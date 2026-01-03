@@ -66,43 +66,104 @@
         <span class="separatorLine"></span>
     </div>
 
+    <!-- Top-level comments -->
     <div class="commentContainer" v-for="comment in comments" :key="comment._id">
-           <div class="userContainer">
-                <div class="commentUserIcon">
-                  <img src="/userIcon.png" alt="User"/>
-                </div>
-                <span class="username ms-2">{{ comment.userID?.username || 'Username not found' }}</span>
-                <span class="text-muted mx-2">–</span>
-                <span class="postDate">{{ formatDate(comment) }}</span>
+        <div class="userContainer">
+            <div class="commentUserIcon">
+                <img src="/userIcon.png" alt="User"/>
+            </div>
+            <span class="username ms-2">{{ comment.userID?.username || 'Unknown' }}</span>
+            <span class="text-muted mx-2">–</span>
+            <span class="postDate">{{ formatDate(comment) }}</span>
+        </div>
+
+        <p class="commentContent">{{ comment.translated || comment.body }}</p>
+
+        <div class="commentFooter">
+            <div class="commentActions">
+                <button class="pillButton" type="button" @click="likeComment(comment)">
+                    <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
+                    <span class="tinyText">{{ comment.likes?.length || 0 }}</span>
+                </button>
+
+                <button class="pillButton" type="button" @click="dislikeComment(comment)">
+                    <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
+                    <span class="tinyText">{{ comment.dislikes?.length || 0 }}</span>
+                </button>
+
+                <button class="pillButton" type="button" @click="toggleReplyInput(comment)">
+                    Reply
+                </button>
             </div>
 
-            <p class="commentContent">{{  comment.translated  || comment.body}}</p>
+            <button class="pillButton translateAction" @click="translateComment(comment)">
+                <span class="tinyText">
+                    {{ comment.isTranslating ? 'translating...' : (comment.translationError ? 'Failed' : (comment.translated ? 'Show Original' : 'Translate')) }}
+                </span>
+            </button>
+        </div>
 
-            <div class="commentFooter">
-                <div class="commentActions">
-                    <button class="pillButton" type="button" @click="likeComment(comment)">
-                        <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
-                        <span class="tinyText">{{comment?.likes?.length || 0 }} </span>
-                    </button>
+        <!-- Inline Reply Input -->
+        <div v-if="replyingTo === comment._id" class="replyInputWrapper">
+            <BFormTextarea 
+                class="replyTextarea" 
+                v-model="replyText" 
+                rows="1" 
+                auto-grow 
+                :placeholder="'Reply to @' + (comment.userID?.username || 'user') + '...'"
+            />
+            <div class="replyInputActions">
+                <button class="pillButton cancelReply" @click="cancelReply">Cancel</button>
+                <button class="pillButton submitReply" @click="submitReply(comment)">Reply</button>
+            </div>
+        </div>
 
-                    <button class="pillButton" type="button" @click="dislikeComment(comment)">
-                        <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
-                        <span class="tinyText">{{comment?.dislikes?.length || 0 }}</span>
-                    </button>
+        <!-- View Replies Toggle -->
+        <button 
+            v-if="comment.replyCount > 0" 
+            class="viewRepliesBtn" 
+            @click="toggleReplies(comment)"
+        >
+            {{ expandedReplies[comment._id] ? '▼ Hide' : '▶ View' }} {{ comment.replyCount }} {{ comment.replyCount === 1 ? 'reply' : 'replies' }}
+        </button>
 
-                    <button class="pillButton" type="button" @click="startReply(comment)">
-                        reply
-                    </button>
+        <!-- Nested Replies -->
+        <div v-if="expandedReplies[comment._id] && comment.replies?.length" class="repliesContainer">
+            <div class="replyComment" v-for="reply in comment.replies" :key="reply._id">
+                <div class="userContainer">
+                    <div class="replyUserIcon">
+                        <img src="/userIcon.png" alt="User"/>
+                    </div>
+                    <span class="username ms-2">{{ reply.userID?.username || 'Unknown' }}</span>
+                    <span class="text-muted mx-2">–</span>
+                    <span class="postDate">{{ formatDate(reply) }}</span>
                 </div>
 
-                <button class="pillButton translateAction" @click="translateComment(comment)">
-                  <span class="tinyText">
-                    {{ comment.isTranslating ? 'translating...' : (comment.translationError ? 'Failed translation' : (comment.translated ? 'Show Original' : 'Translate')) }}
-                  </span>
-                </button>
+                <p class="replyContent">{{ reply.translated || reply.body }}</p>
+
+                <div class="replyFooter">
+                    <div class="commentActions">
+                        <button class="pillButton" type="button" @click="likeComment(reply)">
+                            <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
+                            <span class="tinyText">{{ reply.likes?.length || 0 }}</span>
+                        </button>
+
+                        <button class="pillButton" type="button" @click="dislikeComment(reply)">
+                            <img src="/dislikeIcon.png" alt="Dislikes" class="pillIcon me-1"/>
+                            <span class="tinyText">{{ reply.dislikes?.length || 0 }}</span>
+                        </button>
+                    </div>
+
+                    <button class="pillButton translateAction" @click="translateComment(reply)">
+                        <span class="tinyText">
+                            {{ reply.isTranslating ? 'translating...' : (reply.translationError ? 'Failed' : (reply.translated ? 'Show Original' : 'Translate')) }}
+                        </span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -124,8 +185,9 @@ export default {
       commentDetail: '',
       comments: [],
       translatedPost: null,
-      reply: null,
-      replyTo: '',
+      replyingTo: null,
+      replyText: '',
+      expandedReplies: {},
       isTranslatingPost: false,
       postTranslationError: false
     }
@@ -152,23 +214,11 @@ export default {
           postID: this.postId
         })
 
-        this.comments.push({
-          body: response.data.comment.body,
-          postID: response.data.comment.postID,
-          date: response.data.comment.createdAt,
-          translated: null,
-          isTranslating: false,
-          translationError: false
-        })
-
         if (this.post) {
           this.post.commentsCount = (this.post.commentsCount || 0) + 1
         }
 
         this.commentDetail = ''
-        this.reply = null
-        this.replyTo = ''
-
         await this.getComment()
       } catch (err) {
         console.error(err)
@@ -180,15 +230,16 @@ export default {
         const response = await Api.get(`/posts/${this.postId}/comments`)
 
         this.comments = response.data.comments.map(comment => ({
-          body: comment.body,
-          postID: comment.postID,
-          date: comment.createdAt,
-          postID: comment.postID,
-          date: comment.createdAt,
-          username: comment.userID?.username || 'Username not found',
+          ...comment,
           translated: null,
           isTranslating: false,
-          translationError: false
+          translationError: false,
+          replies: (comment.replies || []).map(reply => ({
+            ...reply,
+            translated: null,
+            isTranslating: false,
+            translationError: false
+          }))
         }))
       } catch (err) {
         console.error(err)
@@ -347,21 +398,47 @@ export default {
       }
     },
 
-    startReply(comment) {
-      this.reply = comment
-      this.replyTo = comment.userID.username
+    toggleReplyInput(comment) {
+      if (this.replyingTo === comment._id) {
+        this.replyingTo = null
+        this.replyText = ''
+      } else {
+        this.replyingTo = comment._id
+        this.replyText = ''
+      }
+    },
 
-      // Prefill textarea with username
-      this.commentDetail = `@${comment.userID.username} `
+    cancelReply() {
+      this.replyingTo = null
+      this.replyText = ''
+    },
 
-      // Scroll up to the comment input
-      this.$nextTick(() => {
-        const reply = this.$refs.commentInput
-        if (reply) {
-          reply.scrollIntoView({ behavior: 'smooth', block: 'center' })
-          reply.querySelector('textarea').focus()
+    async submitReply(parentComment) {
+      try {
+        if (!this.replyText.trim()) return
+        if (!store.user) {
+          alert('You must be logged in to reply.')
+          return
         }
-      })
+
+        await Api.post(`/users/${store.user.username}/comments`, {
+          body: this.replyText,
+          postID: this.postId,
+          parentComment: parentComment._id
+        })
+
+        this.replyText = ''
+        this.replyingTo = null
+        this.expandedReplies[parentComment._id] = true
+        await this.getComment()
+      } catch (err) {
+        console.error('Failed to submit reply:', err)
+        alert('Failed to post reply')
+      }
+    },
+
+    toggleReplies(comment) {
+      this.expandedReplies[comment._id] = !this.expandedReplies[comment._id]
     },
 
     async likeComment(comment) {

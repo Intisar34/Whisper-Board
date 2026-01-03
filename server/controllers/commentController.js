@@ -140,22 +140,47 @@ exports.getPostComments = async (req, res, next) => {
             return res.status(404).json({ error: "Post not found!" });
         }
 
-        let comments = await Comments.find({ postID })
-            .populate('userID', 'username');
+        // Fetch all comments for this post
+        const allComments = await Comments.find({ postID })
+            .populate('userID', 'username')
+            .sort({ createdAt: 1 }); // oldest first
 
-        // Only populate parentComment if it exists
-        comments = await Promise.all(
-            comments.map(async (comment) => {
-                if (comment.parentComment) {
-                    const parent = await Comments.findById(comment.parentComment)
-                        .populate('userID', 'username');
-                    return { ...comment.toObject(), parentComment: parent };
+        // Separate top parent comments and replies
+        const topLevelComments = [];
+        const repliesMap = {};
+
+        allComments.forEach(comment => {
+            const commentObj = comment.toObject();
+            commentObj.replies = []; // Initialize replies array
+
+            if (!comment.parentComment) {
+                // Parent comment
+                topLevelComments.push(commentObj);
+            } else {
+                // Replies, group by parent ID
+                const parentId = comment.parentComment.toString();
+                if (!repliesMap[parentId]) {
+                    repliesMap[parentId] = [];
                 }
-                return comment.toObject();
-            })
-        );
+                repliesMap[parentId].push(commentObj);
+            }
+        });
 
-        res.status(200).json({ comments: comments });
+        // Attach replies to their parent comments
+        topLevelComments.forEach(comment => {
+            const commentId = comment._id.toString();
+            if (repliesMap[commentId]) {
+                comment.replies = repliesMap[commentId];
+                comment.replyCount = repliesMap[commentId].length;
+            } else {
+                comment.replyCount = 0;
+            }
+        });
+
+        // Sort parent comments newest first for display
+        topLevelComments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        res.status(200).json({ comments: topLevelComments });
     } catch (err) {
         next(err);
     }
