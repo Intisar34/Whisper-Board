@@ -109,6 +109,12 @@
                   Account has been successfully deleted. Redirecting...
                 </BAlert>
                 <BButton class="deleteButton" @click="showDeleteConfirm = true">Delete Account</BButton>
+                
+                <div v-if="isAdmin">
+                  <h6 class="text-danger fw-bold mt-4 mb-2">Admin Zone</h6>
+                  <p class="text-muted small mb-3">Deletes all posts ever created.</p>
+                  <BButton variant="outline-danger" @click="deleteAllPosts">Delete All Posts</BButton>
+                </div>
               </div>
              </div>
             </BModal>
@@ -258,6 +264,14 @@ export default {
 
       activeTab: 'posts',
       store
+    }
+  },
+
+
+
+  computed: {
+    isAdmin() {
+      return this.form.role === 'Admin'
     }
   },
 
@@ -511,6 +525,20 @@ export default {
         console.error('Failed deleting user: ', err)
         this.errorMessage = 'Failed to delete user'
         this.showError = true
+      }
+    },
+
+    async deleteAllPosts() {
+      if (!confirm('Are you sure you want to delete ALL posts in the system? This cannot be undone.')) return
+      try {
+        await Api.delete('/posts')
+        alert('All posts have been deleted.')
+        if (this.activeTab === 'posts') {
+          this.fetchPostUser()
+        }
+      } catch (err) {
+        console.error(err)
+        alert('Failed to delete posts')
       }
     },
 
