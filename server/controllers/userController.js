@@ -52,7 +52,7 @@ async function createUniqueUsername() {
 }
 
 // list of predefied roles for user
-const ALLOWED_ROLES = ['Student', 'Alumni', 'Teacher', 'TA', 'other'];
+const ALLOWED_ROLES = ['Student', 'Alumni', 'Teacher', 'TA', 'other', 'Admin'];
 
 // validate language
 const ALLOWED_LANGUAGES = ['sv', 'en', 'es', 'de', 'fr', 'no', 'da', 'fi'];

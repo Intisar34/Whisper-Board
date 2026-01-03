@@ -7,7 +7,9 @@ const {
     getComments,
     getCommentByID,
     deleteCommentByID,
-    updateComment
+    updateComment,
+    likeComment,
+    dislikeComment
 } = require('../controllers/commentController');
 
 router.post("/", createComment);
@@ -15,5 +17,7 @@ router.get("/", getComments);
 router.get("/:id", getCommentByID);
 router.delete("/:id", deleteCommentByID);
 router.put("/:id", updateComment);
+router.patch("/:id/like", likeComment);
+router.patch("/:id/dislike", dislikeComment)
 
 module.exports = router;
