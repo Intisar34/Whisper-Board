@@ -27,14 +27,20 @@ mongoose.connect(mongoURI).catch(function(err) {
 
 // Create Express app
 var app = express();
+var corsOptions = {
+    origin: 'https://evening-reef-95273-ddc186fb6572.herokuapp.com', // frontend URL
+    credentials: true, // allow cookies/auth headers
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    optionsSuccessStatus: 204
+};
 // Parse requests of content-type 'application/json'
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // HTTP request logger
 app.use(morgan('dev'));
 // Enable cross-origin resource sharing for frontend must be registered before api
-app.options('*', cors());
-app.use(cors());
+app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
 app.use('/api/v1/comments', commentRoutes);
 app.use('/api/v1/forums', forumRoutes);
 app.use('/api/v1/users', userRoutes);
