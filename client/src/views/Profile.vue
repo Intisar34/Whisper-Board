@@ -118,8 +118,6 @@
                         <span class="text-muted small">&ndash; {{ formatDate(item) }}</span>
                       </div>
 
-
-
                       <h2 class="postTitle">
                         {{ capitalise(item.title) }}
                       </h2>
@@ -127,12 +125,10 @@
                       <p class="postBody">
                         {{ item.body }}
                       </p>
-
-
                     </div>
                   </div>
                 </BCard>
-                
+
                 <BCard v-else-if="activeTab === 'comments'" class="postCard d-flex flex-row align-items-start border-0 p-3">
                   <div class="d-flex w-100">
                     <!-- comment icon -->
@@ -155,11 +151,26 @@
                     </div>
                   </div>
                 </BCard>
-                
-                <BCard v-else class="postCard">
-                   <h5>{{ item.title || item.name || 'Forum' }}</h5>
-                   <p>{{ item.body || item.description }}</p>
-                   <small v-if="item.date" class="text-secondary">{{ item.date }}</small>
+                <BCard v-else class="postCard d-flex flex-row align-items-start border-0 p-3">
+                   <div class="d-flex w-100">
+                    <!-- forum icon -->
+                    <div class="postUserIcon me-3 flex-shrink-0">
+                      <img src="/forumIcon.png" alt="forum" class="userIcon" />
+                    </div>
+                    <div class="flex-grow-1 text-start">
+                      <div class="d-flex align-items-baseline lh-1 mb-1">
+                        <span class="text-muted small">Created at &ndash; {{ formatDate(item) }}</span>
+                      </div>
+
+                      <h2 class="postTitle">
+                        {{ capitalise(item.name) }}
+                      </h2>
+
+                      <p class="postBody">
+                        {{ item.description }}
+                      </p>
+                    </div>
+                  </div>
                 </BCard>
               </div>
             </div>
@@ -223,8 +234,6 @@ export default {
       store
     }
   },
-
-
 
   computed: {
     isAdmin() {
@@ -341,7 +350,7 @@ export default {
         console.log(request.data.data)
         // Update local user store if needed, though fetchUserDetail usually refreshes it
         if (store.user) {
-             store.user.preferredLanguage = this.form.preferredLanguage;
+          store.user.preferredLanguage = this.form.preferredLanguage;
         }
       } catch (err) {
         this.errorMessage = err.response?.data?.error || 'Something went wrong'
@@ -415,7 +424,8 @@ export default {
 
         this.timeline = this.forums.map(forum => ({
           name: forum.name,
-          description: forum.description
+          description: forum.description,
+          createdAt: forum.createdAt
         }))
       } catch (err) {
         console.error('Failed fetching users forums: ', err)
@@ -435,7 +445,7 @@ export default {
         }
 
         // Check if role or otherRoleName changed
-        if (this.form.role !== this.originalForm.role || 
+        if (this.form.role !== this.originalForm.role ||
             (this.form.role === 'other' && this.form.otherRoleName !== this.originalForm.otherRoleName)) {
           await this.updateUserRole()
         }
