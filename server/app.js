@@ -33,18 +33,18 @@ var corsOptions = {
     credentials: true,
     optionsSuccessStatus: 204
 };
+// Enable cross-origin resource sharing for frontend must be registered before api.
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 // Parse requests of content-type 'application/json'
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // HTTP request logger
 app.use(morgan('dev'));
-// Enable cross-origin resource sharing for frontend must be registered before api.
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
 app.use('/api/v1/comments', commentRoutes);
 app.use('/api/v1/forums', forumRoutes);
 app.use('/api/v1/users', userRoutes);
-app.use(translateText)
+app.use('/api/v1/translate', translateText)
 
 // Import routes
 app.get('/api', function(req, res) {
