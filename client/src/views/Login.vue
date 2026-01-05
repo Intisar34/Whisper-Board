@@ -37,7 +37,11 @@
           {{ isLoading ? 'Logging in...' : 'Log in' }}
         </button>
 
-        <p>--- Don't have an account? ---</p>
+        <div class="separatorLogin">
+          <span class="separatorLineLogin"></span>
+          <span class="separatorTextLogin">Don't have an account?</span>
+          <span class="separatorLineLogin"></span>
+        </div>
 
         <button class="signupButton" type="button" @click="goToSignup">Sign Up</button>
       </form>
