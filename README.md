@@ -75,4 +75,4 @@ The Study Life Forum is a platform that allows verified students, alumni, and fa
 ![ER Diagram](./images/ER_Diagram.drawio.png) 
 ## Teaser (MS3)
 
-![Teaser](./images/teaser.png)
+![Teaser](./images/teaser1.png)
