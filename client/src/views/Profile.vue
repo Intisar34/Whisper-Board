@@ -1,50 +1,7 @@
 <template>
   <div class="backgroundPage">
     <!--Top bar section for logo, searchbar and user profile-->
-    <header class="topBar d-flex align-items-center px-4 py-2">
-        <!-- Logo section -->
-        <div class="me-3 logoLink" @click="goToHome" style="cursor: pointer;">
-          <img
-            src="/WhisperBoardLogo.png"
-            alt="WhisperBoard"
-            class="img-fluid topBarLogo"
-          />
-        </div>
-
-        <!-- Spacer to push items to the right -->
-        <div class="flex-grow-1"></div>
-
-        <!-- Notification section -->
-        <button
-          class="bellIcon me-4"
-          type="button"
-          aria-label="Notifications"
-        >
-          <img
-            src="/Bellicon.png"
-            alt="Notifications"
-            class="bellIcon"
-          />
-        </button>
-
-        <!-- User section -->
-        <BDropdown variant="link" toggle-class="text-decoration-none p-0" no-caret>
-          <template #button-content>
-            <div class="userIconBox d-flex align-items-center cursor-pointer">
-              <div class="userIconOutline">
-                <img
-                  src="/userIcon.png"
-                  alt="User avatar"
-                  class="userIcon"
-                />
-              </div>
-              <span class="ms-2 fw-bold text-dark small">{{ form.username || 'User' }}</span>
-            </div>
-          </template>
-          <BDropdownItem @click="goToHome">Home</BDropdownItem>
-          <BDropdownItem @click="logout"><span class="text-danger">Sign out</span></BDropdownItem>
-        </BDropdown>
-    </header>
+    <TopBar :showSearch="false" />
 
     <div class="profileBanner">
 
@@ -109,7 +66,7 @@
                   Account has been successfully deleted. Redirecting...
                 </BAlert>
                 <BButton class="deleteButton" @click="showDeleteConfirm = true">Delete Account</BButton>
-                
+
                 <div v-if="isAdmin">
                   <h6 class="text-danger fw-bold mt-4 mb-2">Admin Zone</h6>
                   <p class="text-muted small mb-3">Deletes all posts ever created.</p>
