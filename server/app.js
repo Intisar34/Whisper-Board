@@ -38,7 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // HTTP request logger
 app.use(morgan('dev'));
-// Enable cross-origin resource sharing for frontend must be registered before api
+// Enable cross-origin resource sharing for frontend must be registered before api.
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use('/api/v1/comments', commentRoutes);
