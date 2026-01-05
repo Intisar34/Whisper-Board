@@ -47,24 +47,28 @@
     </header>
 
     <!-- Forum Box -->
-     <div class="forumContainer">
-        <div class="forumHeader d-flex align-items-start justify-content-between">
-            <div class="forumHeaderLeft">
+     <div class="container px-3 px-md-4">
+      <div class="forumContainer">
+        <div class="row g-2 align-items-center">
+            <div class="forumHeaderLeft col-12 col-md-6">
                 <img src="/forumIcon.png" alt="Forum" class="forumLogo">
                 <h1 class="forumName">{{ translatedForum ? translatedForum.name : forumDetail?.name }}</h1>
             </div>
 
             <!-- Search section -->
-        <div class="d-flex align-items-center gap-3">
-          <div class="search d-flex align-items-center px-3 forumSearch me-5">
-            <img src="/searchIcon.png" alt="Search" class="searchIconForum"/>
-            <input type="text" class="form-control border-0 bg-transparent shadow-none ms-2" placeholder="Search posts.." v-model="search"/>
-          </div>
-        </div>
+            <div class="d-flex align-items-center gap-3 col-10 col-md-5">
+              <div class="search d-flex align-items-center px-3 forumSearch me-md-3 me-0">
+                <img src="/searchIcon.png" alt="Search" class="searchIconForum"/>
+                <input type="text" class="form-control border-0 bg-transparent shadow-none ms-2" placeholder="Search posts.." v-model="search"/>
+              </div>
+            </div>
 
-          <button class="closeButton" @click="$router.push('/home/posts')">
+          <!-- Close button -->
+            <div class= "col-2 col-md-1 text-md-end">
+              <button class="closeButton" @click="$router.push('/home/forums')">
                 <img src="/closeButton.svg">
-          </button>
+              </button>
+            </div>
         </div>
 
          <!-- Forum Description -->
@@ -94,41 +98,42 @@
             <div class="small text-muted ms-auto" v-if="!loading">
               {{ filteredPosts.length }} posts
             </div>
-          </div>
+        </div>
 
-          <BAlert :model-value="true" variant="light" v-if="!loadingPosts && posts.length === 0">
-            <h4 class="alert-heading">{{ alertTitle}}</h4>
-            <p>{{ alertBody }} <BLink :to="'/home/forums'" class="me-2">{{ translatedAlert ? 'här': 'here' }}</BLink></p>
-            <button class="pillButton translateAction ms-auto" @click="translateAlert">
-              <span class="tinyText fw-bold">
-                {{ isTranslatingAlert ? 'translating...' : (alertTranslationError ? 'Failed translation' : (translatedAlert ? 'Show Original' : 'Translate')) }}
-              </span>
-            </button>
-          </BAlert>
+          <!-- Light alert message if no posts exist in the forum -->
+        <BAlert :model-value="true" variant="light" v-if="!loadingPosts && posts.length === 0">
+          <h4 class="alert-heading">{{ alertTitle}}</h4>
+          <p>{{ alertBody }} <BLink :to="'/home/forums'" class="me-2">{{ translatedAlert ? 'här': 'here' }}</BLink></p>
+          <button class="pillButton translateAction ms-auto" @click="translateAlert">
+            <span class="tinyText fw-bold">
+              {{ isTranslatingAlert ? 'translating...' : (alertTranslationError ? 'Failed translation' : (translatedAlert ? 'Show Original' : 'Translate')) }}
+            </span>
+          </button>
+        </BAlert>
 
           <!-- Post section -->
-        <BCard class="postCard d-flex flex-row align-items-start border-0 p-2 mb-4" v-for="item in filteredPosts" :key="item._id" @click="openPost(item._id)">
-             <div class="d-flex w-100">
-              <div class="postUserIcon me-3 flex-shrink-0">
-               <img src="/postIcon.png" alt="Post" class="userIcon"/>
+        <BCard class="postCard d-flex flex-column flex-md-row align-items-start border-0 p-2 mb-4" v-for="item in filteredPosts" :key="item._id" @click="openPost(item._id)">
+          <div class="d-flex w-100 flex-column flex-md-row">
+            <div class="postUserIcon me-3 flex-shrink-0">
+              <img src="/postIcon.png" alt="Post" class="userIcon"/>
+            </div>
+
+            <div class="flex-grow-1 text-start">
+              <div class="d-flex align-items-baseline lh-1 mb-1">
+                <span class="text-muted small">&ndash; {{ formatDate(item) }}</span>
               </div>
 
-              <div class="flex-grow-1 text-start">
-               <div class="d-flex align-items-baseline lh-1 mb-1">
-                <span class="text-muted small">&ndash; {{ formatDate(item) }}</span>
-               </div>
+              <div class="text-muted tinyText mb-2">
+                {{ item.userID?.username || "Unknown user" }}
+              </div>
 
-               <div class="text-muted tinyText mb-2">
-                 {{ item.userID?.username || "Unknown user" }}
-               </div>
-
-               <h2 class="postTitle">
-                 {{ capitalise(item.translated?.title || item.title) }}
-               </h2>
-               <p class="postBody">
-                 {{ item.translated?.body || item.body }}
-               </p>
-               <footer class="d-flex align-items-center gap-2 mt-3">
+              <h2 class="postTitle">
+                {{ capitalise(item.translated?.title || item.title) }}
+              </h2>
+              <p class="postBody">
+                {{ item.translated?.body || item.body }}
+              </p>
+              <footer class="d-flex align-items-center gap-2 mt-3">
                 <!-- Like Buttion -->
                 <button class="pillButton d-flex align-items-center" type="button" @click.stop="likePost(item._id)">
                   <img src="/likeIcon.png" alt="Likes" class="pillIcon me-1"/>
@@ -154,9 +159,10 @@
                 </button>
                </footer>
               </div>
-             </div>
+            </div>
          </BCard>
         </div>
+     </div>
     </div>
 </template>
 
