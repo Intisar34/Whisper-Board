@@ -1,6 +1,6 @@
 <template>
   <div class="homepage" @click.self="$emit('close')">
-    <!-- Forum Box-->
+    <!-- Form Box-->
     <div class="newforumBox">
       <button class="closeButton" @click="$emit('close')">×</button>
 
