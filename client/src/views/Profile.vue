@@ -1,50 +1,7 @@
 <template>
   <div class="backgroundPage">
     <!--Top bar section for logo, searchbar and user profile-->
-    <header class="topBar d-flex align-items-center px-4 py-2">
-        <!-- Logo section -->
-        <div class="me-3 logoLink" @click="goToHome" style="cursor: pointer;">
-          <img
-            src="/WhisperBoardLogo.png"
-            alt="WhisperBoard"
-            class="img-fluid topBarLogo"
-          />
-        </div>
-
-        <!-- Spacer to push items to the right -->
-        <div class="flex-grow-1"></div>
-
-        <!-- Notification section -->
-        <button
-          class="bellIcon me-4"
-          type="button"
-          aria-label="Notifications"
-        >
-          <img
-            src="/Bellicon.png"
-            alt="Notifications"
-            class="bellIcon"
-          />
-        </button>
-
-        <!-- User section -->
-        <BDropdown variant="link" toggle-class="text-decoration-none p-0" no-caret>
-          <template #button-content>
-            <div class="userIconBox d-flex align-items-center cursor-pointer">
-              <div class="userIconOutline">
-                <img
-                  src="/userIcon.png"
-                  alt="User avatar"
-                  class="userIcon"
-                />
-              </div>
-              <span class="ms-2 fw-bold text-dark small">{{ form.username || 'User' }}</span>
-            </div>
-          </template>
-          <BDropdownItem @click="goToHome">Home</BDropdownItem>
-          <BDropdownItem @click="logout"><span class="text-danger">Sign out</span></BDropdownItem>
-        </BDropdown>
-    </header>
+    <TopBar :showSearch="false" />
 
     <div class="profileBanner">
 
@@ -109,7 +66,7 @@
                   Account has been successfully deleted. Redirecting...
                 </BAlert>
                 <BButton class="deleteButton" @click="showDeleteConfirm = true">Delete Account</BButton>
-                
+
                 <div v-if="isAdmin">
                   <h6 class="text-danger fw-bold mt-4 mb-2">Admin Zone</h6>
                   <p class="text-muted small mb-3">Deletes all posts ever created.</p>
@@ -161,8 +118,6 @@
                         <span class="text-muted small">&ndash; {{ formatDate(item) }}</span>
                       </div>
 
-
-
                       <h2 class="postTitle">
                         {{ capitalise(item.title) }}
                       </h2>
@@ -170,12 +125,10 @@
                       <p class="postBody">
                         {{ item.body }}
                       </p>
-
-
                     </div>
                   </div>
                 </BCard>
-                
+
                 <BCard v-else-if="activeTab === 'comments'" class="postCard d-flex flex-row align-items-start border-0 p-3">
                   <div class="d-flex w-100">
                     <!-- comment icon -->
@@ -198,11 +151,26 @@
                     </div>
                   </div>
                 </BCard>
-                
-                <BCard v-else class="postCard">
-                   <h5>{{ item.title || item.name || 'Forum' }}</h5>
-                   <p>{{ item.body || item.description }}</p>
-                   <small v-if="item.date" class="text-secondary">{{ item.date }}</small>
+                <BCard v-else class="postCard d-flex flex-row align-items-start border-0 p-3">
+                   <div class="d-flex w-100">
+                    <!-- forum icon -->
+                    <div class="postUserIcon me-3 flex-shrink-0">
+                      <img src="/forumIcon.png" alt="forum" class="userIcon" />
+                    </div>
+                    <div class="flex-grow-1 text-start">
+                      <div class="d-flex align-items-baseline lh-1 mb-1">
+                        <span class="text-muted small">Created at &ndash; {{ formatDate(item) }}</span>
+                      </div>
+
+                      <h2 class="postTitle">
+                        {{ capitalise(item.name) }}
+                      </h2>
+
+                      <p class="postBody">
+                        {{ item.description }}
+                      </p>
+                    </div>
+                  </div>
                 </BCard>
               </div>
             </div>
@@ -266,8 +234,6 @@ export default {
       store
     }
   },
-
-
 
   computed: {
     isAdmin() {
@@ -384,7 +350,7 @@ export default {
         console.log(request.data.data)
         // Update local user store if needed, though fetchUserDetail usually refreshes it
         if (store.user) {
-             store.user.preferredLanguage = this.form.preferredLanguage;
+          store.user.preferredLanguage = this.form.preferredLanguage;
         }
       } catch (err) {
         this.errorMessage = err.response?.data?.error || 'Something went wrong'
@@ -458,7 +424,8 @@ export default {
 
         this.timeline = this.forums.map(forum => ({
           name: forum.name,
-          description: forum.description
+          description: forum.description,
+          createdAt: forum.createdAt
         }))
       } catch (err) {
         console.error('Failed fetching users forums: ', err)
@@ -478,7 +445,7 @@ export default {
         }
 
         // Check if role or otherRoleName changed
-        if (this.form.role !== this.originalForm.role || 
+        if (this.form.role !== this.originalForm.role ||
             (this.form.role === 'other' && this.form.otherRoleName !== this.originalForm.otherRoleName)) {
           await this.updateUserRole()
         }

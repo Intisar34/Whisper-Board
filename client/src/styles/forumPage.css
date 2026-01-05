@@ -15,21 +15,15 @@
 }
 
 .forumContainer {
-  width: 80%;
-  margin: 60px auto;
-  padding: 28px 28px 20px;
+  max-width: min(1100px, 100vw - 32px);
+  width: 100%;
+  margin: 20px auto;
+  padding: 16px;
   background: linear-gradient(#FEFEFE 2%, #94a2d6 75%);
   border-radius: 28px;
   border: 1px solid #02153E;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   position: relative; 
-}
-
-.forumHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 6px;
 }
 
 .forumHeaderLeft {
@@ -46,7 +40,7 @@
 .forumName {
   color: #060259;
   font-family: 'Inter', sans-serif;
-  font-size: 27px;
+  font-size: 1.25rem;
   font-weight: 600;
   line-height: 1.3;
   margin: 0;
@@ -76,7 +70,8 @@
  border-radius: 12px;
  border: 1px solid #02153E;
  background: #FFF;
- width: auto;
+ width: 100%;
+ max-width: 100%;
 }
 
 .searchIconForum {
@@ -104,9 +99,7 @@
 
 .translationContainer {
   display: flex;
-  flex-direction: row-reverse;
-  background: transparent;
-  padding-left: 300px;
+  justify-content: flex-end;
 }
 
 .translateAction {
@@ -162,4 +155,78 @@
   margin-bottom: 0.5rem;
 }
 
+.postCard footer {
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .forumContainer {
+    padding: 28px;
+    margin: 60px auto;
+  }
+  .postTitle {
+    font-size: 1.1rem;
+  }
+  .postCard {
+   padding: 15px;
+   border-radius: 15px;
+  }
+  .forumName {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .translationContainer {
+    justify-content: center;
+  }
+  .postUserIcon {
+    margin-bottom: 8px;
+  }
+  .closeButton {
+    margin-top: 12px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .forumDescription {
+    font-size: 16px;
+  }
+  .forumContainer {
+    margin: 8px auto;
+    padding: 12px;
+    border-radius: 20px;
+  }
+  .postCard {
+    padding: 12px;
+    border-radius: 12px;
+  }
+  .forumDescription { 
+    font-size: 16px; 
+  }
+  .postTitle {
+    font-size: 1rem;
+  }
+  .postBody {
+    font-size: 0.9rem;
+  }
+  .postUserIcon {
+    margin-bottom: 8px;
+    margin-right: 0;
+  }
+  .closeButton {
+    margin-top: 19px !important;
+  }
+  .translateAction {
+    margin-left: 0 !important;
+    text-align: center;
+  }
+  .forumSearch { 
+    padding-top: 4px; 
+    padding-bottom: 4px; 
+  } 
+  .forumSearch input { 
+    font-size: 0.85rem; 
+  }
+}
 

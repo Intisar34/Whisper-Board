@@ -65,7 +65,11 @@
         <button class="createButton" type="submit" :disabled="isLoading">
           {{ isLoading ? 'Creating Account...' : 'Create Account' }}
         </button>
-          <p>--- Already have an account? ---</p>
+          <div class="separatorLogin">
+            <span class="separatorLineLogin"></span>
+            <span class="separatorTextLogin">Already have an account?</span>
+            <span class="separatorLineLogin"></span>
+        </div>
         <button class="loginButton" type="button" @click="goToLogin">Log In</button>
       </form>
 
@@ -119,7 +123,7 @@ export default {
         .then(response => {
           console.log('User Created:', response.data.data.user)
           this.successMessage = `Account successfully created! Your username is: ${response.data.data.user.username}. Redirecting to login...`
-          
+
           // Redirect to login after 2 seconds
           setTimeout(() => {
             this.goToLogin()

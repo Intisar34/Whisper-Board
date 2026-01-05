@@ -176,6 +176,14 @@ form p {
   margin: 15px 0 10px;
 }
 
+.separatorLogin {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+
 /* Tab and smaller screens */
 @media (max-width: 900px) {
   .backgroundColor {
@@ -239,4 +247,23 @@ form p {
   label {
     font-size: 14px;
   }
+}
+
+.separator {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.separatorLineLogin {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #9d9d9d;
+}
+
+.separatorTextLogin {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  letter-spacing: 1px;
 }
