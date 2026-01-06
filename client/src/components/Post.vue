@@ -8,6 +8,7 @@
             </router-link>
         </div>
 
+      <!-- Main post container -->
         <div class="postContainer">
             <div class="userContainer">
                 <div class="postPageUserIcon">
