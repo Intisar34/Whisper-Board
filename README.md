@@ -61,7 +61,7 @@ Open the `server` and `client` in separate VSCode workspaces or open the combine
 ## System Definition (MS0)
 
 ### Web App Link: 
-[Link text](https://whisperboard-e8d8a9a57298.herokuapp.com/)
+[whisperboard](https://whisperboard-e8d8a9a57298.herokuapp.com/)
 
 ### Purpose
 
