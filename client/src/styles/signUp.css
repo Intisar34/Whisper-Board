@@ -21,7 +21,7 @@
   font-size: 32px;
   font-weight: bold;
   color: #02153E;
-  text-align: center;
+  text-align: left;
   margin-bottom: 20px;
 }
 
@@ -65,6 +65,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  text-align: left;
 }
 
 .paragraph {
@@ -90,144 +91,6 @@
   left: 40px;
 }
 
-label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.institution {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  margin-bottom: 14px;
-}
-
-.passwordRow {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-}
-
-.password {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  text-align: left;
-  margin-bottom: 14px;
-}
-
-.confirmPassword {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  margin-bottom: 14px;
-}
-
-input {
-  padding: 10px 12px;
-  font-size: 14px;
-  border: 1px solid #c9c9c9;
-  border-radius: 6px;
-  width: 100%;
-  box-sizing: border-box;
-  transition: border-color 0.2s;
-}
-
-input:focus {
-  outline: none;
-  border-color: #0e1d40;
-}
-
-.email {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  margin-bottom: 14px;
-}
-
-.createButton {
-  width: 100%;
-  background: #0e1d40;
-  color: white;
-  padding: 12px 0;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  font-weight: 600;
-  margin: 20px 0 10px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.createButton:hover {
-  background-color: #15264A;
-  transform: scale(1.05);
-}
-
-.loginButton {
-  width: 100%;
-  background: transparent;
-  color: #0e1d40;
-  padding: 10px 0;
-  border: 2px solid #0e1d40;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  margin: 5px 0 0;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.loginButton:hover {
-  background-color: #0e1d40;
-  color: white;
-  transform: scale(1.02);
-}
-
-form p {
-  text-align: center;
-  color: #666;
-  font-size: 13px;
-  margin: 15px 0 10px;
-}
-
-
-
-.roleSelect {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  gap: 5px;
-  margin-bottom: 14px;
-}
-
-.roleRow {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  width: 100%;
-}
-
-.roleDropdown {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: white;
-  font-size: 14px;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
-.otherRole {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  gap: 5px;
-  width: 100%;
-}
 
 /* Tab and smaller screens */
 @media (max-width: 900px) {
@@ -274,38 +137,28 @@ form p {
     font-size: 26px;
     margin-bottom: 15px;
   }
+}
 
-  .passwordRow {
-    flex-direction: column;
-    gap: 0;
-  }
+.signUpBox .btn-primary {
+  background-color: #0e1d40;
+  border-color: #0e1d40;
+  transition: all 0.2s;
+}
 
-  .password,
-  .confirmPassword {
-    flex: none;
-    width: 100%;
-  }
+.signUpBox .btn-primary:hover {
+  background-color: #15264A;
+  border-color: #15264A;
+  transform: scale(1.02);
+}
 
-  .createButton {
-    padding: 14px 0;
-    font-size: 16px;
-  }
+.signUpBox .btn-outline-primary {
+  color: #0e1d40;
+  border-color: #0e1d40;
+  transition: all 0.2s;
+}
 
-  .loginButton {
-    padding: 12px 0;
-  }
-
-  input {
-    padding: 12px;
-    font-size: 16px;
-  }
-
-  .roleDropdown {
-    padding: 12px;
-    font-size: 16px;
-  }
-
-  label {
-    font-size: 14px;
-  }
+.signUpBox .btn-outline-primary:hover {
+  background-color: #0e1d40;
+  color: white;
+  transform: scale(1.02);
 }
