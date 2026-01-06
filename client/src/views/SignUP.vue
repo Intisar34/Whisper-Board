@@ -62,7 +62,7 @@
         <button class="btn btn-primary w-100 mb-3 fw-bold py-2" type="submit" :disabled="isLoading">
           {{ isLoading ? 'Creating Account...' : 'Create Account' }}
         </button>
-        
+
         <div class="d-flex align-items-center mb-3">
             <hr class="flex-grow-1">
             <span class="mx-2 text-muted small">Already have an account?</span>
@@ -77,6 +77,7 @@
 
 <script>
 import { Api } from '@/Api'
+import { store } from '@/store'
 
 export default {
   name: 'SignUP',
@@ -92,6 +93,11 @@ export default {
       errorMessage: '',
       successMessage: '',
       isLoading: false
+    }
+  },
+  created() {
+    if (store.user) {
+      this.$router.replace('/home/posts')
     }
   },
   methods: {
