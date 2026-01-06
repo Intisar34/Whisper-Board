@@ -8,7 +8,7 @@ var commentRoutes = require('./routes/commentRoutes');
 var postRouter = require('./routes/postRoutes');
 var forumRoutes = require('./routes/forumRoutes');
 var userRoutes = require('./routes/userRoutes');
-var translateText = require ('./routes/translateRoute')
+var translateText = require('./routes/translateRoute')
 
 // Variables
 require('dotenv').config();
@@ -16,11 +16,11 @@ var mongoURI = process.env.MONGODB_URI;
 var port = process.env.PORT || 3000;
 
 // Connect to MongoDB
-mongoose.connect(mongoURI).catch(function(err) {
+mongoose.connect(mongoURI).catch(function (err) {
     console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
     console.error(err.stack);
     process.exit(1);
-}).then(function() {
+}).then(function () {
     console.log(`Connected to MongoDB`); // mistake when forward porting
     console.log('Database name:', mongoose.connection.db.databaseName); // print database name
 });
@@ -41,9 +41,9 @@ app.use('/api/v1/users', userRoutes);
 app.use(translateText)
 
 // Import routes
-app.get('/api', function(req, res) {
-    res.json({'message': 'Welcome to your DIT342 backend ExpressJS project!'});
-}); 
+app.get('/api', function (req, res) {
+    res.json({ 'message': 'Welcome to your DIT342 backend ExpressJS project!' });
+});
 
 app.use('/api/v1', postRouter);
 
@@ -63,20 +63,20 @@ app.use(express.static(client));
 // Error handler (i.e., when exception is thrown) must be registered last
 var env = app.get('env');
 // eslint-disable-next-line no-unused-vars
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     console.error(err.stack);
     var err_res = {
         'message': err.message,
         'error': {}
     };
-    if (env === 'development') { 
+    if (env === 'development') {
         err_res['error'] = err.stack;
     }
-    res.status(err.status || 500); 
+    res.status(err.status || 500);
     res.json(err_res);
 });
 
-app.listen(port, function(err) {
+app.listen(port, function (err) {
     if (err) throw err;
     console.log(`Express server listening on port ${port}, in ${env} mode`);
     console.log(`Backend: http://localhost:${port}/api/`);

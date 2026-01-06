@@ -295,7 +295,16 @@ exports.getForumPosts = async (req, res, next) => {
 
         const posts = await Post.find({ forumID: forumID }).sort(sortQuery).populate('userID', 'username');
 
-        res.status(200).json(posts);
+        const postsWithComments = await Promise.all(posts.map(async (post) => {
+            const commentsCount = await Comment.countDocuments({ postID: post._id });
+            const postObj = post.toObject ? post.toObject() : post;
+            return {
+                ...postObj,
+                commentsCount
+            };
+        }));
+
+        res.status(200).json(postsWithComments);
     } catch (err) {
         next(err);
     }
