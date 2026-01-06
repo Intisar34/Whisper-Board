@@ -9,41 +9,41 @@
       </p>
     </div>
 
-    <div class="loginBox">
-      <h1 class="title">Log in</h1>
+    <div class="loginBox card p-4 shadow border-0">
+      <h1 class="title text-start mb-4">Log in</h1>
 
       <!-- Success Message -->
-      <div v-if="successMessage" class="messageBox successMessage">
-        <span>✓</span> {{ successMessage }}
+      <div v-if="successMessage" class="alert alert-success d-flex align-items-center" role="alert">
+        <span class="me-2">✓</span> {{ successMessage }}
       </div>
 
       <!-- Error Message -->
-      <div v-if="errorMessage" class="messageBox errorMessage">
-        <span>✕</span> {{ errorMessage }}
+      <div v-if="errorMessage" class="alert alert-danger d-flex align-items-center" role="alert">
+        <span class="me-2">✕</span> {{ errorMessage }}
       </div>
 
       <form @submit.prevent="loginUser">
-        <div class="email">
-          <label for="email">Email Address</label>
-          <input id="email" type="email" v-model="email" placeholder="Enter your email address...">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input id="email" type="email" class="form-control" v-model="email" placeholder="Enter your email address..." required>
         </div>
 
-        <div class="password">
-          <label for="password">Password</label>
-          <input id="password" type="password" v-model="password" placeholder="Enter your password...">
+        <div class="mb-4">
+          <label for="password" class="form-label">Password</label>
+          <input id="password" type="password" class="form-control" v-model="password" placeholder="Enter your password..." required>
         </div>
 
-        <button class="loginButton" type="submit" :disabled="isLoading">
+        <button class="btn btn-primary w-100 mb-3 fw-bold py-2" type="submit" :disabled="isLoading">
           {{ isLoading ? 'Logging in...' : 'Log in' }}
         </button>
 
-        <div class="separatorLogin">
-          <span class="separatorLineLogin"></span>
-          <span class="separatorTextLogin">Don't have an account?</span>
-          <span class="separatorLineLogin"></span>
+        <div class="d-flex align-items-center mb-3">
+          <hr class="flex-grow-1">
+          <span class="mx-2 text-muted small">Don't have an account?</span>
+          <hr class="flex-grow-1">
         </div>
 
-        <button class="signupButton" type="button" @click="goToSignup">Sign Up</button>
+        <button class="btn btn-outline-primary w-100 fw-bold py-2" type="button" @click="goToSignup">Sign Up</button>
       </form>
     </div>
   </div>

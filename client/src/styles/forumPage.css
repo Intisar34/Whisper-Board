@@ -15,50 +15,59 @@
 }
 
 .forumContainer {
-  max-width: min(1100px, 100vw - 32px);
-  width: 100%;
-  margin: 20px auto;
-  padding: 16px;
-  background: linear-gradient(#FEFEFE 2%, #94a2d6 75%);
-  border-radius: 28px;
-  border: 1px solid #02153E;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-  position: relative; 
+  max-width: min(800px, 100vw - 32px);
+  width: 95%;
+  margin: 30px auto;
+  padding: 32px;
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.05);
+  position: relative;
+  box-sizing: border-box;
 }
 
 .forumHeaderLeft {
   display: flex;
   align-items: center;
-  gap:14px;
+  gap: 14px;
 }
 
 .forumLogo {
   width: 28px;
   height: 28px;
+  display: none;
+}
+
+.forumLogo {
+  display: block;
 }
 
 .forumName {
-  color: #060259;
+  color: #111827;
   font-family: 'Inter', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 800;
   line-height: 1.3;
   margin: 0;
-  letter-spacing: -0.2px;
+  letter-spacing: -0.5px;
 }
 
 .closeButton {
   border-radius: 50%;
-  background-color: #cbe6ff;
+  background-color: rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border: none;
-  right: 20px;
-  top: 20px;
+  transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+  background-color: #e5e7eb;
 }
 
 .closeButton svg {
@@ -67,34 +76,36 @@
 }
 
 .forumSearch {
- border-radius: 12px;
- border: 1px solid #02153E;
- background: #FFF;
- width: 100%;
- max-width: 100%;
+  border-radius: 50px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  width: 100%;
+  max-width: 100%;
+  padding: 8px 16px;
 }
 
 .searchIconForum {
-  width: 18px;
-  height: 18px;
-  opacity: 0.6;
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
 }
 
 .divider {
   height: 1px;
   width: 100%;
-  background: rgba(0, 0, 0, 0.15);
-  margin: 14px 0;
+  background: #f3f4f6;
+  margin: 24px 0;
 }
 
 .forumDescription {
-  color: #2a313c;
+  color: #4b5563;
   font-family: 'Inter', sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   text-align: left;
-  font-weight: 430;
-  margin: 12px 0;
-  padding-top: 30px;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 12px 0 24px 0;
+  padding-top: 0;
 }
 
 .translationContainer {
@@ -164,13 +175,16 @@
     padding: 28px;
     margin: 60px auto;
   }
+
   .postTitle {
     font-size: 1.1rem;
   }
+
   .postCard {
-   padding: 15px;
-   border-radius: 15px;
+    padding: 15px;
+    border-radius: 15px;
   }
+
   .forumName {
     font-size: 1.3rem;
   }
@@ -180,9 +194,11 @@
   .translationContainer {
     justify-content: center;
   }
+
   .postUserIcon {
     margin-bottom: 8px;
   }
+
   .closeButton {
     margin-top: 12px !important;
   }
@@ -192,41 +208,50 @@
   .forumDescription {
     font-size: 16px;
   }
+
   .forumContainer {
     margin: 8px auto;
     padding: 12px;
     border-radius: 20px;
   }
+
   .postCard {
     padding: 12px;
     border-radius: 12px;
   }
-  .forumDescription { 
-    font-size: 16px; 
+
+  .forumDescription {
+    font-size: 16px;
   }
+
   .postTitle {
     font-size: 1rem;
   }
+
   .postBody {
     font-size: 0.9rem;
   }
+
   .postUserIcon {
     margin-bottom: 8px;
     margin-right: 0;
   }
+
   .closeButton {
     margin-top: 19px !important;
   }
+
   .translateAction {
     margin-left: 0 !important;
     text-align: center;
   }
-  .forumSearch { 
-    padding-top: 4px; 
-    padding-bottom: 4px; 
-  } 
-  .forumSearch input { 
-    font-size: 0.85rem; 
+
+  .forumSearch {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  .forumSearch input {
+    font-size: 0.85rem;
   }
 }
-
