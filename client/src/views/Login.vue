@@ -65,6 +65,12 @@ export default {
     }
   },
 
+  created() {
+    if (store.user) {
+      this.$router.replace('/home/posts')
+    }
+  },
+
   methods: {
     clearMessages() {
       this.errorMessage = ''
