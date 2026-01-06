@@ -60,6 +60,9 @@ Open the `server` and `client` in separate VSCode workspaces or open the combine
 
 ## System Definition (MS0)
 
+### Web App Link: 
+[whisperboard](https://whisperboard-e8d8a9a57298.herokuapp.com/)
+
 ### Purpose
 
 The Study Life Forum is a platform that allows students, alumni, and faculty to discuss university related topics anonymously. Users can create and participate in forums, make posts, and comment, all while maintaining their anonymity. The system aims to foster open communication, knowledge sharing, and networking within the academic community. It unifies discussions about courses, careers, and general topics.
