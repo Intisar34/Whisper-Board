@@ -39,7 +39,7 @@ app.use(cors());
 app.use('/api/v1/comments', commentRoutes);
 app.use('/api/v1/forums', forumRoutes);
 app.use('/api/v1/users', userRoutes);
-app.use(translateText)
+app.use('/api/v1/translate', translateText);
 
 // Import routes
 app.get('/api', function (req, res) {
