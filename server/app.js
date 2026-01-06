@@ -27,6 +27,7 @@ mongoose.connect(mongoURI).catch(function(err) {
 
 // Create Express app
 var app = express();
+app.enable('trust proxy');
 // Parse requests of content-type 'application/json'
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

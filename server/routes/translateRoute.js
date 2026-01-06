@@ -5,6 +5,6 @@ const {
     translateText
 } = require('../services/translate')
 
-router.post('/', translateText)
+router.post('/api/v1/translate', translateText)
 
 module.exports = router;
