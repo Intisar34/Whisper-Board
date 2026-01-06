@@ -30,12 +30,16 @@ var app = express();
 var corsOptions = {
     origin: ['https://evening-reef-95273-ddc186fb6572.herokuapp.com', 'http://localhost:3000', 'http://localhost:5173'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
     optionsSuccessStatus: 204
 };
 // Enable cross-origin resource sharing for frontend must be registered before api.
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
+
+app.use((req, res, next) => {
+  console.log(req.method, req.path);
+  next();
+});
 // Parse requests of content-type 'application/json'
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -60,7 +64,14 @@ app.use('/api/*', function (req, res) {
 
 // Configuration for serving frontend in production mode
 // Support Vuejs HTML 5 history mode
-app.use(history());
+app.use(history({
+    rewrites: [
+      { from: /^\/api\/.*$/, to: function (context) {
+          return context.parsedUrl.pathname;
+        }
+      }
+    ]
+  }));
 // Serve static assets
 var root = path.normalize(__dirname + '/..');
 var client = path.join(root, 'client', 'dist');
