@@ -58,6 +58,3 @@ We integrated a language translation feature for forum posts and comments, allow
 ### Entity-Relationship (ER) Diagram
 
 ![ER Diagram](./images/ER_Diagram.drawio.png) 
-## Teaser (MS3)
-
-![Teaser](./images/teaser1.png)
